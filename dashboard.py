@@ -10,8 +10,19 @@ scope = [
 
 creds = Credentials.from_service_account_info(st.secrets["gcp"], scopes=scope)
 client = gspread.authorize(creds)
-sheet = client.open_by_key("1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs").sheet1
-df = pd.DataFrame(sheet.get_all_records())
+SHEET_ID = "1pq1_lH3Y87D2jWGa0MVMyyPR0039Rk0naW0h2pFAXgs"
+
+profile_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
+plan_ws    = client.open_by_key(SHEET_ID).worksheet("village plan")
+
+df_profile = pd.DataFrame(profile_ws.get_all_records())
+df_plan    = pd.DataFrame(plan_ws.get_all_records())
+
+df = df_profile.merge(
+    df_plan,
+    on=["mandal","panchayath","village"],
+    how="left"
+)
 
 st.title("Habitation-wise Livestock MEL Dashboard")
 
@@ -56,6 +67,7 @@ mandal_summary = df.groupby("Mandal name").agg({
 }).reset_index()
 st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+
 
 
 
