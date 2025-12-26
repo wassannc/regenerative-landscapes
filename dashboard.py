@@ -26,7 +26,7 @@ df = df_profile.merge(
 
 st.title("Habitation-wise Livestock MEL Dashboard")
 
-mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["Mandal name"].unique()))
+mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].unique()))
 
 if mandal != "All":
     df = df[df["Mandal name"] == mandal]
@@ -40,7 +40,7 @@ st.metric("Animals Dewormed", df["Total animals Dewormed"].sum())
 st.metric("Total Mortality", df["Mortality"].sum())
 st.subheader("GP Wise Summary")
 
-gp_summary = df.groupby("Panchayath name").agg({
+gp_summary = df.groupby("panchayath").agg({
     "no of HH":"sum",
     "population":"sum",
     "Total animals immunized":"sum",
@@ -55,7 +55,7 @@ st.download_button("Download GP Wise Excel", gp_summary.to_csv(index=False), "GP
 
 st.subheader("Mandal Wise Summary")
 
-mandal_summary = df.groupby("Mandal name").agg({
+mandal_summary = df.groupby("mandal").agg({
     "no of HH":"sum",
     "population":"sum",
     "Total animals immunized":"sum",
@@ -67,6 +67,7 @@ mandal_summary = df.groupby("Mandal name").agg({
 }).reset_index()
 st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+
 
 
 
