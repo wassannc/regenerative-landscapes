@@ -3,12 +3,13 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import streamlit as st
 
-scope = ["https://spreadsheets.google.com/feeds",
-         "https://www.googleapis.com/auth/drive"]
+scope = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
 
-creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["gcp"], scope)
+creds = Credentials.from_service_account_info(st.secrets["gcp"], scopes=scope)
 client = gspread.authorize(creds)
-
 sheet = client.open_by_key("1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs").sheet1
 df = pd.DataFrame(sheet.get_all_records())
 
@@ -55,5 +56,6 @@ mandal_summary = df.groupby("Mandal name").agg({
 }).reset_index()
 st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+
 
 
