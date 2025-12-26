@@ -1,6 +1,6 @@
 import pandas as pd
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2.service_account import Credentials
 import streamlit as st
 
 scope = [
@@ -56,6 +56,7 @@ mandal_summary = df.groupby("Mandal name").agg({
 }).reset_index()
 st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+
 
 
 
