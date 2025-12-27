@@ -21,7 +21,7 @@ df_plan    = pd.DataFrame(plan_ws.get_all_records())
 df_profile = df_profile[[
     "mandal","panchayath","village",
     "no of HH","population","Total animals immunized",
-    "Total animals Dewormed","Mortality","no of cattle sheds","no of sheds rennovated"
+    "Mortality","no of cattle sheds","no of sheds rennovated"
 ]]
 
 df_plan = df_plan[[
@@ -49,7 +49,6 @@ st.dataframe(df)
 st.metric("Total HH", df["no of HH"].sum())
 st.metric("Total Population", df["population"].sum())
 st.metric("Animals Immunized", df["Total animals immunized"].sum())
-st.metric("Animals Dewormed", df["Total animals Dewormed"].sum())
 st.metric("Total Mortality", df["Mortality"].sum())
 st.subheader("GP Wise Summary")
 
@@ -57,7 +56,6 @@ gp_summary = df.groupby("panchayath").agg({
     "no of HH":"sum",
     "population":"sum",
     "Total animals immunized":"sum",
-    "Total animals Dewormed":"sum",
     "Animals to be immunized":"sum",
     "Mortality":"sum",
     "no of cattle sheds":"sum",
@@ -73,7 +71,6 @@ mandal_summary = df.groupby("mandal").agg({
     "no of HH":"sum",
     "population":"sum",
     "Total animals immunized":"sum",
-    "Total animals Dewormed":"sum",
     "Animals to be immunized":"sum",
     "Mortality":"sum",
     "no of cattle sheds":"sum",
@@ -82,6 +79,7 @@ mandal_summary = df.groupby("mandal").agg({
 }).reset_index()
 st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+
 
 
 
