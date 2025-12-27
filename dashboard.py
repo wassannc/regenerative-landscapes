@@ -18,18 +18,31 @@ plan_ws    = client.open_by_key(SHEET_ID).worksheet("village plan")
 df_profile = pd.DataFrame(profile_ws.get_all_records())
 df_plan    = pd.DataFrame(plan_ws.get_all_records())
 
+df_profile = df_profile[[
+    "mandal","panchayath","village",
+    "no of HH","population","Total animals immunized",
+    "Total animals Dewormed","Mortality","no of cattle sheds"
+]]
+
+df_plan = df_plan[[
+    "mandal","panchayath","village",
+    "no of sheds rennovated","no of sheds to be rennovated"
+]]
+
 df = df_profile.merge(
     df_plan,
     on=["mandal","panchayath","village"],
     how="left"
 )
 
+
 st.title("Habitation-wise Livestock MEL Dashboard")
 
-mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].unique()))
+mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
+
 
 if mandal != "All":
-    df = df[df["Mandal name"] == mandal]
+    df = df[df["mandal"] == mandal]
 
 st.dataframe(df)
 
@@ -67,6 +80,7 @@ mandal_summary = df.groupby("mandal").agg({
 }).reset_index()
 st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+
 
 
 
