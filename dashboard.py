@@ -21,12 +21,12 @@ df_plan    = pd.DataFrame(plan_ws.get_all_records())
 df_profile = df_profile[[
     "mandal","panchayath","village",
     "no of HH","population","Total animals immunized",
-    "Total animals Dewormed","Mortality","no of cattle sheds"
+    "Total animals Dewormed","Mortality","no of cattle sheds","no of sheds rennovated"
 ]]
 
 df_plan = df_plan[[
     "mandal","panchayath","village",
-    "no of sheds rennovated","no of sheds to be rennovated"
+   "no of sheds to be rennovated","Animals to be immunized"
 ]]
 
 df = df_profile.merge(
@@ -36,7 +36,7 @@ df = df_profile.merge(
 )
 
 
-st.title("Habitation-wise Livestock MEL Dashboard")
+st.title("Habitation-wise Livestock Dashboard")
 
 mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
 
@@ -58,6 +58,7 @@ gp_summary = df.groupby("panchayath").agg({
     "population":"sum",
     "Total animals immunized":"sum",
     "Total animals Dewormed":"sum",
+    "Animals to be immunized":"sum",
     "Mortality":"sum",
     "no of cattle sheds":"sum",
     "no of sheds rennovated":"sum",
@@ -73,6 +74,7 @@ mandal_summary = df.groupby("mandal").agg({
     "population":"sum",
     "Total animals immunized":"sum",
     "Total animals Dewormed":"sum",
+    "Animals to be immunized":"sum",
     "Mortality":"sum",
     "no of cattle sheds":"sum",
     "no of sheds rennovated":"sum",
@@ -80,6 +82,7 @@ mandal_summary = df.groupby("mandal").agg({
 }).reset_index()
 st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+
 
 
 
