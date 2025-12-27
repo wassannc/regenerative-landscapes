@@ -10,7 +10,7 @@ scope = [
 
 creds = Credentials.from_service_account_info(st.secrets["gcp"], scopes=scope)
 client = gspread.authorize(creds)
-SHEET_ID = "1pq1_lH3Y87D2jWGa0MVMyyPR0039Rk0naW0h2pFAXgs"
+SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
 
 profile_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
 plan_ws    = client.open_by_key(SHEET_ID).worksheet("village plan")
@@ -82,6 +82,7 @@ mandal_summary = df.groupby("mandal").agg({
 }).reset_index()
 st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+
 
 
 
