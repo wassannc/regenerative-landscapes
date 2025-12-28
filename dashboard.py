@@ -16,7 +16,7 @@ st.sidebar.markdown("---")
 
 menu = st.sidebar.radio(
     "Select Thematic Area",
-    ["Livestock", "Crop Systems", "Fisheries", "Land Development"]
+    ["Large Ruminants", "Small Ruminants", "Crop Systems","Desi Poultry", "Fisheries", "Land Development", "Migration", "Farm mechanization"]
 )
 
 scope = [
@@ -130,6 +130,9 @@ elif menu == "Farm mechanization":
     st.info("Farm mechanization dashboard coming soon.")
 
 
+elif menu == "Desi Poultry":
+    st.header("Desi Poultry")
+    st.info("Desi Poultry dashboard coming soon.")
 
 
 
