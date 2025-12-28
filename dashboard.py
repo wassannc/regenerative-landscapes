@@ -99,14 +99,20 @@ if menu == "Livestock":
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
     pass
+    
 elif menu == "Crop Systems":
-    st.info("Crop Systems module will be added here")
+    st.header("🌾 Crop Systems")
+    st.info("Crop systems dashboard coming soon.")
+
 
 elif menu == "Fisheries":
-    st.info("Fisheries module will be added here")
+    st.header("🐟 Fisheries")
+    st.info("Fisheries dashboard coming soon.")
+
 
 elif menu == "Land Development":
-    st.info("Land Development module will be added here")
+    st.header("🌱 Land Development")
+    st.info("Land development dashboard coming soon.")
 
 
 
