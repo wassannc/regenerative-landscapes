@@ -115,10 +115,19 @@ elif menu == "Land Development":
     st.info("Land development dashboard coming soon.")
 
 
+elif menu == "Small Ruminants":
+    st.header("Small Ruminants")
+    st.info("Small Ruminants dashboard coming soon.")
 
 
+elif menu == "Migration":
+    st.header("Migration")
+    st.info("Migration dashboard coming soon.")
 
 
+elif menu == "Farm mechanization":
+    st.header("Farm mechanization")
+    st.info("Farm mechanization dashboard coming soon.")
 
 
 
