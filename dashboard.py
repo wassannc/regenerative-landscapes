@@ -69,8 +69,8 @@ st.download_button("Download GP Wise Excel", gp_summary.to_csv(index=False), "GP
 st.subheader("Mandal Wise Summary")
 
 mandal_summary = df.groupby("mandal").agg({
-    "village":"nunique",
     "panchayath":"nunique",
+    "village":"nunique",
     "no of HH":"sum",
     "population":"sum",
     "Total animals immunized":"sum",
@@ -82,6 +82,7 @@ mandal_summary = df.groupby("mandal").agg({
 }).reset_index()
 st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+
 
 
 
