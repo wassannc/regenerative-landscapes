@@ -10,8 +10,7 @@ st.set_page_config(
 
 st.title("Regenerative Landscape Villages")
 
-st.sidebar.markdown("## RLV MEL PORTAL")
-st.sidebar.markdown("### Regenerative Landscape Villages")
+st.sidebar.markdown("## RLV PORTAL")
 st.sidebar.markdown("---")
 
 menu = st.sidebar.radio(
@@ -133,6 +132,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
