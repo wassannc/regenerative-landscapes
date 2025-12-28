@@ -10,6 +10,15 @@ st.set_page_config(
 
 st.title("Regenerative Landscape Villages")
 
+st.sidebar.markdown("## RLV MEL PORTAL")
+st.sidebar.markdown("### Regenerative Landscape Villages")
+st.sidebar.markdown("---")
+
+menu = st.sidebar.radio(
+    "Select Thematic Area",
+    ["Livestock", "Crop Systems", "Fisheries", "Land Development"]
+)
+
 scope = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
@@ -89,6 +98,7 @@ mandal_summary = df.groupby("mandal").agg({
 }).reset_index()
 st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+
 
 
 
