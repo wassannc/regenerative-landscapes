@@ -3,6 +3,13 @@ import gspread
 from google.oauth2.service_account import Credentials
 import streamlit as st
 
+st.set_page_config(
+    page_title="RLV MEL Portal",
+    layout="wide"
+)
+
+st.title("Regenerative Landscape Villages")
+
 scope = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
@@ -82,6 +89,7 @@ mandal_summary = df.groupby("mandal").agg({
 }).reset_index()
 st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+
 
 
 
