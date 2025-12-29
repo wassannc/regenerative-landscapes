@@ -51,7 +51,7 @@ if menu == "Large Ruminants":
 )
 
 
-    st.title("Large Ruminants")
+    st.subheader("🐄 Large Ruminants")
 
     mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
 
@@ -112,7 +112,7 @@ elif menu == "Small Ruminants":
     df_p = df_p[[
         "mandal","panchayath","village",
         "no of HH","population",
-        "SR immunized","Mortality",
+        "SR immunized","SR Mortality",
         "no of sheep / goat sheds","no of elevated sheds"
     ]]
 
@@ -193,6 +193,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
