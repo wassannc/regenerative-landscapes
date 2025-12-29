@@ -28,6 +28,7 @@ client = gspread.authorize(creds)
 SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
 
 if menu == "Large Ruminants":    
+    st.subheader("🐄 Large Ruminants")
     profile_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
     plan_ws    = client.open_by_key(SHEET_ID).worksheet("village plan")
     df_profile = pd.DataFrame(profile_ws.get_all_records())
@@ -49,9 +50,7 @@ if menu == "Large Ruminants":
         on=["mandal","panchayath","village"],
         how="left"
 )
-
-
-    st.subheader("🐄 Large Ruminants")
+    
 
     mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
 
@@ -193,6 +192,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
