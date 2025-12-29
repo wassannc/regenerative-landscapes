@@ -103,8 +103,8 @@ if menu == "Large Ruminants":
 
     st.subheader("🐐 Small Ruminants")
 
-    sr_profile = client.open_by_key(SHEET_ID).worksheet("small ruminant profile")
-    sr_plan    = client.open_by_key(SHEET_ID).worksheet("small ruminant plan")
+    sr_profile = client.open_by_key(SHEET_ID).worksheet("village profile")
+    sr_plan    = client.open_by_key(SHEET_ID).worksheet("village plan")
 
     df_p = pd.DataFrame(sr_profile.get_all_records())
     df_pl = pd.DataFrame(sr_plan.get_all_records())
@@ -193,6 +193,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
