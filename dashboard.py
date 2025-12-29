@@ -99,7 +99,7 @@ if menu == "Large Ruminants":
     st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
     pass
 
-elif menu == "Small Ruminants":
+    elif menu == "Small Ruminants":
 
     st.subheader("🐐 Small Ruminants")
 
@@ -193,6 +193,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
