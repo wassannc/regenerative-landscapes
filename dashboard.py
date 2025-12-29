@@ -99,7 +99,7 @@ if menu == "Large Ruminants":
     st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
     pass
 
-    if menu == "Small Ruminants":
+    elif menu == "Small Ruminants":
 
     st.subheader("🐐 Small Ruminants")
 
@@ -130,7 +130,6 @@ if menu == "Large Ruminants":
     st.markdown("### Village Wise")
     st.dataframe(df)
 
-    # GP SUMMARY
     st.markdown("### Panchayath Wise Summary")
     gp = df.groupby("panchayath").agg(
         Villages=("village","nunique"),
@@ -147,7 +146,6 @@ if menu == "Large Ruminants":
     st.dataframe(gp)
     st.download_button("Download GP Summary", gp.to_csv(index=False), "small_ruminant_gp.csv")
 
-    # MANDAL SUMMARY
     st.markdown("### Mandal Wise Summary")
     mandal_sum = df.groupby("mandal").agg(
         Panchayaths=("panchayath","nunique"),
@@ -164,6 +162,7 @@ if menu == "Large Ruminants":
 
     st.dataframe(mandal_sum)
     st.download_button("Download Mandal Summary", mandal_sum.to_csv(index=False), "small_ruminant_mandal.csv")
+
     pass
     
 elif menu == "Crop Systems":
@@ -194,6 +193,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
