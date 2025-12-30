@@ -217,7 +217,8 @@ elif menu == "Desi Poultry":
         "Birds to be immunized","No of women are willing to establish breedfarms"
     ]]
     df = df_b.merge(df_b1, on=["mandal","panchayath","village"], how="left")
-    df_poultry["service_provider_yes"] = df_poultry["poultry service provider"].str.strip().str.lower().eq("yes").astype(int)
+    df["service_provider_yes"] = df["poultry service provider"].str.strip().str.lower().eq("yes").astype(int)
+
     
     mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
     if mandal != "All":
@@ -263,6 +264,7 @@ elif menu == "Desi Poultry":
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False), "desi_poultry_mandal.csv")
     pass
+
 
 
 
