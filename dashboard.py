@@ -131,7 +131,7 @@ elif menu == "Small Ruminants":
 
     st.markdown("Panchayath Wise Summary")
     
-    gp_summary = df.groupby("panchayath").agg(
+    gp_summary = df.groupby("panchayath").agg({
         "village":"nunique",
         "no of HH":"sum",
         "population":"sum",
@@ -141,14 +141,14 @@ elif menu == "Small Ruminants":
         "no of sheep / goat sheds":"sum",
         "no of elevated sheds":"sum",
         "no of sheds to be elevated":"sum"
-    ).reset_index()
+    }).reset_index()
 
     st.dataframe(gp_summary)
     st.download_button("Download GP Summary", gp.to_csv(index=False), "small_ruminant_gp.csv")
 
     st.markdown("Mandal Wise Summary")
     
-    mandal_summary = df.groupby("mandal").agg(
+    mandal_summary = df.groupby("mandal").agg({
         "panchayath":"nunique",
         "village":"nunique",
         "no of HH":"sum",
@@ -159,7 +159,7 @@ elif menu == "Small Ruminants":
         "no of sheep / goat sheds":"sum",
         "no of elevated sheds":"sum",
         "no of sheds to be elevated":"sum"
-    ).reset_index()
+    }).reset_index()
 
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Summary", mandal_sum.to_csv(index=False), "small_ruminant_mandal.csv")
@@ -193,6 +193,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
