@@ -147,16 +147,16 @@ elif menu == "Small Ruminants":
 
     st.markdown("### Mandal Wise Summary")
     mandal_sum = df.groupby("mandal").agg(
-        Panchayaths=("panchayath","nunique"),
-        Villages=("village","nunique"),
-        HH=("no of HH","sum"),
-        Population=("population","sum"),
-        SR_Immunized=("SR immunized","sum"),
-        SR_To_Be_Immunized=("SR to be immunized","sum"),
-        Mortality=("Mortality","sum"),
-        Goat_Sheds=("no of sheep / goat sheds","sum"),
-        Elevated=("no of elevated sheds","sum"),
-        To_Be_Elevated=("no of sheds to be elevated","sum")
+        "panchayath","nunique",
+        "village","nunique",
+        "no of HH","sum",
+        "population","sum",
+        "SR immunized","sum",
+        "SR to be immunized","sum",
+        "Mortality","sum),
+        "no of sheep / goat sheds","sum",
+        "no of elevated sheds","sum",
+        "no of sheds to be elevated","sum"
     ).reset_index()
 
     st.dataframe(mandal_sum)
@@ -192,6 +192,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
