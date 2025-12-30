@@ -144,7 +144,7 @@ elif menu == "Small Ruminants":
     }).reset_index()
 
     st.dataframe(gp_summary)
-    st.download_button("Download GP Summary", gp.to_csv(index=False), "small_ruminant_gp.csv")
+    st.download_button("Download GP Summary", gp_summary.to_csv(index=False), "small_ruminant_gp.csv")
 
     st.markdown("Mandal Wise Summary")
     
@@ -162,7 +162,7 @@ elif menu == "Small Ruminants":
     }).reset_index()
 
     st.dataframe(mandal_summary)
-    st.download_button("Download Mandal Summary", mandal_sum.to_csv(index=False), "small_ruminant_mandal.csv")
+    st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False), "small_ruminant_mandal.csv")
     pass
     
 elif menu == "Crop Systems":
@@ -193,6 +193,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
