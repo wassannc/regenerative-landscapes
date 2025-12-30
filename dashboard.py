@@ -238,7 +238,7 @@ elif menu == "Desi Poultry":
         "Total birds to be immunized":"sum",
         "Birds mortality":"sum",
         "No of breedfarms exists":"sum",
-        "No of women are willing to establish breedfarms":"sum"
+        "No of women are willing to establish breedfarms":"sum",
         "service_provider_yes":"sum"
     }).reset_index()
 
@@ -257,13 +257,14 @@ elif menu == "Desi Poultry":
         "Total birds to be immunized":"sum",
         "Birds mortality":"sum",
         "No of breedfarms exists":"sum",
-        "No of women are willing to establish breedfarms":"sum"
+        "No of women are willing to establish breedfarms":"sum",
         "service_provider_yes":"sum"
     }).reset_index()
 
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False), "desi_poultry_mandal.csv")
     pass
+
 
 
 
