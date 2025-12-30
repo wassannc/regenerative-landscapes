@@ -161,8 +161,7 @@ elif menu == "Small Ruminants":
 
     st.dataframe(mandal_sum)
     st.download_button("Download Mandal Summary", mandal_sum.to_csv(index=False), "small_ruminant_mandal.csv")
-
-    pass
+        pass
     
 elif menu == "Crop Systems":
     st.header("🌾 Crop Systems")
@@ -192,6 +191,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
