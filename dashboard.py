@@ -129,7 +129,8 @@ elif menu == "Small Ruminants":
     st.markdown("### Village Wise")
     st.dataframe(df)
 
-    st.markdown("### Panchayath Wise Summary")
+    st.markdown("Panchayath Wise Summary")
+    
     gp = df.groupby("panchayath").agg(
         "village","nunique",
         "no of HH","sum",
@@ -145,7 +146,8 @@ elif menu == "Small Ruminants":
     st.dataframe(gp)
     st.download_button("Download GP Summary", gp.to_csv(index=False), "small_ruminant_gp.csv")
 
-    st.markdown("### Mandal Wise Summary")
+    st.markdown("Mandal Wise Summary")
+    
     mandal_sum = df.groupby("mandal").agg(
         "panchayath","nunique",
         "village","nunique",
@@ -191,6 +193,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
