@@ -209,7 +209,8 @@ elif menu == "Desi Poultry":
 
     df_b1 = df_b1[[
         "mandal","panchayath","village",
-        "Birds to be immunized","No of women are willing to establish breedfarms"
+        "Birds to be immunized",
+        "No of women are willing to establish breedfarms"
     ]]
 
     df_b2 = df_b2[[
@@ -264,6 +265,7 @@ elif menu == "Desi Poultry":
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False), "desi_poultry_mandal.csv")
     pass
+
 
 
 
