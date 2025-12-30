@@ -132,15 +132,15 @@ elif menu == "Small Ruminants":
     st.markdown("Panchayath Wise Summary")
     
     gp_summary = df.groupby("panchayath").agg(
-        "village","nunique",
-        "no of HH","sum",
-        "population","sum",
-        "SR immunized","sum",
-        "SR to be immunized","sum",
-        "Mortality","sum",
-        "no of sheep / goat sheds","sum",
-        "no of elevated sheds","sum",
-        "no of sheds to be elevated","sum"
+        "village":"nunique",
+        "no of HH":"sum",
+        "population":"sum",
+        "SR immunized":"sum",
+        "SR to be immunized":"sum",
+        "Mortality":"sum",
+        "no of sheep / goat sheds":"sum",
+        "no of elevated sheds":"sum",
+        "no of sheds to be elevated":"sum"
     ).reset_index()
 
     st.dataframe(gp_summary)
@@ -149,16 +149,16 @@ elif menu == "Small Ruminants":
     st.markdown("Mandal Wise Summary")
     
     mandal_summary = df.groupby("mandal").agg(
-        "panchayath","nunique",
-        "village","nunique",
-        "no of HH","sum",
-        "population","sum",
-        "SR immunized","sum",
-        "SR to be immunized","sum",
-        "Mortality","sum",
-        "no of sheep / goat sheds","sum",
-        "no of elevated sheds","sum",
-        "no of sheds to be elevated","sum"
+        "panchayath":"nunique",
+        "village":"nunique",
+        "no of HH":"sum",
+        "population":"sum",
+        "SR immunized":"sum",
+        "SR to be immunized":"sum",
+        "Mortality":"sum",
+        "no of sheep / goat sheds":"sum",
+        "no of elevated sheds":"sum",
+        "no of sheds to be elevated":"sum"
     ).reset_index()
 
     st.dataframe(mandal_summary)
@@ -193,6 +193,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
