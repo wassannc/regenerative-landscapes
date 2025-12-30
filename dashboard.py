@@ -153,7 +153,7 @@ elif menu == "Small Ruminants":
         "population","sum",
         "SR immunized","sum",
         "SR to be immunized","sum",
-        "Mortality","sum),
+        "Mortality","sum,
         "no of sheep / goat sheds","sum",
         "no of elevated sheds","sum",
         "no of sheds to be elevated","sum"
@@ -191,6 +191,7 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.header("Desi Poultry")
     st.info("Desi Poultry dashboard coming soon.")
+
 
 
 
