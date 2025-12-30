@@ -225,7 +225,7 @@ elif menu == "Desi Poultry":
     if mandal != "All":
         df = df[df["mandal"] == mandal]
 
-    st.markdown("### Village Wise")
+    st.markdown("Village Wise Summary")
     st.dataframe(df)
 
     st.markdown("Panchayath Wise Summary")
@@ -265,6 +265,7 @@ elif menu == "Desi Poultry":
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False), "desi_poultry_mandal.csv")
     pass
+
 
 
 
