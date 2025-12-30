@@ -209,12 +209,12 @@ elif menu == "Desi Poultry":
 
     df_b1 = df_b1[[
         "mandal","panchayath","village",
-        "SR to be immunized","no of sheds to be elevated"
+        "Birds to be immunized","No of women are willing to establish breedfarms"
     ]]
 
     df_b2 = df_b2[[
         "mandal","panchayath","village",
-        "Birds to be immunized","No of women are willing to establish breedfarms"
+        "No of breedfarms exists"
     ]]
     df = df_b.merge(df_b1, on=["mandal","panchayath","village"], how="left")
     df["service_provider_yes"] = df["poultry service provider"].str.strip().str.lower().eq("yes").astype(int)
@@ -264,6 +264,7 @@ elif menu == "Desi Poultry":
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False), "desi_poultry_mandal.csv")
     pass
+
 
 
 
