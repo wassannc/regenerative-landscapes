@@ -302,7 +302,10 @@ elif menu == "Natural Farming":
         "Total HH practicing NF",
         "Total land under NF practice_acre",
         "Is business plan developed",
-        "Name of the BRC entrepreneur"
+        "Name of the BRC entrepreneur",
+        "No of farmers accessing NF inputs",
+        "Extent covered under BRC_acres",
+        "No of villages accessing NF inputs"
     ]]
 
     df_nf1 = df_nf1[[
@@ -369,6 +372,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
