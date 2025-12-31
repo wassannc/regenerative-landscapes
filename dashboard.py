@@ -313,11 +313,7 @@ elif menu == "Natural Farming":
     ]]
 
     df_nf2 = df_nf2[[
-        "mandal","panchayath","village",
-        "Name of the BRC entrepreneur",
-        "No of villages accessing NF inputs",
-        "No of farmers accessing NF inputs",
-        "Extent covered under BRC_acres"
+        "mandal","panchayath","village"
     ]]
 
     # Merge 3 sources
@@ -372,6 +368,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
