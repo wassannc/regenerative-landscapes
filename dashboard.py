@@ -300,12 +300,12 @@ elif menu == "Natural Farming":
         "Total HHs",
         "Total land in the village_acre",
         "Total HH practicing NF",
-        "Total land under NF practice_acre"
+        "Total land under NF practice_acre",
+        "Is business plan developed"
     ]]
 
     df_nf1 = df_nf1[[
-        "mandal","panchayath","village",
-        "Is business plan developed"
+        "mandal","panchayath","village"
     ]]
 
     df_nf2 = df_nf2[[
@@ -368,6 +368,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
