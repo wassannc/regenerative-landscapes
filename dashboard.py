@@ -36,7 +36,7 @@ if menu == "Large Ruminants":
 
     df_profile = df_profile[[
         "mandal","panchayath","village",
-        "no of HH","population","Total animals immunized",
+        "Total HHs","population","Total animals immunized",
         "Mortality","no of cattle sheds","no of sheds rennovated"
 ]]
 
@@ -60,7 +60,7 @@ if menu == "Large Ruminants":
 
     st.dataframe(df)
 
-    st.metric("Total HH", df["no of HH"].sum())
+    st.metric("Total HH", df["Total HHs"].sum())
     st.metric("Total Population", df["population"].sum())
     st.metric("Animals Immunized", df["Total animals immunized"].sum())
     st.metric("Total Mortality", df["Mortality"].sum())
@@ -68,7 +68,7 @@ if menu == "Large Ruminants":
 
     gp_summary = df.groupby("panchayath").agg({
         "village":"nunique",
-        "no of HH":"sum",
+        "Total HHs":"sum",
         "population":"sum",
         "Total animals immunized":"sum",
         "Animals to be immunized":"sum",
@@ -85,7 +85,7 @@ if menu == "Large Ruminants":
     mandal_summary = df.groupby("mandal").agg({
         "panchayath":"nunique",
         "village":"nunique",
-        "no of HH":"sum",
+        "Total HHs":"sum",
         "population":"sum",
         "Total animals immunized":"sum",
         "Animals to be immunized":"sum",
@@ -110,7 +110,7 @@ elif menu == "Small Ruminants":
 
     df_p = df_p[[
         "mandal","panchayath","village",
-        "no of HH","population",
+        "Total HHs","population",
         "SR immunized","SR Mortality",
         "no of sheep / goat sheds","no of elevated sheds"
     ]]
@@ -133,7 +133,7 @@ elif menu == "Small Ruminants":
     
     gp_summary = df.groupby("panchayath").agg({
         "village":"nunique",
-        "no of HH":"sum",
+        "Total HHs":"sum",
         "population":"sum",
         "SR immunized":"sum",
         "SR to be immunized":"sum",
@@ -151,7 +151,7 @@ elif menu == "Small Ruminants":
     mandal_summary = df.groupby("mandal").agg({
         "panchayath":"nunique",
         "village":"nunique",
-        "no of HH":"sum",
+        "Total HHs":"sum",
         "population":"sum",
         "SR immunized":"sum",
         "SR to be immunized":"sum",
@@ -208,7 +208,7 @@ elif menu == "Desi Poultry":
     # Profile columns
     df_b = df_b[[
         "mandal","panchayath","village",
-        "no of HH","no of BYP HHs",
+        "Total HHs","no of BYP HHs",
         "Total Birds","Total birds immunized",
         "birds mortality","poultry service provider"
     ]]
@@ -244,7 +244,7 @@ elif menu == "Desi Poultry":
     st.markdown("### Panchayath Wise Summary")
     gp_summary = df.groupby("panchayath").agg({
         "village":"nunique",
-        "no of HH":"sum",
+        "Total HHs":"sum",
         "no of BYP HHs":"sum",
         "Total Birds":"sum",
         "Total birds immunized":"sum",
@@ -263,7 +263,7 @@ elif menu == "Desi Poultry":
     mandal_summary = df.groupby("mandal").agg({
         "panchayath":"nunique",
         "village":"nunique",
-        "no of HH":"sum",
+        "Total HHs":"sum",
         "no of BYP HHs":"sum",
         "Total Birds":"sum",
         "Total birds immunized":"sum",
@@ -277,6 +277,7 @@ elif menu == "Desi Poultry":
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False), "desi_poultry_mandal.csv")
     pass
+
 
 
 
