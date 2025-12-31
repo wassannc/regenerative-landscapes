@@ -15,7 +15,7 @@ st.sidebar.markdown("---")
 
 menu = st.sidebar.radio(
     "Select Thematic Area",
-    ["Large Ruminants", "Small Ruminants", "Crop Systems","Desi Poultry", "Fisheries", "Land Development", "Migration", "Farm mechanization"]
+    ["Large Ruminants", "Small Ruminants", "Desi Poultry", "Crop Systems", "Natural Farming", "Fisheries", "Land Development", "Migration", "Farm mechanization"]
 )
 
 scope = [
@@ -278,6 +278,92 @@ elif menu == "Desi Poultry":
     st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False), "desi_poultry_mandal.csv")
     pass
 
+elif menu == "Natural Farming":
+    st.subheader("🌱 Natural Farming")
+
+    nf_profile = client.open_by_key(SHEET_ID).worksheet("village profile")
+    nf_plan    = client.open_by_key(SHEET_ID).worksheet("village plan")
+    nf_epra    = client.open_by_key(SHEET_ID).worksheet("epra")
+
+    df_nf  = pd.DataFrame(nf_profile.get_all_records())
+    df_nf1 = pd.DataFrame(nf_plan.get_all_records())
+    df_nf2 = pd.DataFrame(nf_epra.get_all_records())
+
+    # Clean column names
+    df_nf.columns  = df_nf.columns.str.strip()
+    df_nf1.columns = df_nf1.columns.str.strip()
+    df_nf2.columns = df_nf2.columns.str.strip()
+
+    # Required columns
+    df_nf = df_nf[[
+        "mandal","panchayath","village",
+        "Total HHS",
+        "Total land in the village_acre",
+        "Total HH practicing NF",
+        "Total land under NF practice_acre"
+    ]]
+
+    df_nf1 = df_nf1[[
+        "mandal","panchayath","village",
+        "Is business plan developed"
+    ]]
+
+    df_nf2 = df_nf2[[
+        "mandal","panchayath","village",
+        "Name of the BRC entrepreneur",
+        "No of villages accessing NF inputs",
+        "No of farmers accessing NF inputs",
+        "Extent covered under BRC_acres"
+    ]]
+
+    # Merge 3 sources
+    df = df_nf.merge(df_nf1, on=["mandal","panchayath","village"], how="left")
+    df = df.merge(df_nf2, on=["mandal","panchayath","village"], how="left")
+
+    # Mandal filter
+    mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
+    if mandal != "All":
+        df = df[df["mandal"] == mandal]
+
+    st.markdown("### Village Wise")
+    st.dataframe(df)
+
+    # Panchayath summary
+    st.markdown("### Panchayath Wise Summary")
+    gp_summary = df.groupby("panchayath").agg({
+        "village":"nunique",
+        "Total HHS":"sum",
+        "Total land in the village_acre":"sum",
+        "Total HH practicing NF":"sum",
+        "Total land under NF practice_acre":"sum",
+        "No of villages accessing NF inputs":"sum",
+        "No of farmers accessing NF inputs":"sum",
+        "Extent covered under BRC_acres":"sum"
+    }).reset_index()
+
+    st.dataframe(gp_summary)
+    st.download_button("Download GP NF Report", gp_summary.to_csv(index=False), "nf_gp_summary.csv")
+
+    # Mandal summary
+    st.markdown("### Mandal Wise Summary")
+    mandal_summary = df.groupby("mandal").agg({
+        "panchayath":"nunique",
+        "village":"nunique",
+        "Total HHS":"sum",
+        "Total land in the village_acre":"sum",
+        "Total HH practicing NF":"sum",
+        "Total land under NF practice_acre":"sum",
+        "No of villages accessing NF inputs":"sum",
+        "No of farmers accessing NF inputs":"sum",
+        "Extent covered under BRC_acres":"sum"
+    }).reset_index()
+
+    st.dataframe(mandal_summary)
+    st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
+    pass
+    
+
+    
 
 
 
