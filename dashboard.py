@@ -320,6 +320,8 @@ elif menu == "Natural Farming":
     df = df_nf.merge(df_nf1, on=["mandal","panchayath","village"], how="left")
     df = df.merge(df_nf2, on=["mandal","panchayath","village"], how="left")
 
+    df["business_plan_yes"] = df["Is business plan developed"].astype(str).str.strip().str.lower().eq("yes").astype(int)
+
     # Mandal filter
     mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
     if mandal != "All":
@@ -338,7 +340,8 @@ elif menu == "Natural Farming":
         "Total land under NF practice_acre":"sum",
         "No of villages accessing NF inputs":"sum",
         "No of farmers accessing NF inputs":"sum",
-        "Extent covered under BRC_acres":"sum"
+        "Extent covered under BRC_acres":"sum",
+        "business_plan_yes":"sum"
     }).reset_index()
 
     st.dataframe(gp_summary)
@@ -355,7 +358,8 @@ elif menu == "Natural Farming":
         "Total land under NF practice_acre":"sum",
         "No of villages accessing NF inputs":"sum",
         "No of farmers accessing NF inputs":"sum",
-        "Extent covered under BRC_acres":"sum"
+        "Extent covered under BRC_acres":"sum",
+        "business_plan_yes":"sum"
     }).reset_index()
 
     st.dataframe(mandal_summary)
@@ -364,6 +368,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
