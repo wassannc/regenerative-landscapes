@@ -200,6 +200,10 @@ elif menu == "Desi Poultry":
     df_b  = pd.DataFrame(byp_profile.get_all_records())
     df_b1 = pd.DataFrame(byp_plan.get_all_records())
     df_b2 = pd.DataFrame(byp_epra.get_all_records())
+    
+    df_b.columns  = df_b.columns.str.strip()
+    df_b1.columns = df_b1.columns.str.strip()
+    df_b2.columns = df_b2.columns.str.strip()
 
     # Profile columns
     df_b = df_b[[
@@ -273,6 +277,7 @@ elif menu == "Desi Poultry":
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False), "desi_poultry_mandal.csv")
     pass
+
 
 
 
