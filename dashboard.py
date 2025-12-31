@@ -192,14 +192,16 @@ elif menu == "Farm mechanization":
 
 elif menu == "Desi Poultry":
     st.subheader("🐔 Desi Poultry")
+
     byp_profile = client.open_by_key(SHEET_ID).worksheet("village profile")
     byp_plan    = client.open_by_key(SHEET_ID).worksheet("village plan")
     byp_epra    = client.open_by_key(SHEET_ID).worksheet("epra")
 
-    df_b = pd.DataFrame(byp_profile.get_all_records())
-    df_bl = pd.DataFrame(byp_plan.get_all_records())
+    df_b  = pd.DataFrame(byp_profile.get_all_records())
+    df_b1 = pd.DataFrame(byp_plan.get_all_records())
     df_b2 = pd.DataFrame(byp_epra.get_all_records())
 
+    # Profile columns
     df_b = df_b[[
         "mandal","panchayath","village",
         "no of HH","no of BYP HHs",
@@ -207,37 +209,43 @@ elif menu == "Desi Poultry":
         "birds mortality","poultry service provider"
     ]]
 
+    # Plan columns
     df_b1 = df_b1[[
         "mandal","panchayath","village",
         "Birds to be immunized",
         "No of women are willing to establish breedfarms"
     ]]
 
+    # EPRA columns
     df_b2 = df_b2[[
         "mandal","panchayath","village",
         "No of breedfarms exists"
     ]]
+
+    # Merge all
     df = df_b.merge(df_b1, on=["mandal","panchayath","village"], how="left")
+    df = df.merge(df_b2, on=["mandal","panchayath","village"], how="left")
+
+    # Count YES service providers
     df["service_provider_yes"] = df["poultry service provider"].str.strip().str.lower().eq("yes").astype(int)
 
-    
     mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
     if mandal != "All":
         df = df[df["mandal"] == mandal]
 
-    st.markdown("Village Wise Summary")
+    st.markdown("### Village Wise")
     st.dataframe(df)
 
-    st.markdown("Panchayath Wise Summary")
-    
+    # GP Summary
+    st.markdown("### Panchayath Wise Summary")
     gp_summary = df.groupby("panchayath").agg({
         "village":"nunique",
         "no of HH":"sum",
         "no of BYP HHs":"sum",
         "Total Birds":"sum",
         "Total birds immunized":"sum",
-        "Total birds to be immunized":"sum",
-        "Birds mortality":"sum",
+        "Birds to be immunized":"sum",
+        "birds mortality":"sum",
         "No of breedfarms exists":"sum",
         "No of women are willing to establish breedfarms":"sum",
         "service_provider_yes":"sum"
@@ -246,8 +254,8 @@ elif menu == "Desi Poultry":
     st.dataframe(gp_summary)
     st.download_button("Download GP Summary", gp_summary.to_csv(index=False), "desi_poultry_gp.csv")
 
-    st.markdown("Mandal Wise Summary")
-    
+    # Mandal Summary
+    st.markdown("### Mandal Wise Summary")
     mandal_summary = df.groupby("mandal").agg({
         "panchayath":"nunique",
         "village":"nunique",
@@ -255,8 +263,8 @@ elif menu == "Desi Poultry":
         "no of BYP HHs":"sum",
         "Total Birds":"sum",
         "Total birds immunized":"sum",
-        "Total birds to be immunized":"sum",
-        "Birds mortality":"sum",
+        "Birds to be immunized":"sum",
+        "birds mortality":"sum",
         "No of breedfarms exists":"sum",
         "No of women are willing to establish breedfarms":"sum",
         "service_provider_yes":"sum"
