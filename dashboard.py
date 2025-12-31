@@ -297,7 +297,7 @@ elif menu == "Natural Farming":
     # Required columns
     df_nf = df_nf[[
         "mandal","panchayath","village",
-        "Total HHS",
+        "Total HHs",
         "Total land in the village_acre",
         "Total HH practicing NF",
         "Total land under NF practice_acre"
@@ -332,7 +332,7 @@ elif menu == "Natural Farming":
     st.markdown("### Panchayath Wise Summary")
     gp_summary = df.groupby("panchayath").agg({
         "village":"nunique",
-        "Total HHS":"sum",
+        "Total HHs":"sum",
         "Total land in the village_acre":"sum",
         "Total HH practicing NF":"sum",
         "Total land under NF practice_acre":"sum",
@@ -349,7 +349,7 @@ elif menu == "Natural Farming":
     mandal_summary = df.groupby("mandal").agg({
         "panchayath":"nunique",
         "village":"nunique",
-        "Total HHS":"sum",
+        "Total HHs":"sum",
         "Total land in the village_acre":"sum",
         "Total HH practicing NF":"sum",
         "Total land under NF practice_acre":"sum",
@@ -364,6 +364,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
