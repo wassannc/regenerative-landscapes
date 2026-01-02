@@ -255,7 +255,7 @@ elif menu == "Migration":
         
     mig_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
     df_mig = pd.DataFrame(mig_ws.get_all_records())
-        df_mig = df_mig[[
+    df_mig = df_mig[[
         "mandal","panchayath","village",
         "Total HHs",
         "Total no of land less HHs",
@@ -488,6 +488,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
