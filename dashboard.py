@@ -206,6 +206,7 @@ if mandal!="All":
     st.markdown("### Village Wise")
 st.dataframe(df_fish)
 
+    st.markdown("GP Wise Summary")
     gp_summary = df_fish.groupby("panchayath").agg({
         "village":"nunique",
         "Total HHs":"sum",
@@ -220,6 +221,10 @@ st.dataframe(df_fish)
         "New farmponds proposed 40x40m (nos)":"sum"
     }).reset_index()
 
+    st.dataframe(gp_summary)
+    st.download_button("Download GP Wise Excel", gp_summary.to_csv(index=False), "fisheries.csv"
+
+    st.markdown("Mandal Wise Summary")                   
     mandal_summary = df_fish.groupby("mandal").agg({
         "panchayath":"nunique",
         "village":"nunique",
@@ -234,6 +239,9 @@ st.dataframe(df_fish)
         "New farmponds proposed 20x20m (nos)":"sum",
         "New farmponds proposed 40x40m (nos)":"sum"
     }).reset_index()
+
+    st.dataframe(mandal_summary)
+    st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False), "fisheries.csv")
     pass
 
 elif menu == "Land Development":
@@ -429,6 +437,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
