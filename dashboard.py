@@ -207,33 +207,33 @@ if mandal!="All":
 st.dataframe(df_fish)
 
     gp_summary = df_fish.groupby("panchayath").agg({
-    "village":"nunique",
-    "Total HHs":"sum",
-    "HHs owning ponds":"sum",
-    "No of community ponds":"sum",
-    "No of ponds under fisheries":"sum",
-    "How many ponds converted in to eco farmponds":"sum",
-    "Total water spread are of the ponds_acr":"sum",
-    "New farmponds proposed 10x10m (nos)":"sum",
-    "New farmponds proposed 15x15m (nos)":"sum",
-    "New farmponds proposed 20x20m (nos)":"sum",
-    "New farmponds proposed 40x40m (nos)":"sum"
-}).reset_index()
+        "village":"nunique",
+        "Total HHs":"sum",
+        "HHs owning ponds":"sum",
+        "No of community ponds":"sum",
+        "No of ponds under fisheries":"sum",
+        "How many ponds converted in to eco farmponds":"sum",
+        "Total water spread are of the ponds_acr":"sum",
+        "New farmponds proposed 10x10m (nos)":"sum",
+        "New farmponds proposed 15x15m (nos)":"sum",
+        "New farmponds proposed 20x20m (nos)":"sum",
+        "New farmponds proposed 40x40m (nos)":"sum"
+    }).reset_index()
 
     mandal_summary = df_fish.groupby("mandal").agg({
-    "panchayath":"nunique",
-    "village":"nunique",
-    "Total HHs":"sum",
-    "HHs owning ponds":"sum",
-    "No of community ponds":"sum",
-    "No of ponds under fisheries":"sum",
-    "How many ponds converted in to eco farmponds":"sum",
-    "Total water spread are of the ponds_acr":"sum",
-    "New farmponds proposed 10x10m (nos)":"sum",
-    "New farmponds proposed 15x15m (nos)":"sum",
-    "New farmponds proposed 20x20m (nos)":"sum",
-    "New farmponds proposed 40x40m (nos)":"sum"
-}).reset_index()
+        "panchayath":"nunique",
+        "village":"nunique",
+        "Total HHs":"sum",
+        "HHs owning ponds":"sum",
+        "No of community ponds":"sum",
+        "No of ponds under fisheries":"sum",
+        "How many ponds converted in to eco farmponds":"sum",
+        "Total water spread are of the ponds_acr":"sum",
+        "New farmponds proposed 10x10m (nos)":"sum",
+        "New farmponds proposed 15x15m (nos)":"sum",
+        "New farmponds proposed 20x20m (nos)":"sum",
+        "New farmponds proposed 40x40m (nos)":"sum"
+    }).reset_index()
     pass
 
 elif menu == "Land Development":
@@ -429,6 +429,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
