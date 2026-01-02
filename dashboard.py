@@ -223,7 +223,7 @@ if mandal!="All":
     }).reset_index()
 
     st.dataframe(gp_summary)
-    st.download_button("Download GP Wise Excel", gp_summary.to_csv(index=False), "fisheries.csv"
+    st.download_button("Download GP Wise Excel", gp_summary.to_csv(index=False), "fisheries.csv")
 
     st.markdown("Mandal Wise Summary")                   
     mandal_summary = df_fish.groupby("mandal").agg({
@@ -438,6 +438,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
