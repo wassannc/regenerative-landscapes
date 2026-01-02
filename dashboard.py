@@ -200,7 +200,7 @@ elif menu == "Fisheries":
     how="left"
 ).fillna(0)
     mandal = st.selectbox("Select Mandal",["All"]+sorted(df_fish["mandal"].unique()))
-if mandal!="All":
+    if mandal!="All":
     df_fish = df_fish[df_fish["mandal"]==mandal]
 
     st.markdown("### Village Wise")
@@ -438,6 +438,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
