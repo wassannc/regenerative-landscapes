@@ -274,14 +274,15 @@ elif menu == "Migration":
     st.dataframe(df_mig)
 
     st.markdown("### Panchayath Wise Summary")
+    
     gp_summary = df_mig.groupby("panchayath").agg({
         "village":"nunique",
         "Total HHs":"sum",
         "Total no of land less HHs":"sum",
         "No of HHs not having Job cards":"sum",
         "HHs going for seasonal migraion":"sum",
-        "Average no of days in a year going for migraion":"mean",
-        "Average earning per annum per family":"mean"
+        "Average no of days in a year going for migraion":"sum",
+        "Average earning per annum per family":"sum"
     }).reset_index()
 
     st.dataframe(gp_summary)
@@ -296,8 +297,8 @@ elif menu == "Migration":
         "Total no of land less HHs":"sum",
         "No of HHs not having Job cards":"sum",
         "HHs going for seasonal migraion":"sum",
-        "Average no of days in a year going for migraion":"mean",
-        "Average earning per annum per family":"mean"
+        "Average no of days in a year going for migraion":"sum",
+        "Average earning per annum per family":"sum"
     }).reset_index()
 
     st.dataframe(mandal_summary)
@@ -487,6 +488,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
