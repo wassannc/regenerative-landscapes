@@ -274,7 +274,6 @@ elif menu == "Migration":
     st.dataframe(df_mig)
 
     st.markdown("### Panchayath Wise Summary")
-
     gp_summary = df_mig.groupby("panchayath").agg({
         "village":"nunique",
         "Total HHs":"sum",
@@ -488,6 +487,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
