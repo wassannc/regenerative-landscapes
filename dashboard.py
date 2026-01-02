@@ -171,9 +171,70 @@ elif menu == "Crop Systems":
 
 
 elif menu == "Fisheries":
-    st.header("🐟 Fisheries")
-    st.info("Fisheries dashboard coming soon.")
+    st.subheader("🐟 Fisheries")
+    f_profile_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
+    f_plan_ws    = client.open_by_key(SHEET_ID).worksheet("village plan")
 
+    df_f_profile = pd.DataFrame(f_profile_ws.get_all_records())
+    df_f_plan    = pd.DataFrame(f_plan_ws.get_all_records())
+    
+    df_f_profile = df_f_profile[[
+    "mandal","panchayath","village",
+    "Total HHs",
+    "HHs owning ponds",
+    "No of community ponds",
+    "No of ponds under fisheries",
+    "How many ponds converted in to eco farmponds",
+    "Total water spread are of the ponds_acr"
+]]
+    df_f_plan = df_f_plan[[
+    "mandal","panchayath","village",
+    "New farmponds proposed 10x10m (nos)",
+    "New farmponds proposed 15x15m (nos)",
+    "New farmponds proposed 20x20m (nos)",
+    "New farmponds proposed 40x40m (nos)"
+]]
+    df_fish = df_f_profile.merge(
+    df_f_plan,
+    on=["mandal","panchayath","village"],
+    how="left"
+).fillna(0)
+    mandal = st.selectbox("Select Mandal",["All"]+sorted(df_fish["mandal"].unique()))
+if mandal!="All":
+    df_fish = df_fish[df_fish["mandal"]==mandal]
+
+    st.markdown("### Village Wise")
+st.dataframe(df_fish)
+
+    gp_summary = df_fish.groupby("panchayath").agg({
+    "village":"nunique",
+    "Total HHs":"sum",
+    "HHs owning ponds":"sum",
+    "No of community ponds":"sum",
+    "No of ponds under fisheries":"sum",
+    "How many ponds converted in to eco farmponds":"sum",
+    "Total water spread are of the ponds_acr":"sum",
+    "New farmponds proposed 10x10m (nos)":"sum",
+    "New farmponds proposed 15x15m (nos)":"sum",
+    "New farmponds proposed 20x20m (nos)":"sum",
+    "New farmponds proposed 40x40m (nos)":"sum"
+}).reset_index()
+
+    mandal_summary = df_fish.groupby("mandal").agg({
+    "panchayath":"nunique",
+    "village":"nunique",
+    "Total HHs":"sum",
+    "HHs owning ponds":"sum",
+    "No of community ponds":"sum",
+    "No of ponds under fisheries":"sum",
+    "How many ponds converted in to eco farmponds":"sum",
+    "Total water spread are of the ponds_acr":"sum",
+    "New farmponds proposed 10x10m (nos)":"sum",
+    "New farmponds proposed 15x15m (nos)":"sum",
+    "New farmponds proposed 20x20m (nos)":"sum",
+    "New farmponds proposed 40x40m (nos)":"sum"
+}).reset_index()
+    pass
 
 elif menu == "Land Development":
     st.header("🌱 Land Development")
@@ -368,6 +429,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
