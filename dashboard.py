@@ -204,9 +204,10 @@ if mandal!="All":
     df_fish = df_fish[df_fish["mandal"]==mandal]
 
     st.markdown("### Village Wise")
-st.dataframe(df_fish)
-
+    st.dataframe(df_fish)
+    
     st.markdown("GP Wise Summary")
+    
     gp_summary = df_fish.groupby("panchayath").agg({
         "village":"nunique",
         "Total HHs":"sum",
@@ -437,6 +438,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
