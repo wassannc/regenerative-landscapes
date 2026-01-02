@@ -251,9 +251,59 @@ elif menu == "Land Development":
 
 
 elif menu == "Migration":
-    st.header("Migration")
-    st.info("Migration dashboard coming soon.")
+    st.subheader("🧳 Migration")
+        
+    mig_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
+    df_mig = pd.DataFrame(mig_ws.get_all_records())
+        df_mig = df_mig[[
+        "mandal","panchayath","village",
+        "Total HHs",
+        "Total no of land less HHs",
+        "No of HHs not having Job cards",
+        "HHs going for seasonal migraion",
+        "Average no of days in a year going for migraion",
+        "Type of work during the migration",
+        "Average earning per annum per family"
+    ]].fillna(0)
 
+    mandal = st.selectbox("Select Mandal",["All"]+sorted(df_mig["mandal"].unique()))
+    if mandal!="All":
+        df_mig = df_mig[df_mig["mandal"]==mandal]
+
+    st.markdown("### Village Wise")
+    st.dataframe(df_mig)
+
+    st.markdown("### Panchayath Wise Summary")
+
+    gp_summary = df_mig.groupby("panchayath").agg({
+        "village":"nunique",
+        "Total HHs":"sum",
+        "Total no of land less HHs":"sum",
+        "No of HHs not having Job cards":"sum",
+        "HHs going for seasonal migraion":"sum",
+        "Average no of days in a year going for migraion":"mean",
+        "Average earning per annum per family":"mean"
+    }).reset_index()
+
+    st.dataframe(gp_summary)
+    st.download_button("Download GP Summary", gp_summary.to_csv(index=False),"migration_gp.csv")
+
+    st.markdown("### Mandal Wise Summary")
+
+    mandal_summary = df_mig.groupby("mandal").agg({
+        "panchayath":"nunique",
+        "village":"nunique",
+        "Total HHs":"sum",
+        "Total no of land less HHs":"sum",
+        "No of HHs not having Job cards":"sum",
+        "HHs going for seasonal migraion":"sum",
+        "Average no of days in a year going for migraion":"mean",
+        "Average earning per annum per family":"mean"
+    }).reset_index()
+
+    st.dataframe(mandal_summary)
+    st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False),"migration_mandal.csv")
+    pass
 
 elif menu == "Farm mechanization":
     st.header("Farm mechanization")
@@ -438,6 +488,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
