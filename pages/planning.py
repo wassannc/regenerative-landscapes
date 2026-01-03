@@ -5,7 +5,7 @@ import streamlit as st
 
 st.set_page_config(page_title="RLV Planning", layout="wide")
 
-st.title("RLV – Village Planning & Budget Engine")
+st.title("RLV – Village Planning & Budget")
 
 scope = [
     "https://www.googleapis.com/auth/spreadsheets",
