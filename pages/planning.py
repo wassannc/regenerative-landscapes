@@ -22,8 +22,6 @@ plan    = pd.DataFrame(client.open_by_key(SHEET_ID).worksheet("village plan").ge
 epra    = pd.DataFrame(client.open_by_key(SHEET_ID).worksheet("epra").get_all_records())
 budget  = pd.DataFrame(client.open_by_key(SHEET_ID).worksheet("budget").get_all_records())
 
-st.success("All planning data & budget master loaded successfully")
-
 st.subheader("Village Wise Livestock Development Plan")
 
 mandal = st.selectbox("Select Mandal", sorted(plan["mandal"].dropna().unique()))
