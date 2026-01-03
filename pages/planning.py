@@ -81,7 +81,7 @@ for _, row in df_budget.iterrows():
 
 df_budget_calc = pd.concat(budget_rows, ignore_index=True)
 
-theme_budget = df_f.groupby("Thematic").agg(
+theme_budget = df_budget_calc.groupby("Thematic").agg(
     Total_Cost=("Total Cost","sum")
 ).reset_index()
 
