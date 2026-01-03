@@ -23,3 +23,31 @@ epra    = pd.DataFrame(client.open_by_key(SHEET_ID).worksheet("epra").get_all_re
 budget  = pd.DataFrame(client.open_by_key(SHEET_ID).worksheet("budget").get_all_records())
 
 st.success("All planning data & budget master loaded successfully")
+
+st.subheader("Village Wise Livestock Development Plan")
+
+mandal = st.selectbox("Select Mandal", sorted(plan["mandal"].dropna().unique()))
+panchayath = st.selectbox("Select Panchayath", sorted(plan[plan["mandal"]==mandal]["panchayath"].unique()))
+village = st.selectbox("Select Village", sorted(plan[(plan["mandal"]==mandal) & (plan["panchayath"]==panchayath)]["village"].unique()))
+
+village_plan = plan[(plan["mandal"]==mandal) & (plan["panchayath"]==panchayath) & (plan["village"]==village)]
+
+livestock_budget = budget[budget["Thematic"]=="Large Ruminants"]
+
+final_plan = []
+
+for _,row in livestock_budget.iterrows():
+    col = row["Source Column"]
+    if col in village_plan.columns:
+        qty = village_plan[col].sum()
+        if qty > 0:
+            cost = qty * row["Unit Cost (Rs)"]
+            final_plan.append([row["Name of the work"], row["Unit"], qty, row["Unit Cost (Rs)"], cost])
+
+final_df = pd.DataFrame(final_plan, columns=["Work","Unit","Quantity","Unit Cost","Total Cost"])
+
+st.dataframe(final_df)
+
+st.metric("Total Livestock Budget (₹)", int(final_df["Total Cost"].sum()))
+
+st.download_button("Download Village Livestock DPR", final_df.to_csv(index=False), f"{village}_livestock_dpr.csv")
