@@ -2,6 +2,7 @@ import pandas as pd
 import gspread
 from google.oauth2.service_account import Credentials
 import streamlit as st
+import plotly.express as px
 
 st.set_page_config(page_title="RLV Planning", layout="wide")
 
@@ -79,6 +80,47 @@ for _, row in df_budget.iterrows():
     ]])
 
 df_budget_calc = pd.concat(budget_rows, ignore_index=True)
+
+theme_budget = df_f.groupby("Thematic").agg(
+    Total_Cost=("Total Cost","sum")
+).reset_index()
+
+fig_theme = px.pie(theme_budget,
+                   names="Thematic",
+                   values="Total_Cost",
+                   title="Budget Share by Thematic")
+st.plotly_chart(fig_theme, use_container_width=True)
+
+top10 = df_f.groupby("Work").agg(
+    Total_Cost=("Total Cost","sum")
+).reset_index().sort_values("Total_Cost", ascending=False).head(10)
+
+fig_top = px.bar(top10,
+                 x="Work",
+                 y="Total_Cost",
+                 title="Top 10 High Cost Interventions")
+st.plotly_chart(fig_top, use_container_width=True)
+
+village_budget = df_f.groupby("village").agg(
+    Budget=("Total Cost","sum")
+).reset_index()
+
+fig_village = px.bar(village_budget,
+                     x="village", y="Budget",
+                     title="Village-wise Budget Distribution")
+st.plotly_chart(fig_village, use_container_width=True)
+
+gp_budget = df_f.groupby("panchayath").agg(
+    Budget=("Total Cost","sum"),
+    Villages=("village","nunique")
+).reset_index()
+
+fig_gp = px.scatter(gp_budget,
+                    x="Villages", y="Budget",
+                    size="Budget",
+                    hover_name="panchayath",
+                    title="GP Coverage vs Budget")
+st.plotly_chart(fig_gp, use_container_width=True)
 
 st.subheader("Village Wise Budget")
 st.dataframe(df_budget_calc)
