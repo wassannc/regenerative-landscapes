@@ -91,7 +91,7 @@ fig_theme = px.pie(theme_budget,
                    title="Budget Share by Thematic")
 st.plotly_chart(fig_theme, use_container_width=True)
 
-top10 = df_f.groupby("Work").agg(
+top10 = df_budget_calc.groupby("Work").agg(
     Total_Cost=("Total Cost","sum")
 ).reset_index().sort_values("Total_Cost", ascending=False).head(10)
 
@@ -101,7 +101,7 @@ fig_top = px.bar(top10,
                  title="Top 10 High Cost Interventions")
 st.plotly_chart(fig_top, use_container_width=True)
 
-village_budget = df_f.groupby("village").agg(
+village_budget = df_budget_calc.groupby("village").agg(
     Budget=("Total Cost","sum")
 ).reset_index()
 
@@ -110,7 +110,7 @@ fig_village = px.bar(village_budget,
                      title="Village-wise Budget Distribution")
 st.plotly_chart(fig_village, use_container_width=True)
 
-gp_budget = df_f.groupby("panchayath").agg(
+gp_budget = df_budget_calc.groupby("panchayath").agg(
     Budget=("Total Cost","sum"),
     Villages=("village","nunique")
 ).reset_index()
