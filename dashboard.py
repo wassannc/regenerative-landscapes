@@ -246,9 +246,139 @@ elif menu == "Fisheries":
     pass
 
 elif menu == "Land Development":
-    st.header("🌱 Land Development")
-    st.info("Land development dashboard coming soon.")
 
+    st.subheader("🌱 Land Development")
+
+    # --- Load sheets ---
+    profile_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
+    plan_ws    = client.open_by_key(SHEET_ID).worksheet("village plan")
+
+    df_profile = pd.DataFrame(profile_ws.get_all_records())
+    df_plan    = pd.DataFrame(plan_ws.get_all_records())
+
+    # --- Select required columns ---
+    df_profile = df_profile[[
+        "mandal","panchayath","village",
+        "mettu_total_land_acr",
+        "coffee_cashew_land_acr",
+        "podu_total_land_acr"
+    ]]
+
+    df_plan = df_plan[[
+        "mandal","panchayath","village",
+
+        # METTU
+        "mettu_earthen_bunds_cum",
+        "mettu_stone_bunding_cum",
+        "mettu_wat_cum",
+        "mettu_land_leveling_cum",
+
+        # COFFEE
+        "coffee_trench_cum",
+        "coffee_stone_bunding_cum",
+        "coffee_bench_terracing_cum",
+
+        # PODU
+        "podu_sgt_cum",
+        "podu_cct_cum",
+        "podu_pebble_bunding_cum",
+        "podu_plantation_acr",
+
+        # PASTURE
+        "pasture_land_development_acr",
+
+        # CONVERGENCE
+        "plans_submitted_mgnrega"
+    ]]
+
+    # --- Merge profile + plan ---
+    df = df_profile.merge(
+        df_plan,
+        on=["mandal","panchayath","village"],
+        how="left"
+    )
+
+    # --- Mandal filter ---
+    mandal = st.selectbox(
+        "Select Mandal",
+        ["All"] + sorted(df["mandal"].dropna().unique())
+    )
+
+    if mandal != "All":
+        df = df[df["mandal"] == mandal]
+
+    # ======================
+    # VILLAGE WISE TABLE
+    # ======================
+    st.markdown("### 🏘️ Village Wise Land Development")
+
+    st.dataframe(df)
+
+    # ======================
+    # PANCHAYATH SUMMARY
+    # ======================
+    st.markdown("### 🏡 Panchayath Wise Summary")
+
+    df["mgnrega_yes"] = (
+        df["plans_submitted_mgnrega"]
+        .astype(str)
+        .str.strip()
+        .str.lower()
+        .eq("yes")
+        .astype(int)
+    )
+
+    gp_summary = df.groupby("panchayath").agg({
+        "village": "nunique",
+
+        "mettu_total_land_acr": "sum",
+        "mettu_earthen_bunds_cum": "sum",
+        "mettu_stone_bunding_cum": "sum",
+
+        "coffee_cashew_land_acr": "sum",
+        "coffee_trench_cum": "sum",
+
+        "podu_total_land_acr": "sum",
+        "podu_sgt_cum": "sum",
+
+        "pasture_land_development_acr": "sum",
+
+        "mgnrega_yes": "sum"
+    }).reset_index()
+
+    st.dataframe(gp_summary)
+
+    st.download_button(
+        "Download Panchayath Report",
+        gp_summary.to_csv(index=False),
+        "land_development_gp.csv"
+    )
+
+    # ======================
+    # MANDAL SUMMARY
+    # ======================
+    st.markdown("### 🗺️ Mandal Wise Summary")
+
+    mandal_summary = df.groupby("mandal").agg({
+        "panchayath": "nunique",
+        "village": "nunique",
+
+        "mettu_total_land_acr": "sum",
+        "coffee_cashew_land_acr": "sum",
+        "podu_total_land_acr": "sum",
+        "pasture_land_development_acr": "sum",
+
+        "mgnrega_yes": "sum"
+    }).reset_index()
+
+    st.dataframe(mandal_summary)
+
+    st.download_button(
+        "Download Mandal Report",
+        mandal_summary.to_csv(index=False),
+        "land_development_mandal.csv"
+    )
+    pass
 
 elif menu == "Migration":
     st.subheader("🧳 Migration")
@@ -488,6 +618,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
