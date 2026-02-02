@@ -256,15 +256,22 @@ elif menu == "Land Development":
     df_profile = pd.DataFrame(profile_ws.get_all_records())
     df_plan    = pd.DataFrame(plan_ws.get_all_records())
 
-    # --- Select required columns ---
-    df_profile = df_profile[[
+    # --- Clean column names (removes hidden spaces) ---
+    df_profile.columns = df_profile.columns.str.strip()
+    df_plan.columns    = df_plan.columns.str.strip()
+
+    # --- Required PROFILE columns ---
+    profile_cols = [
         "mandal","panchayath","village",
         "mettu_total_land_acr",
         "coffee_cashew_land_acr",
         "podu_total_land_acr"
-    ]]
+    ]
 
-    df_plan = df_plan[[
+    df_profile = df_profile.reindex(columns=profile_cols)
+
+    # --- Required PLAN columns ---
+    plan_cols = [
         "mandal","panchayath","village",
 
         # METTU
@@ -287,23 +294,21 @@ elif menu == "Land Development":
         # PASTURE
         "pasture_land_development_acr",
 
-        # CONVERGENCE
+        # MGNREGA
         "plans_submitted_mgnrega"
-    ]]
+    ]
+
+    df_plan = df_plan.reindex(columns=plan_cols)
 
     # --- Merge profile + plan ---
     df = df_profile.merge(
         df_plan,
         on=["mandal","panchayath","village"],
         how="left"
-    )
+    ).fillna(0)
 
-    # --- Mandal filter ---
-    mandal = st.selectbox(
-        "Select Mandal",
-        ["All"] + sorted(df["mandal"].dropna().unique())
-    )
-
+    # --- Mandal Filter ---
+    mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
     if mandal != "All":
         df = df[df["mandal"] == mandal]
 
@@ -311,12 +316,12 @@ elif menu == "Land Development":
     # VILLAGE WISE TABLE
     # ======================
     st.markdown("### 🏘️ Village Wise Land Development")
-
     st.dataframe(df)
 
     # ======================
     # PANCHAYATH SUMMARY
     # ======================
+
     st.markdown("### 🏡 Panchayath Wise Summary")
 
     df["mgnrega_yes"] = (
@@ -334,12 +339,19 @@ elif menu == "Land Development":
         "mettu_total_land_acr": "sum",
         "mettu_earthen_bunds_cum": "sum",
         "mettu_stone_bunding_cum": "sum",
+        "mettu_wat_cum": "sum",
+        "mettu_land_leveling_cum": "sum",
 
         "coffee_cashew_land_acr": "sum",
         "coffee_trench_cum": "sum",
+        "coffee_stone_bunding_cum": "sum",
+        "coffee_bench_terracing_cum": "sum",
 
         "podu_total_land_acr": "sum",
         "podu_sgt_cum": "sum",
+        "podu_cct_cum": "sum",
+        "podu_pebble_bunding_cum": "sum",
+        "podu_plantation_acr": "sum",
 
         "pasture_land_development_acr": "sum",
 
@@ -357,6 +369,7 @@ elif menu == "Land Development":
     # ======================
     # MANDAL SUMMARY
     # ======================
+
     st.markdown("### 🗺️ Mandal Wise Summary")
 
     mandal_summary = df.groupby("mandal").agg({
@@ -367,6 +380,10 @@ elif menu == "Land Development":
         "coffee_cashew_land_acr": "sum",
         "podu_total_land_acr": "sum",
         "pasture_land_development_acr": "sum",
+
+        "mettu_earthen_bunds_cum": "sum",
+        "coffee_trench_cum": "sum",
+        "podu_sgt_cum": "sum",
 
         "mgnrega_yes": "sum"
     }).reset_index()
@@ -618,6 +635,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
