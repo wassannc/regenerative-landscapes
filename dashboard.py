@@ -453,9 +453,109 @@ elif menu == "Migration":
     pass
 
 elif menu == "Farm mechanization":
-    st.header("Farm mechanization")
-    st.info("Farm mechanization dashboard coming soon.")
 
+    st.subheader("🚜 Farm Mechanization")
+
+    profile_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
+    plan_ws    = client.open_by_key(SHEET_ID).worksheet("village plan")
+
+    df_profile = pd.DataFrame(profile_ws.get_all_records())
+    df_plan    = pd.DataFrame(plan_ws.get_all_records())
+
+    df_profile.columns = df_profile.columns.str.strip()
+    df_plan.columns    = df_plan.columns.str.strip()
+
+    # Select required columns
+    df_profile = df_profile[[
+        "mandal","panchayath","village",
+
+        "farmeasy_Power_weeder_available","farmeasy_Power_weeder_users",
+        "farmeasy_Cycle_weeder_available","farmeasy_Cycle_weeder_users",
+        "farmeasy_Plastic_drums_available","farmeasy_Plastic_drums_users",
+        "farmeasy_Cono_Weeder_available","farmeasy_Cono_Weeder_users",
+        "farmeasy_Sprayers_available","farmeasy_Sprayers_users",
+        "farmeasy_Power_sprayers_available","farmeasy_Power_sprayers_users",
+        "farmeasy_Taurpalin_available","farmeasy_Taurpalin_users",
+        "farmeasy_Graders_available","farmeasy_Graders_users",
+        "farmeasy_Power_tiller_available","farmeasy_Power_tiller_users",
+        "farmeasy_Tractor_available","farmeasy_Tractor_users",
+        "farmeasy_Coffee_pulper_available","farmeasy_Coffee_pulper_users",
+        "farmeasy_Pepper_thresher_available","farmeasy_Pepper_thresher_users",
+        "farmeasy_Multigrain_thresher_available","farmeasy_Multigrain_thresher_users",
+        "farmeasy_Turmeric_polisher_available","farmeasy_Turmeric_polisher_users",
+        "farmeasy_Turmeric_boiler_available","farmeasy_Turmeric_boiler_users",
+        "farmeasy_asc_businessplan",
+        "farmeasy_asc"
+    ]]
+
+    df_plan = df_plan[[
+        "mandal","panchayath","village",
+
+        "farmeasy_Power_weeder_required",
+        "farmeasy_Cycle_weeder_required",
+        "farmeasy_Plastic_drums_required",
+        "farmeasy_Cono_Weeder_required",
+        "farmeasy_Sprayers_required",
+        "farmeasy_Power_sprayers_required",
+        "farmeasy_Taurpalin_required",
+        "farmeasy_Graders_required",
+        "farmeasy_Power_tiller_required",
+        "farmeasy_Tractor_required",
+        "farmeasy_Coffee_pulper_required",
+        "farmeasy_Pepper_thresher_required",
+        "farmeasy_Multigrain_thresher_required",
+        "farmeasy_Turmeric_polisher_required",
+        "farmeasy_Turmeric_boiler_required"
+    ]]
+
+    df = df_profile.merge(df_plan, on=["mandal","panchayath","village"], how="left").fillna(0)
+
+    # Convert yes/no to counts
+    df["asc_businessplan_yes"] = df["farmeasy_asc_businessplan"].astype(str).str.lower().eq("yes").astype(int)
+    df["asc_yes"] = df["farmeasy_asc"].astype(str).str.lower().eq("yes").astype(int)
+
+    mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].unique()))
+    if mandal != "All":
+        df = df[df["mandal"] == mandal]
+
+    st.markdown("### Village Wise")
+    st.dataframe(df)
+
+    st.markdown("### Panchayath Wise Summary")
+
+    gp_summary = df.groupby("panchayath").agg({
+        "village":"nunique",
+        "farmeasy_Power_weeder_available":"sum",
+        "farmeasy_Power_weeder_users":"sum",
+        "farmeasy_Power_weeder_required":"sum",
+        "farmeasy_Tractor_available":"sum",
+        "farmeasy_Tractor_users":"sum",
+        "farmeasy_Tractor_required":"sum",
+        "asc_businessplan_yes":"sum",
+        "asc_yes":"sum"
+    }).reset_index()
+
+    st.dataframe(gp_summary)
+    st.download_button("Download GP Report", gp_summary.to_csv(index=False), "farm_mech_gp.csv")
+
+    st.markdown("### Mandal Wise Summary")
+
+    mandal_summary = df.groupby("mandal").agg({
+        "panchayath":"nunique",
+        "village":"nunique",
+        "farmeasy_Power_weeder_available":"sum",
+        "farmeasy_Power_weeder_users":"sum",
+        "farmeasy_Power_weeder_required":"sum",
+        "farmeasy_Tractor_available":"sum",
+        "farmeasy_Tractor_users":"sum",
+        "farmeasy_Tractor_required":"sum",
+        "asc_businessplan_yes":"sum",
+        "asc_yes":"sum"
+    }).reset_index()
+
+    st.dataframe(mandal_summary)
+    st.download_button("Download Mandal Report", mandal_summary.to_csv(index=False), "farm_mech_mandal.csv")
+    pass
 
 elif menu == "Desi Poultry":
     st.subheader("🐔 Desi Poultry")
@@ -635,6 +735,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
