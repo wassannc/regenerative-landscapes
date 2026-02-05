@@ -485,7 +485,7 @@ elif menu == "Farm mechanization":
         "farmeasy_Turmeric_polisher_available","farmeasy_Turmeric_polisher_users",
         "farmeasy_Turmeric_boiler_available","farmeasy_Turmeric_boiler_users",
         "farmeasy_asc_businessplan",
-        "farmeasy-asc"
+        "farmeasy_asc"
     ]]
 
     df_plan = df_plan[[
@@ -735,6 +735,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
