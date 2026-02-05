@@ -484,7 +484,7 @@ elif menu == "Farm mechanization":
         "farmeasy_Multigrain_thresher_available","farmeasy_Multigrain_thresher_users",
         "farmeasy_Turmeric_polisher_available","farmeasy_Turmeric_polisher_users",
         "farmeasy_Turmeric_boiler_available","farmeasy_Turmeric_boiler_users",
-        "farmeasy-asc_businessplan",
+        "farmeasy_asc_businessplan",
         "farmeasy-asc"
     ]]
 
@@ -735,6 +735,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
