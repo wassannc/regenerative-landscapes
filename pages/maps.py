@@ -29,7 +29,18 @@ if uploaded_file:
             gdf[col] = gdf[col].astype(str)
 
     # Convert to GeoJSON safely
-    geojson_data = json.loads(gdf.to_json())
+    # ---------- FIX GEOMETRY ISSUES ----------
+gdf = gdf[gdf.geometry.notnull()]          # Remove empty geometries
+gdf = gdf[gdf.is_valid]                   # Remove invalid shapes
+gdf["geometry"] = gdf["geometry"].buffer(0)  # Fix minor geometry errors
+
+# Convert all non-geometry columns to safe types
+for col in gdf.columns:
+    if col != "geometry":
+        gdf[col] = gdf[col].astype(str)
+
+# Convert to GeoJSON safely
+geojson_data = json.loads(gdf.to_json())
 
     st.success(f"Loaded {len(gdf)} map features")
 
