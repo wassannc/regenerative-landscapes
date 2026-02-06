@@ -4,7 +4,13 @@ gspread
 google-auth
 plotly
 # rebuild
+geopandas
+folium
 streamlit-folium
+shapely
+fiona
+pyproj
+
 
 
 
