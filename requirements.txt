@@ -4,6 +4,8 @@ gspread
 google-auth
 plotly
 # rebuild
+streamlit-folium
+
 
 
 
