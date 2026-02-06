@@ -110,6 +110,20 @@ fig_village = px.bar(village_budget,
                      title="Village-wise Budget Distribution")
 st.plotly_chart(fig_village, use_container_width=True)
 
+# -------------------------------
+# THEME FILTER (APPLIES TO ALL BELOW)
+# -------------------------------
+st.markdown("---")
+st.subheader("Filter Budget by Thematic")
+
+theme_selected = st.selectbox(
+    "Select Thematic",
+    ["All"] + sorted(df_budget_calc["Thematic"].dropna().unique())
+)
+
+if theme_selected != "All":
+    df_budget_calc = df_budget_calc[df_budget_calc["Thematic"] == theme_selected]
+
 gp_budget = df_budget_calc.groupby("panchayath").agg(
     Budget=("Total Cost","sum"),
     Villages=("village","nunique")
