@@ -28,10 +28,20 @@ if uploaded_file is not None:
                              gdf.geometry.centroid.x.mean()],
                    zoom_start=12)
 
-    folium.GeoJson(gdf,
-                   name="Layer",
-                   tooltip=folium.GeoJsonTooltip(fields=gdf.columns[:5])
-                  ).add_to(m)
+    folium.GeoJson(
+    gdf,
+    name="Village Boundaries",
+    tooltip=folium.GeoJsonTooltip(
+        fields=["village", "mandal", "panchayath"],
+        aliases=["Village:", "Mandal:", "Panchayath:"]
+    ),
+    style_function=lambda x: {
+        "fillColor": "#3186cc",
+        "color": "black",
+        "weight": 1,
+        "fillOpacity": 0.6,
+    }
+).add_to(m)
 
     st_folium(m, width=1200, height=600)
 
