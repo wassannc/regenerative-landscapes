@@ -6,7 +6,43 @@ import plotly.express as px
 
 st.set_page_config(page_title="RLV Planning", layout="wide")
 
-st.title("RLV – Village Planning & Budget")
+st.markdown("""
+<style>
+/* Main background */
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(to bottom right, #f5f7fb, #eef2f7);
+}
+
+/* Metric cards */
+div[data-testid="metric-container"] {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    text-align: center;
+}
+
+/* Section headers */
+.section-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+/* Tables */
+[data-testid="stDataFrame"] {
+    border-radius: 10px;
+    overflow: hidden;
+}
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<h1 style='font-size:34px;'>📑 RLV Village Planning & Budget Engine</h1>
+<p style='color:gray;'>Generate DPRs and budget reports across all themes</p>
+""", unsafe_allow_html=True)
+
 
 scope = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -23,7 +59,7 @@ plan    = pd.DataFrame(client.open_by_key(SHEET_ID).worksheet("village plan").ge
 epra    = pd.DataFrame(client.open_by_key(SHEET_ID).worksheet("epra").get_all_records())
 budget  = pd.DataFrame(client.open_by_key(SHEET_ID).worksheet("budget").get_all_records())
 
-st.subheader("Village Wise Livestock Development Plan")
+st.markdown("<div class='section-title'>🐄 Village Wise Livestock Development Plan</div>", unsafe_allow_html=True)
 
 mandal = st.selectbox("Select Mandal", sorted(plan["mandal"].dropna().unique()))
 panchayath = st.selectbox("Select Panchayath", sorted(plan[plan["mandal"]==mandal]["panchayath"].unique()))
@@ -47,7 +83,12 @@ final_df = pd.DataFrame(final_plan, columns=["Work","Unit","Quantity","Unit Cost
 
 st.dataframe(final_df)
 
-st.metric("Total Livestock Budget (₹)", int(final_df["Total Cost"].sum()))
+total_budget = int(final_df["Total Cost"].sum())
+
+c1, c2, c3 = st.columns(3)
+c1.metric("💰 Total Budget", f"₹ {total_budget:,.0f}")
+c2.metric("🧱 Total Works", len(final_df))
+c3.metric("📍 Village", village)
 
 st.download_button("Download Village Livestock DPR", final_df.to_csv(index=False), f"{village}_livestock_dpr.csv")
 
