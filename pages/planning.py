@@ -91,6 +91,14 @@ fig_theme = px.pie(theme_budget,
                    title="Budget Share by Thematic")
 st.plotly_chart(fig_theme, use_container_width=True)
 
+fig_theme_bar = px.bar(theme_budget,
+                       x="Thematic",
+                       y="Total_Cost",
+                       title="Budget Allocation by Thematic Area",
+                       text_auto=True)
+
+st.plotly_chart(fig_theme_bar, use_container_width=True)
+
 top10 = df_budget_calc.groupby("Work").agg(
     Total_Cost=("Total Cost","sum")
 ).reset_index().sort_values("Total_Cost", ascending=False).head(10)
@@ -136,7 +144,22 @@ fig_gp = px.scatter(gp_budget,
                     title="GP Coverage vs Budget")
 st.plotly_chart(fig_gp, use_container_width=True)
 
-st.subheader("Village Wise Budget")
+st.markdown("## 💰 Overall Budget Snapshot")
+
+col1, col2, col3, col4 = st.columns(4)
+
+total_budget = df_budget_calc["Total Cost"].sum()
+total_villages = df_budget_calc["village"].nunique()
+total_gps = df_budget_calc["panchayath"].nunique()
+total_works = df_budget_calc["Work"].nunique()
+
+col1.metric("💵 Total Budget", f"₹ {int(total_budget):,}")
+col2.metric("🏘️ Villages Covered", total_villages)
+col3.metric("📍 Panchayaths Covered", total_gps)
+col4.metric("🛠️ No. of Work Types", total_works)
+
+st.markdown("---")
+st.markdown("### 🏘️ Village Wise Budget Details")
 st.dataframe(df_budget_calc)
 
 gp_budget = df_budget_calc.groupby(["mandal","panchayath","Work"]).agg(
@@ -144,7 +167,8 @@ gp_budget = df_budget_calc.groupby(["mandal","panchayath","Work"]).agg(
     Total_Cost=("Total Cost","sum")
 ).reset_index()
 
-st.subheader("GP Wise Budget Summary")
+st.markdown("---")
+st.markdown("### 📍 GP Wise Budget Summary")
 st.dataframe(gp_budget)
 st.download_button("Download GP Budget", gp_budget.to_csv(index=False), "gp_budget.csv")
 
@@ -153,6 +177,7 @@ mandal_budget = df_budget_calc.groupby(["mandal","Work"]).agg(
     Total_Cost=("Total Cost","sum")
 ).reset_index()
 
-st.subheader("Mandal Wise Budget Summary")
+st.markdown("---")
+st.markdown("### 🗺️ Mandal Wise Budget Summary")
 st.dataframe(mandal_budget)
 st.download_button("Download Mandal Budget", mandal_budget.to_csv(index=False), "mandal_budget.csv")
