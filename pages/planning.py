@@ -9,34 +9,53 @@ st.set_page_config(page_title="RLV Planning", layout="wide")
 st.markdown("""
 <style>
 
-/* Main background */
+/* ===== Sidebar Background ===== */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #0f2b4c, #0b3b66);
+    color: white;
+}
+
+/* Sidebar text */
+[data-testid="stSidebar"] * {
+    color: white !important;
+}
+
+/* Sidebar section titles */
+[data-testid="stSidebar"] h1, 
+[data-testid="stSidebar"] h2, 
+[data-testid="stSidebar"] h3 {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+/* Sidebar radio buttons */
+[data-testid="stSidebar"] .stRadio label {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* Selected radio option highlight */
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] > label[data-baseweb="radio"] > div:first-child {
+    border-color: white !important;
+}
+
+/* ===== Sidebar Navigation Buttons (dashboard/maps/planning) ===== */
+[data-testid="stSidebarNav"] {
+    background: transparent;
+}
+
+/* Active page highlight */
+[data-testid="stSidebarNav"] li a {
+    border-radius: 8px;
+    padding: 6px 10px;
+}
+[data-testid="stSidebarNav"] li a[aria-current="page"] {
+    background-color: rgba(255,255,255,0.15);
+}
+
+/* ===== Keep main page light ===== */
 [data-testid="stAppViewContainer"] {
     background: linear-gradient(to bottom right, #f5f7fb, #eef2f7);
-}
-
-/* Sidebar styling */
-section[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #0f2b46, #123a63);
-}
-
-/* ===== Download / Action Buttons ===== */
-.stDownloadButton button, 
-.stButton button {
-    background: linear-gradient(135deg, #1b6cff, #1746d0);
-    color: white !important;
-    border-radius: 10px;
-    padding: 10px 18px;
-    font-weight: 600;
-    border: none;
-    box-shadow: 0 4px 12px rgba(23,70,208,0.25);
-    transition: all 0.2s ease-in-out;
-}
-
-.stDownloadButton button:hover,
-.stButton button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(23,70,208,0.35);
-    background: linear-gradient(135deg, #2a7bff, #1b57e0);
 }
 
 </style>
