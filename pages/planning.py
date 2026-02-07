@@ -8,41 +8,77 @@ st.set_page_config(page_title="RLV Planning", layout="wide")
 
 st.markdown("""
 <style>
-/* Main background */
+
+/* ===== Page Background ===== */
 [data-testid="stAppViewContainer"] {
     background: linear-gradient(to bottom right, #f5f7fb, #eef2f7);
 }
 
-/* Metric cards */
-div[data-testid="metric-container"] {
-    background: white;
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    text-align: center;
+/* ===== Main Title ===== */
+h1 {
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -1px;
 }
 
-/* Section headers */
+/* ===== Section Titles ===== */
 .section-title {
     font-size: 22px;
     font-weight: 700;
-    margin-top: 25px;
+    color: #1e293b;
+    margin-top: 30px;
     margin-bottom: 10px;
 }
 
-/* Tables */
-[data-testid="stDataFrame"] {
-    border-radius: 10px;
-    overflow: hidden;
+/* ===== Cards (metrics + content blocks) ===== */
+.block-container {
+    padding-top: 2rem;
 }
+
+.stMetric {
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* ===== Data Tables ===== */
+[data-testid="stDataFrame"] {
+    background: white;
+    border-radius: 14px;
+    padding: 10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+}
+
+/* ===== Download Buttons ===== */
+.stDownloadButton>button {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    color: white;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 600;
+    border: none;
+}
+.stDownloadButton>button:hover {
+    background: linear-gradient(135deg, #1e40af, #1d4ed8);
+    transform: scale(1.03);
+    transition: 0.2s ease-in-out;
+}
+
+/* ===== Regular Buttons ===== */
+.stButton>button {
+    border-radius: 8px;
+    border: 1px solid #dbeafe;
+}
+
+/* ===== Select Boxes ===== */
+div[data-baseweb="select"] > div {
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+}
+
 </style>
 """, unsafe_allow_html=True)
-
-st.markdown("""
-<h1 style='font-size:34px;'>📑 RLV Village Planning & Budget Engine</h1>
-<p style='color:gray;'>Generate DPRs and budget reports across all themes</p>
-""", unsafe_allow_html=True)
-
 
 scope = [
     "https://www.googleapis.com/auth/spreadsheets",
