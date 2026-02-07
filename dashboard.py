@@ -7,8 +7,89 @@ st.set_page_config(
     page_title="RLV MEL Portal",
     layout="wide"
 )
+# ---------------- PREMIUM UI STYLE ----------------
+st.markdown("""
+<style>
+/* App background */
+.stApp {
+    background: linear-gradient(135deg, #f5f7fa, #e4ecf7);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Main title */
+h1, h2, h3 {
+    color: #1f3b73;
+    font-weight: 700;
+}
+
+/* Sidebar styling */
+section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #0f3057, #145da0);
+    color: white;
+}
+
+section[data-testid="stSidebar"] * {
+    color: white !important;
+}
+
+/* Sidebar title */
+section[data-testid="stSidebar"] h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* Radio buttons */
+div[role="radiogroup"] > label {
+    padding: 8px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+div[role="radiogroup"] > label:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+/* Data tables */
+thead tr th {
+    background-color: #1f3b73 !important;
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+/* Metrics */
+div[data-testid="metric-container"] {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Download buttons */
+button[kind="secondary"] {
+    border-radius: 8px;
+    border: none;
+    background-color: #1f3b73;
+    color: white;
+    font-weight: 600;
+}
+button[kind="secondary"]:hover {
+    background-color: #145da0;
+    color: white;
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.title("Regenerative Landscape Villages")
+st.markdown("""
+<div style="
+    background: linear-gradient(90deg, #1f3b73, #145da0);
+    padding: 12px 20px;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    margin-bottom: 15px;">
+    🌿 RLV Monitoring & Planning Portal | Integrated Livelihood & Resource Dashboard
+</div>
+""", unsafe_allow_html=True)
 
 st.sidebar.markdown("## RLV PORTAL")
 st.sidebar.markdown("---")
@@ -60,11 +141,14 @@ if menu == "Large Ruminants":
 
     st.dataframe(df)
 
-    st.metric("Total HH", df["Total HHs"].sum())
-    st.metric("Total Population", df["population"].sum())
-    st.metric("Animals Immunized", df["Total animals immunized"].sum())
-    st.metric("Total Mortality", df["Mortality"].sum())
-    st.subheader("GP Wise Summary")
+    col1, col2, col3, col4 = st.columns(4)
+
+col1.metric("🏠 Total HH", df["Total HHs"].sum())
+col2.metric("👥 Population", df["population"].sum())
+col3.metric("💉 Animals Immunized", df["Total animals immunized"].sum())
+col4.metric("⚠️ Mortality", df["Mortality"].sum())
+
+st.markdown("### 📍 GP Wise Summary")
 
     gp_summary = df.groupby("panchayath").agg({
         "village":"nunique",
@@ -735,6 +819,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
