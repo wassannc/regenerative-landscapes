@@ -58,6 +58,34 @@ st.markdown("""
     background: linear-gradient(to bottom right, #f5f7fb, #eef2f7);
 }
 
+st.markdown("""
+<style>
+
+/* ===== Download / Action Buttons ===== */
+.stDownloadButton button, 
+.stButton button {
+    background: linear-gradient(135deg, #1b6cff, #1746d0);
+    color: white !important;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 4px 12px rgba(23,70,208,0.25);
+    transition: all 0.2s ease-in-out;
+}
+
+.stDownloadButton button:hover,
+.stButton button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(23,70,208,0.35);
+    background: linear-gradient(135deg, #2a7bff, #1b57e0);
+}
+
+/* Make buttons slightly larger */
+.stDownloadButton, .stButton {
+    margin-top: 8px;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
