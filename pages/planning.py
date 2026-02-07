@@ -58,9 +58,6 @@ st.markdown("""
     background: linear-gradient(to bottom right, #f5f7fb, #eef2f7);
 }
 
-st.markdown("""
-<style>
-
 /* ===== Download / Action Buttons ===== */
 .stDownloadButton button, 
 .stButton button {
