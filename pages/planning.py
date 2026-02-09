@@ -5,6 +5,35 @@ import streamlit as st
 import plotly.express as px
 
 st.set_page_config(page_title="RLV Planning", layout="wide")
+st.markdown("""
+<style>
+[data-testid="stSidebarNav"] {display: none;}
+
+.topnav {
+    background: linear-gradient(90deg, #0f2b46, #123e63);
+    padding: 12px 30px;
+    border-radius: 0 0 12px 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.topnav a {
+    color: white;
+    margin-right: 40px;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+}
+.topnav a:hover {
+    color: #ffd166;
+}
+</style>
+
+<div class="topnav">
+    <a href="/">Dashboard</a>
+    <a href="/maps">Maps</a>
+    <a href="/planning">Planning</a>
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
