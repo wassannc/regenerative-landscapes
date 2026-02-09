@@ -7,6 +7,7 @@ st.set_page_config(
     page_title="RLV MEL Portal",
     layout="wide"
 )
+page = "dashboard"
 st.markdown("""
 <style>
 /* Hide Streamlit default sidebar navigation */
@@ -32,10 +33,39 @@ st.markdown("""
 }
 </style>
 
+st.markdown(f"""
+<style>
+[data-testid="stSidebarNav"] {{display: none;}}
+
+.topnav {{
+    background: linear-gradient(90deg, #0f2b46, #123e63);
+    padding: 12px 30px;
+    border-radius: 0 0 12px 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}}
+.topnav a {{
+    color: white;
+    margin-right: 40px;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+}}
+.topnav a:hover {{
+    background-color: rgba(255,255,255,0.15);
+}}
+.active {{
+    background-color: #ffd166;
+    color: #0f2b46 !important;
+}}
+</style>
+
 <div class="topnav">
-    <a href="/">Dashboard</a>
-    <a href="/maps">Maps</a>
-    <a href="/planning">Planning</a>
+    <a href="/" class="{{'active' if page=='dashboard' else ''}}">Dashboard</a>
+    <a href="/maps" class="{{'active' if page=='maps' else ''}}">Maps</a>
+    <a href="/planning" class="{{'active' if page=='planning' else ''}}">Planning</a>
 </div>
 """, unsafe_allow_html=True)
 
@@ -851,6 +881,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
