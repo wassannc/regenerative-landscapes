@@ -10,6 +10,7 @@ streamlit-folium
 shapely
 fiona
 pyproj
+streamlit-authenticator
 
 
 
