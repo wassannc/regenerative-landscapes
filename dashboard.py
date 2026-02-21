@@ -30,7 +30,7 @@ if not authentication_status:
     st.stop()
 
 authenticator.logout()
-st.sidebar.write(f"Welcome {name}")
+st.sidebar.write(f"Welcome {st.session_state['name']}")
 
 st.set_page_config(
     page_title="RLV MEL Portal",
@@ -892,6 +892,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
