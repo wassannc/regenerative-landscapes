@@ -29,7 +29,7 @@ if authentication_status is None:
 if not authentication_status:
     st.stop()
 
-authenticator.logout("Logout", "sidebar")
+authenticator.logout()
 st.sidebar.write(f"Welcome {name}")
 
 st.set_page_config(
@@ -892,6 +892,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
