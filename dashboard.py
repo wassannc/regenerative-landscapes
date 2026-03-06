@@ -269,9 +269,7 @@ for col in numeric_cols:
     pass
 
 elif menu == "Small Ruminants":
-
     st.subheader("🐐 Small Ruminants")
-
     sr_profile = client.open_by_key(SHEET_ID).worksheet("village profile")
     sr_plan    = client.open_by_key(SHEET_ID).worksheet("village plan")
 
@@ -905,6 +903,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
