@@ -204,8 +204,21 @@ if menu == "Large Ruminants":
         on=["mandal","panchayath","village"],
         how="left"
 )
-    
+    numeric_cols = [
+    "Total HHs",
+    "population",
+    "Total animals immunized",
+    "Animals to be immunized",
+    "Mortality",
+    "no of cattle sheds",
+    "no of sheds rennovated",
+    "no of sheds to be rennovated"
+]
 
+for col in numeric_cols:
+    if col in df.columns:
+        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+    
     mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
 
 
@@ -892,6 +905,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
