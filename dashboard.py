@@ -231,8 +231,8 @@ mandal_summary = df.groupby("mandal").agg({
         "no of sheds rennovated":"sum",
         "no of sheds to be rennovated":"sum"
     }).reset_index()
-    st.dataframe(mandal_summary)
-    st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+st.dataframe(mandal_summary)
+st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
     pass
 
 elif menu == "Small Ruminants":
@@ -871,6 +871,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
