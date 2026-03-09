@@ -194,7 +194,7 @@ numeric_cols = [
     "no of sheds rennovated",
     "no of sheds to be rennovated"
 ]
-    col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4 = st.columns(4)
 
     col1.metric("🏠 Total HH", df["Total HHs"].sum())
     col2.metric("👥 Population", df["population"].sum())
@@ -871,6 +871,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
