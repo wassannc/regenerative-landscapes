@@ -233,7 +233,7 @@ mandal_summary = df.groupby("mandal").agg({
     }).reset_index()
 st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
-    pass
+pass
 
 elif menu == "Small Ruminants":
     st.subheader("🐐 Small Ruminants")
@@ -871,6 +871,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
