@@ -184,7 +184,7 @@ if mandal != "All":
         df = df[df["mandal"] == mandal]
 st.dataframe(df)
     
-    numeric_cols = [
+numeric_cols = [
     "Total HHs",
     "population",
     "Total animals immunized",
@@ -871,6 +871,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
