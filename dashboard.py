@@ -214,10 +214,10 @@ gp_summary = df.groupby("panchayath").agg({
         "no of sheds rennovated":"sum",
         "no of sheds to be rennovated":"sum"
     }).reset_index()
-    st.dataframe(gp_summary)
-    st.download_button("Download GP Wise Excel", gp_summary.to_csv(index=False), "GP_Wise_Report.csv")
+st.dataframe(gp_summary)
+st.download_button("Download GP Wise Excel", gp_summary.to_csv(index=False), "GP_Wise_Report.csv")
 
-    st.subheader("Mandal Wise Summary")
+st.subheader("Mandal Wise Summary")
 
     mandal_summary = df.groupby("mandal").agg({
         "panchayath":"nunique",
@@ -871,6 +871,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
