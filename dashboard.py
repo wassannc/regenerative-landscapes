@@ -187,9 +187,10 @@ if menu == "Large Ruminants":
     "no of sheds to be rennovated"
 ]
 
-for col in numeric_cols:
-    if col in df.columns:
-        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+if 'df' in locals():
+    for col in numeric_cols:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
 
 mandal = st.selectbox(
     "Select Mandal",
@@ -878,6 +879,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
