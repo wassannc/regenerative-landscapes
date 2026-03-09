@@ -175,6 +175,7 @@ if menu == "Large Ruminants":
         on=["mandal","panchayath","village"],
         how="left"
 )
+
 for col in df.columns:
     try:
         df[col] = pd.to_numeric(df[col])
@@ -878,6 +879,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
