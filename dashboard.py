@@ -3,35 +3,6 @@ import gspread
 from google.oauth2.service_account import Credentials
 import streamlit as st
 
-import streamlit_authenticator as stauth
-import yaml
-from yaml.loader import SafeLoader
-
-# ---------- LOGIN CONFIG ----------
-with open('config.yaml') as file:
-    config = yaml.load(file, Loader=SafeLoader)
-
-authenticator = stauth.Authenticate(
-    config['credentials'],
-    config['cookie']['name'],
-    config['cookie']['key'],
-    config['cookie']['expiry_days']
-)
-
-authentication_status = authenticator.login()
-
-if authentication_status is False:
-    st.error("Username/password is incorrect")
-
-if authentication_status is None:
-    st.warning("Please enter your credentials")
-
-if not authentication_status:
-    st.stop()
-
-authenticator.logout()
-st.sidebar.write(f"Welcome {st.session_state['name']}")
-
 st.set_page_config(
     page_title="RLV MEL Portal",
     layout="wide"
@@ -905,6 +876,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
