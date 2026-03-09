@@ -273,8 +273,8 @@ elif menu == "Small Ruminants":
     "no of sheds to be elevated"
     ]
     for col in numeric_cols:
-    if col in df.columns:
-        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
 
     mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
     if mandal != "All":
@@ -890,6 +890,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
