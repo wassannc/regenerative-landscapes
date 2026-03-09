@@ -184,7 +184,7 @@ if menu == "Large Ruminants":
     "no of cattle sheds",
     "no of sheds rennovated",
     "no of sheds to be rennovated"
-]
+]    
 
 for col in df.columns:
     try:
@@ -878,6 +878,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
