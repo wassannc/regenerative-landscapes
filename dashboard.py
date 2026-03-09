@@ -175,7 +175,14 @@ if menu == "Large Ruminants":
         on=["mandal","panchayath","village"],
         how="left"
 )
+mandal = st.selectbox(
+    "Select Mandal",
+    ["All"] + sorted(df["mandal"].dropna().unique())
+)
 
+if mandal != "All":
+    df = df[df["mandal"] == mandal]
+    
     numeric_cols = [
     "Total HHs",
     "population",
@@ -191,14 +198,6 @@ if 'df' in locals():
     for col in numeric_cols:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
-
-mandal = st.selectbox(
-    "Select Mandal",
-    ["All"] + sorted(df["mandal"].dropna().unique())
-)
-
-if mandal != "All":
-    df = df[df["mandal"] == mandal]
 
     st.dataframe(df)
 
@@ -879,6 +878,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
