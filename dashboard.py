@@ -175,6 +175,11 @@ if menu == "Large Ruminants":
         on=["mandal","panchayath","village"],
         how="left"
 )
+    for col in df.columns:
+    try:
+        df[col] = pd.to_numeric(df[col])
+    except:
+        pass
     numeric_cols = [
     "Total HHs",
     "population",
@@ -185,12 +190,6 @@ if menu == "Large Ruminants":
     "no of sheds rennovated",
     "no of sheds to be rennovated"
 ]    
-
-for col in df.columns:
-    try:
-        df[col] = pd.to_numeric(df[col])
-    except:
-        pass
 
 mandal = st.selectbox(
     "Select Mandal",
@@ -879,6 +878,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
