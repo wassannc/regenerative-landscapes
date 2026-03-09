@@ -224,8 +224,8 @@ mandal = st.selectbox(
     ["All"] + sorted(df["mandal"].dropna().unique())
 )
 
-    if mandal != "All":
-        df = df[df["mandal"] == mandal]
+if mandal != "All":
+    df = df[df["mandal"] == mandal]
 
     st.dataframe(df)
 
@@ -905,6 +905,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
