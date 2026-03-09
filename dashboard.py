@@ -181,7 +181,9 @@ mandal = st.selectbox(
 )
 
 if mandal != "All":
-    df = df[df["mandal"] == mandal]
+        df = df[df["mandal"] == mandal]
+
+    st.dataframe(df)
     
     numeric_cols = [
     "Total HHs",
@@ -870,6 +872,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
