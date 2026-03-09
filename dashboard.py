@@ -239,7 +239,7 @@ if menu == "Large Ruminants":
         mandal_summary.to_csv(index=False),
         "Mandal_Wise_Report.csv"
     )
-pass
+    pass
 
 elif menu == "Small Ruminants":
     st.subheader("🐐 Small Ruminants")
@@ -877,6 +877,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
