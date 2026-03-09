@@ -875,9 +875,11 @@ elif menu == "Natural Farming":
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
+    # refresh
     
 
     
+
 
 
 
