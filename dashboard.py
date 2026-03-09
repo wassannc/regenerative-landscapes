@@ -218,9 +218,11 @@ if menu == "Large Ruminants":
 for col in numeric_cols:
     if col in df.columns:
         df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
-    
-    mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
 
+mandal = st.selectbox(
+    "Select Mandal",
+    ["All"] + sorted(df["mandal"].dropna().unique())
+)
 
     if mandal != "All":
         df = df[df["mandal"] == mandal]
@@ -903,6 +905,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
