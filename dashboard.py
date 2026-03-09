@@ -235,7 +235,7 @@ st.dataframe(mandal_summary)
 st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
 pass
 
-    elif menu == "Small Ruminants":
+elif menu == "Small Ruminants":
     st.subheader("🐐 Small Ruminants")
     sr_profile = client.open_by_key(SHEET_ID).worksheet("village profile")
     sr_plan    = client.open_by_key(SHEET_ID).worksheet("village plan")
@@ -871,6 +871,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
