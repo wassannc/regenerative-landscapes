@@ -154,8 +154,10 @@ SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
 
 if menu == "Large Ruminants":    
     st.subheader("🐄 Large Ruminants")
+
     profile_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
     plan_ws    = client.open_by_key(SHEET_ID).worksheet("village plan")
+
     df_profile = pd.DataFrame(profile_ws.get_all_records())
     df_plan    = pd.DataFrame(plan_ws.get_all_records())
 
@@ -163,47 +165,39 @@ if menu == "Large Ruminants":
         "mandal","panchayath","village",
         "Total HHs","population","Total animals immunized",
         "Mortality","no of cattle sheds","no of sheds rennovated"
-]]
+    ]]
 
     df_plan = df_plan[[
         "mandal","panchayath","village",
         "no of sheds to be rennovated","Animals to be immunized"
-]]
+    ]]
 
     df = df_profile.merge(
         df_plan,
         on=["mandal","panchayath","village"],
         how="left"
-)
-mandal = st.selectbox(
-    "Select Mandal",
-    ["All"] + sorted(df["mandal"].dropna().unique())
-)
+    )
 
-if mandal != "All":
+    mandal = st.selectbox(
+        "Select Mandal",
+        ["All"] + sorted(df["mandal"].dropna().unique())
+    )
+
+    if mandal != "All":
         df = df[df["mandal"] == mandal]
-st.dataframe(df)
-    
-numeric_cols = [
-    "Total HHs",
-    "population",
-    "Total animals immunized",
-    "Animals to be immunized",
-    "Mortality",
-    "no of cattle sheds",
-    "no of sheds rennovated",
-    "no of sheds to be rennovated"
-]
-col1, col2, col3, col4 = st.columns(4)
 
-col1.metric("🏠 Total HH", df["Total HHs"].sum())
-col2.metric("👥 Population", df["population"].sum())
-col3.metric("💉 Animals Immunized", df["Total animals immunized"].sum())
-col4.metric("⚠️ Mortality", df["Mortality"].sum())
+    st.dataframe(df)
 
-st.markdown("### 📍 GP Wise Summary")
+    col1, col2, col3, col4 = st.columns(4)
 
-gp_summary = df.groupby("panchayath").agg({
+    col1.metric("🏠 Total HH", df["Total HHs"].sum())
+    col2.metric("👥 Population", df["population"].sum())
+    col3.metric("💉 Animals Immunized", df["Total animals immunized"].sum())
+    col4.metric("⚠️ Mortality", df["Mortality"].sum())
+
+    st.markdown("### 📍 GP Wise Summary")
+
+    gp_summary = df.groupby("panchayath").agg({
         "village":"nunique",
         "Total HHs":"sum",
         "population":"sum",
@@ -214,12 +208,18 @@ gp_summary = df.groupby("panchayath").agg({
         "no of sheds rennovated":"sum",
         "no of sheds to be rennovated":"sum"
     }).reset_index()
-st.dataframe(gp_summary)
-st.download_button("Download GP Wise Excel", gp_summary.to_csv(index=False), "GP_Wise_Report.csv")
 
-st.subheader("Mandal Wise Summary")
+    st.dataframe(gp_summary)
 
-mandal_summary = df.groupby("mandal").agg({
+    st.download_button(
+        "Download GP Wise Excel",
+        gp_summary.to_csv(index=False),
+        "GP_Wise_Report.csv"
+    )
+
+    st.subheader("Mandal Wise Summary")
+
+    mandal_summary = df.groupby("mandal").agg({
         "panchayath":"nunique",
         "village":"nunique",
         "Total HHs":"sum",
@@ -231,8 +231,14 @@ mandal_summary = df.groupby("mandal").agg({
         "no of sheds rennovated":"sum",
         "no of sheds to be rennovated":"sum"
     }).reset_index()
-st.dataframe(mandal_summary)
-st.download_button("Download Mandal Wise Excel", mandal_summary.to_csv(index=False), "Mandal_Wise_Report.csv")
+
+    st.dataframe(mandal_summary)
+
+    st.download_button(
+        "Download Mandal Wise Excel",
+        mandal_summary.to_csv(index=False),
+        "Mandal_Wise_Report.csv"
+    )
 pass
 
 elif menu == "Small Ruminants":
@@ -871,6 +877,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
