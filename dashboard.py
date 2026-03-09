@@ -219,7 +219,7 @@ st.download_button("Download GP Wise Excel", gp_summary.to_csv(index=False), "GP
 
 st.subheader("Mandal Wise Summary")
 
-    mandal_summary = df.groupby("mandal").agg({
+mandal_summary = df.groupby("mandal").agg({
         "panchayath":"nunique",
         "village":"nunique",
         "Total HHs":"sum",
@@ -871,6 +871,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
