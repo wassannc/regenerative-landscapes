@@ -203,7 +203,7 @@ col4.metric("⚠️ Mortality", df["Mortality"].sum())
 
 st.markdown("### 📍 GP Wise Summary")
 
-    gp_summary = df.groupby("panchayath").agg({
+gp_summary = df.groupby("panchayath").agg({
         "village":"nunique",
         "Total HHs":"sum",
         "population":"sum",
@@ -871,6 +871,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
