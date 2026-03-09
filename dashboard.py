@@ -193,14 +193,6 @@ if mandal != "All":
     "no of sheds rennovated",
     "no of sheds to be rennovated"
 ]
-
-if 'df' in locals():
-    for col in numeric_cols:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
-
-    st.dataframe(df)
-
     col1, col2, col3, col4 = st.columns(4)
 
     col1.metric("🏠 Total HH", df["Total HHs"].sum())
@@ -878,6 +870,7 @@ elif menu == "Natural Farming":
     
 
     
+
 
 
 
