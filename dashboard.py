@@ -235,6 +235,22 @@ if menu == "Large Ruminants":
     col3.metric("💉 Animals Immunized", df["Total animals immunized"].sum())
     col4.metric("⚠️ Mortality", df["Mortality"].sum())
 
+    # --- Immunization Progress ---
+    total_immunized = df["Total animals immunized"].sum()
+    target_immunization = df["Animals to be immunized"].sum()
+
+    if target_immunization > 0:
+        completion = round((total_immunized / target_immunization) * 100, 1)
+    else:
+        completion = 0
+
+    st.markdown("### 🎯 Immunization Completion")
+
+    st.metric(
+        label="Completion %",
+        value=f"{completion} %"
+    )
+    
     st.markdown("### 📍 GP Wise Summary")
 
     gp_summary = df.groupby("panchayath").agg({
@@ -924,6 +940,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
