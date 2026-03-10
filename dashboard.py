@@ -287,7 +287,20 @@ if menu == "Large Ruminants":
         "no of sheds rennovated":"sum",
         "no of sheds to be rennovated":"sum"
     }).reset_index()
+    # --- Calculate completion percentage ---
+    mandal_summary["completion_%"] = (
+    mandal_summary["Total animals immunized"] /
+    mandal_summary["Animals to be immunized"]
+    ) * 100
+    def get_status(p):
+    if p >= 80:
+        return "🟢 On Track"
+    elif p >= 50:
+        return "🟡 Moderate"
+    else:
+        return "🔴 Needs Attention"
 
+mandal_summary["Status"] = mandal_summary["completion_%"].apply(get_status)
     st.dataframe(mandal_summary)
     st.markdown("### 📊 Immunization Progress by Mandal")
 
@@ -940,6 +953,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
