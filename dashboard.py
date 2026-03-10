@@ -2,6 +2,7 @@ import pandas as pd
 import gspread
 from google.oauth2.service_account import Credentials
 import streamlit as st
+import plotly.express as px
 
 SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
 
@@ -913,5 +914,6 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
