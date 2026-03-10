@@ -320,7 +320,7 @@ def get_status(p):
     )
     pass
 
-elif menu == "Small Ruminants":
+    elif menu == "Small Ruminants":
     st.subheader("🐐 Small Ruminants")
     df_p = df_profile.copy()
     df_pl = df_plan.copy()
@@ -953,6 +953,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
