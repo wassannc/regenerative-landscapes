@@ -3,6 +3,48 @@ import gspread
 from google.oauth2.service_account import Credentials
 import streamlit as st
 
+SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
+
+# ---------- GOOGLE CONNECTION ----------
+@st.cache_resource
+def init_connection():
+
+    scope = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive"
+    ]
+
+    creds = Credentials.from_service_account_info(
+        st.secrets["gcp"],
+        scopes=scope
+    )
+
+    client = gspread.authorize(creds)
+
+    return client
+
+
+# ---------- LOAD GOOGLE SHEET ----------
+@st.cache_data(ttl=600)
+def load_sheet(sheet_name):
+
+    client = init_connection()
+
+    sheet = client.open_by_key(SHEET_ID).worksheet(sheet_name)
+
+    data = sheet.get_all_records()
+
+    df = pd.DataFrame(data)
+
+    if not df.empty:
+        df.columns = df.columns.str.strip()
+
+    return df
+
+df_profile = load_sheet("village profile")
+df_plan    = load_sheet("village plan")
+df_epra    = load_sheet("epra")
+
 st.set_page_config(
     page_title="RLV MEL Portal",
     layout="wide"
@@ -155,25 +197,22 @@ SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
 if menu == "Large Ruminants":    
     st.subheader("🐄 Large Ruminants")
 
-    profile_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
-    plan_ws    = client.open_by_key(SHEET_ID).worksheet("village plan")
+    df_profile_local = df_profile.copy()
+    df_plan_local = df_plan.copy()
 
-    df_profile = pd.DataFrame(profile_ws.get_all_records())
-    df_plan    = pd.DataFrame(plan_ws.get_all_records())
-
-    df_profile = df_profile[[
+    df_profile_local = df_profile_local[[
         "mandal","panchayath","village",
         "Total HHs","population","Total animals immunized",
         "Mortality","no of cattle sheds","no of sheds rennovated"
     ]]
 
-    df_plan = df_plan[[
+    df_plan_local = df_plan_local[[
         "mandal","panchayath","village",
         "no of sheds to be rennovated","Animals to be immunized"
     ]]
 
-    df = df_profile.merge(
-        df_plan,
+    df = df_profile_local.merge(
+        df_plan_local,
         on=["mandal","panchayath","village"],
         how="left"
     )
@@ -243,12 +282,9 @@ if menu == "Large Ruminants":
 
 elif menu == "Small Ruminants":
     st.subheader("🐐 Small Ruminants")
-    sr_profile = client.open_by_key(SHEET_ID).worksheet("village profile")
-    sr_plan    = client.open_by_key(SHEET_ID).worksheet("village plan")
-
-    df_p = pd.DataFrame(sr_profile.get_all_records())
-    df_pl = pd.DataFrame(sr_plan.get_all_records())
-
+    df_p = df_profile.copy()
+    df_pl = df_plan.copy()
+    
     df_p = df_p[[
         "mandal","panchayath","village",
         "Total HHs","population",
@@ -326,11 +362,9 @@ elif menu == "Crop Systems":
 
 elif menu == "Fisheries":
     st.subheader("🐟 Fisheries")
-    f_profile_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
-    f_plan_ws    = client.open_by_key(SHEET_ID).worksheet("village plan")
+    df_f_profile = df_profile.copy()
 
-    df_f_profile = pd.DataFrame(f_profile_ws.get_all_records())
-    df_f_plan    = pd.DataFrame(f_plan_ws.get_all_records())
+    df_f_plan = df_plan.copy()
     
     df_f_profile = df_f_profile[[
     "mandal","panchayath","village",
@@ -552,10 +586,8 @@ elif menu == "Land Development":
     pass
 
 elif menu == "Migration":
-    st.subheader("🧳 Migration")
-        
-    mig_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
-    df_mig = pd.DataFrame(mig_ws.get_all_records())
+    st.subheader("🧳 Migration")    
+    df_mig = df_profile.copy()
     df_mig = df_mig[[
         "mandal","panchayath","village",
         "Total HHs",
@@ -610,11 +642,8 @@ elif menu == "Farm mechanization":
 
     st.subheader("🚜 Farm Mechanization")
 
-    profile_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
-    plan_ws    = client.open_by_key(SHEET_ID).worksheet("village plan")
-
-    df_profile = pd.DataFrame(profile_ws.get_all_records())
-    df_plan    = pd.DataFrame(plan_ws.get_all_records())
+    df_profile = df_profile.copy()
+    df_plan = df_plan.copy()
 
     df_profile.columns = df_profile.columns.str.strip()
     df_plan.columns    = df_plan.columns.str.strip()
@@ -714,9 +743,9 @@ elif menu == "Farm mechanization":
 elif menu == "Desi Poultry":
     st.subheader("🐔 Desi Poultry")
 
-    byp_profile = client.open_by_key(SHEET_ID).worksheet("village profile")
-    byp_plan    = client.open_by_key(SHEET_ID).worksheet("village plan")
-    byp_epra    = client.open_by_key(SHEET_ID).worksheet("epra")
+    df_b = df_profile.copy()
+    df_b1 = df_plan.copy()
+    df_b2 = df_epra.copy()
 
     df_b  = pd.DataFrame(byp_profile.get_all_records())
     df_b1 = pd.DataFrame(byp_plan.get_all_records())
@@ -802,9 +831,9 @@ elif menu == "Desi Poultry":
 elif menu == "Natural Farming":
     st.subheader("🌱 Natural Farming")
 
-    nf_profile = client.open_by_key(SHEET_ID).worksheet("village profile")
-    nf_plan    = client.open_by_key(SHEET_ID).worksheet("village plan")
-    nf_epra    = client.open_by_key(SHEET_ID).worksheet("epra")
+    df_nf = df_profile.copy()
+    df_nf1 = df_plan.copy()
+    df_nf2 = df_epra.copy()
 
     df_nf  = pd.DataFrame(nf_profile.get_all_records())
     df_nf1 = pd.DataFrame(nf_plan.get_all_records())
@@ -887,3 +916,4 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
