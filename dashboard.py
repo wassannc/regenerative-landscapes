@@ -273,7 +273,17 @@ if menu == "Large Ruminants":
     }).reset_index()
 
     st.dataframe(mandal_summary)
+    st.markdown("### 📊 Immunization Progress by Mandal")
 
+    fig = px.bar(
+        mandal_summary,
+        x="mandal",
+        y=["Total animals immunized", "Animals to be immunized"],
+        barmode="group",
+        title="Animal Immunization Progress"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
     st.download_button(
         "Download Mandal Wise Excel",
         mandal_summary.to_csv(index=False),
@@ -914,6 +924,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
