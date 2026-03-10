@@ -250,7 +250,7 @@ if menu == "Large Ruminants":
         label="Completion %",
         value=f"{completion} %"
     )
-    
+    st.progress(completion / 100)
     st.markdown("### 📍 GP Wise Summary")
 
     gp_summary = df.groupby("panchayath").agg({
@@ -940,6 +940,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
