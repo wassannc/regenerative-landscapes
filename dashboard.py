@@ -438,15 +438,12 @@ elif menu == "Land Development":
     st.subheader("🌱 Land Development")
 
     # --- Load sheets ---
-    profile_ws = client.open_by_key(SHEET_ID).worksheet("village profile")
-    plan_ws    = client.open_by_key(SHEET_ID).worksheet("village plan")
-
-    df_profile = pd.DataFrame(profile_ws.get_all_records())
-    df_plan    = pd.DataFrame(plan_ws.get_all_records())
+    df_profile_local = df_profile.copy()
+    df_plan_local = df_plan.copy()
 
     # --- Clean column names (removes hidden spaces) ---
-    df_profile.columns = df_profile.columns.str.strip()
-    df_plan.columns    = df_plan.columns.str.strip()
+    df_profile_local.columns = df_profile_local.columns.str.strip()
+    df_plan_local.columns = df_plan_local.columns.str.strip()
 
     # --- Required PROFILE columns ---
     profile_cols = [
@@ -916,4 +913,5 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
