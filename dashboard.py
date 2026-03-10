@@ -300,7 +300,7 @@ def get_status(p):
     else:
         return "🔴 Needs Attention"
 
-mandal_summary["Status"] = mandal_summary["completion_%"].apply(get_status)
+    mandal_summary["Status"] = mandal_summary["completion_%"].apply(get_status)
     st.dataframe(mandal_summary)
     st.markdown("### 📊 Immunization Progress by Mandal")
 
@@ -953,6 +953,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
