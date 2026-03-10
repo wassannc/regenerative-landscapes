@@ -12,6 +12,7 @@ fiona
 pyproj
 streamlit-authenticator==0.3.2
 PyYAML
+plotly
 
 
 
