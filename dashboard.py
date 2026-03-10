@@ -292,7 +292,7 @@ if menu == "Large Ruminants":
     mandal_summary["Total animals immunized"] /
     mandal_summary["Animals to be immunized"]
     ) * 100
-    def get_status(p):
+def get_status(p):
     if p >= 80:
         return "🟢 On Track"
     elif p >= 50:
@@ -953,6 +953,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
