@@ -757,7 +757,56 @@ elif menu == "Farm mechanization":
     ]]
 
     df = df_profile.merge(df_plan, on=["mandal","panchayath","village"], how="left").fillna(0)
+    numeric_cols = [
+        "farmeasy_Power_weeder_available",
+        "farmeasy_Power_weeder_users",
+        "farmeasy_Power_weeder_required",
+        "farmeasy_Cycle_weeder_available",
+        "farmeasy_Cycle_weeder_users",
+        "farmeasy_Cycle_weeder_required",
+        "farmeasy_Plastic_drums_available",
+        "farmeasy_Plastic_drums_users",
+        "farmeasy_Plastic_drums_required",
+        "farmeasy_Cono_Weeder_available",
+        "farmeasy_Cono_Weeder_users",
+        "farmeasy_Cono_Weeder_required",
+        "farmeasy_Sprayers_available",
+        "farmeasy_Sprayers_users",
+        "farmeasy_Sprayers_required",
+        "farmeasy_Power_sprayers_available",
+        "farmeasy_Power_sprayers_users",
+        "farmeasy_Power_sprayers_required",
+        "farmeasy_Taurpalin_available",
+        "farmeasy_Taurpalin_users",
+        "farmeasy_Taurpalin_required",
+        "farmeasy_Graders_available",
+        "farmeasy_Graders_users",
+        "farmeasy_Graders_required",
+        "farmeasy_Power_tiller_available",
+        "farmeasy_Power_tiller_users",
+        "farmeasy_Power_tiller_required",
+        "farmeasy_Tractor_available",
+        "farmeasy_Tractor_users",
+        "farmeasy_Tractor_required",
+        "farmeasy_Coffee_pulper_available",
+        "farmeasy_Coffee_pulper_users",
+        "farmeasy_Coffee_pulper_required",
+        "farmeasy_Pepper_thresher_available",
+        "farmeasy_Pepper_thresher_users",
+        "farmeasy_Pepper_thresher_required",
+        "farmeasy_Multigrain_thresher_available",
+        "farmeasy_Multigrain_thresher_users",
+        "farmeasy_Multigrain_thresher_required",
+        "farmeasy_Turmeric_polisher_available",
+        "farmeasy_Turmeric_polisher_users",
+        "farmeasy_Turmeric_polisher_required",
+        "farmeasy_Turmeric_boiler_available",
+        "farmeasy_Turmeric_boiler_users",
+        "farmeasy_Turmeric_boiler_required"
+]
 
+    df = clean_numeric(df, numeric_cols)
+    
     # Convert yes/no to counts
     df["asc_businessplan_yes"] = df["farmeasy_asc_businessplan"].astype(str).str.lower().eq("yes").astype(int)
     df["asc_yes"] = df["farmeasy_asc"].astype(str).str.lower().eq("yes").astype(int)
@@ -982,6 +1031,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
