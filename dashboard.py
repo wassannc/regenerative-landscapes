@@ -769,10 +769,6 @@ elif menu == "Desi Poultry":
     df_b = df_profile.copy()
     df_b1 = df_plan.copy()
     df_b2 = df_epra.copy()
-
-    df_b  = pd.DataFrame(byp_profile.get_all_records())
-    df_b1 = pd.DataFrame(byp_plan.get_all_records())
-    df_b2 = pd.DataFrame(byp_epra.get_all_records())
     
     df_b.columns  = df_b.columns.str.strip()
     df_b1.columns = df_b1.columns.str.strip()
@@ -939,6 +935,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
