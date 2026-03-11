@@ -4,6 +4,22 @@ from google.oauth2.service_account import Credentials
 import streamlit as st
 import plotly.express as px
 
+# -------- CLEAN NUMERIC DATA --------
+def clean_numeric(df, cols):
+
+    for col in cols:
+        if col in df.columns:
+            df[col] = (
+                df[col]
+                .astype(str)
+                .str.replace(",", "", regex=False)
+                .str.strip()
+            )
+
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+
+    return df
+    
 SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
 
 # ---------- GOOGLE CONNECTION ----------
@@ -930,6 +946,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
