@@ -911,7 +911,17 @@ elif menu == "Natural Farming":
     # Merge 3 sources
     df = df_nf.merge(df_nf1, on=["mandal","panchayath","village"], how="left")
     df = df.merge(df_nf2, on=["mandal","panchayath","village"], how="left")
+    numeric_cols = [
+        "Total HHs",
+        "Total land in the village_acre",
+        "Total HH practicing NF",
+        "Total land under NF practice_acre",
+        "No of farmers accessing NF inputs",
+        "Extent covered under BRC_acres",
+        "No of villages accessing NF inputs"
+]
 
+    df = clean_numeric(df, numeric_cols)
     df["business_plan_yes"] = df["Is business plan developed"].astype(str).str.strip().str.lower().eq("yes").astype(int)
 
     # Mandal filter
@@ -958,6 +968,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
