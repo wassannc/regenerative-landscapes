@@ -853,11 +853,6 @@ elif menu == "Natural Farming":
     df_nf = df_profile.copy()
     df_nf1 = df_plan.copy()
     df_nf2 = df_epra.copy()
-
-    df_nf  = pd.DataFrame(nf_profile.get_all_records())
-    df_nf1 = pd.DataFrame(nf_plan.get_all_records())
-    df_nf2 = pd.DataFrame(nf_epra.get_all_records())
-
     # Clean column names
     df_nf.columns  = df_nf.columns.str.strip()
     df_nf1.columns = df_nf1.columns.str.strip()
@@ -935,6 +930,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
