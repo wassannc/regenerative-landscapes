@@ -441,6 +441,20 @@ elif menu == "Fisheries":
     on=["mandal","panchayath","village"],
     how="left"
 ).fillna(0)
+    numeric_cols = [
+        "Total HHs",
+        "HHs owning ponds",
+        "No of community ponds",
+        "No of ponds under fisheries",
+        "How many ponds converted in to eco farmponds",
+        "Total water spread are of the ponds_acr",
+        "New farmponds proposed 10x10m (nos)",
+        "New farmponds proposed 15x15m (nos)",
+        "New farmponds proposed 20x20m (nos)",
+        "New farmponds proposed 40x40m (nos)"
+]
+
+    df_fish = clean_numeric(df_fish, numeric_cols)
     mandal = st.selectbox("Select Mandal",["All"]+sorted(df_fish["mandal"].unique()))
     if mandal!="All":
         df_fish = df_fish[df_fish["mandal"]==mandal]
@@ -968,6 +982,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
