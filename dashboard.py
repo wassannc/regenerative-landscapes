@@ -233,7 +233,19 @@ if menu == "Large Ruminants":
         on=["mandal","panchayath","village"],
         how="left"
     )
+    numeric_cols = [
+        "Total HHs",
+        "population",
+        "Total animals immunized",
+        "Animals to be immunized",
+        "Mortality",
+        "no of cattle sheds",
+        "no of sheds rennovated",
+        "no of sheds to be rennovated"
+]
 
+    df = clean_numeric(df, numeric_cols)
+    
     mandal = st.selectbox(
         "Select Mandal",
         ["All"] + sorted(df["mandal"].dropna().unique())
@@ -946,6 +958,7 @@ elif menu == "Natural Farming":
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
     pass
     # refresh
+
 
 
 
