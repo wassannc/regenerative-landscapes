@@ -38,7 +38,7 @@ folium.GeoJson(
 ).add_to(m)
 
 # --- Proposed Irrigation ---
-with open("maps/Nereduvalasa_proposed_irrigation.geojson") as f:
+with open("maps/Nereduvalasa_proposed_irrigation_area.geojson") as f:
     irrigation = json.load(f)
 
 folium.GeoJson(
