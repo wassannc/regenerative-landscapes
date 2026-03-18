@@ -1,14 +1,15 @@
 import folium
 from streamlit_folium import st_folium
 import json
+import streamlit as st
 
 st.subheader("Nereduvalasa Village GIS Map")
 
-# create base map
+# Base map
 m = folium.Map(location=[18.15, 82.70], zoom_start=14)
 
 # --- Village Boundary ---
-with open("maps/nereduvalasa.geojson") as f:
+with open("maps/Nereduvalasa.geojson") as f:
     village = json.load(f)
 
 folium.GeoJson(
@@ -21,14 +22,19 @@ folium.GeoJson(
     }
 ).add_to(m)
 
-# --- EPRA (existing resources) ---
+# --- EPRA Resources ---
 with open("maps/Nereduvalasa_epra.geojson") as f:
     epra = json.load(f)
 
 folium.GeoJson(
     epra,
-    name="Existing Resources (EPRA)",
-    marker=folium.CircleMarker(radius=5, color="blue")
+    name="EPRA Resources",
+    point_to_layer=lambda feature, latlng: folium.CircleMarker(
+        location=latlng,
+        radius=5,
+        color="blue",
+        fill=True
+    )
 ).add_to(m)
 
 # --- Proposed Irrigation ---
@@ -44,8 +50,8 @@ folium.GeoJson(
     }
 ).add_to(m)
 
-# layer control
+# Layer control
 folium.LayerControl().add_to(m)
 
-# display map
+# Show map
 st_folium(m, width=900)
