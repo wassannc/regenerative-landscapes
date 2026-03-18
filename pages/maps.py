@@ -1,100 +1,51 @@
-import streamlit as st
-import geopandas as gpd
 import folium
 from streamlit_folium import st_folium
 import json
 
-st.set_page_config(page_title="RLV Maps", layout="wide")
-st.markdown("""
-<style>
-[data-testid="stSidebarNav"] {display: none;}
+st.subheader("Nereduvalasa Village GIS Map")
 
-.topnav {
-    background: linear-gradient(90deg, #0f2b46, #123e63);
-    padding: 12px 30px;
-    border-radius: 0 0 12px 12px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-.topnav a {
-    color: white;
-    margin-right: 40px;
-    font-size: 18px;
-    font-weight: 600;
-    text-decoration: none;
-}
-.topnav a:hover {
-    color: #ffd166;
-}
-</style>
+# create base map
+m = folium.Map(location=[18.15, 82.70], zoom_start=14)
 
-<div class="topnav">
-    <a href="/">Dashboard</a>
-    <a href="/maps">Maps</a>
-    <a href="/planning">Planning</a>
-</div>
-""", unsafe_allow_html=True)
+# --- Village Boundary ---
+with open("maps/nereduvalasa.geojson") as f:
+    village = json.load(f)
 
-st.title("🗺️ RLV Resource Mapping")
+folium.GeoJson(
+    village,
+    name="Village Boundary",
+    style_function=lambda x: {
+        "color": "green",
+        "weight": 2,
+        "fillOpacity": 0.05
+    }
+).add_to(m)
 
-uploaded_file = st.file_uploader(
-    "Upload a KML or GeoJSON file",
-    type=["geojson", "json", "kml"]
-)
+# --- EPRA (existing resources) ---
+with open("maps/Nereduvalasa_epra.geojson") as f:
+    epra = json.load(f)
 
-if uploaded_file:
+folium.GeoJson(
+    epra,
+    name="Existing Resources (EPRA)",
+    marker=folium.CircleMarker(radius=5, color="blue")
+).add_to(m)
 
-    # ---------- READ FILE ----------
-    if uploaded_file.name.endswith(".kml"):
-        gdf = gpd.read_file(uploaded_file, driver="KML")
-    else:
-        gdf = gpd.read_file(uploaded_file)
+# --- Proposed Irrigation ---
+with open("maps/Nereduvalasa_proposed_irrigation.geojson") as f:
+    irrigation = json.load(f)
 
-    # Ensure WGS84 CRS
-    gdf = gdf.to_crs(epsg=4326)
+folium.GeoJson(
+    irrigation,
+    name="Proposed Irrigation",
+    style_function=lambda x: {
+        "color": "red",
+        "weight": 2
+    }
+).add_to(m)
 
-    # Remove problematic columns (timestamps, objects etc.)
-    for col in gdf.columns:
-        if gdf[col].dtype not in ["int64", "float64", "object"]:
-            gdf[col] = gdf[col].astype(str)
+# layer control
+folium.LayerControl().add_to(m)
 
-    # Convert to GeoJSON safely
-    # ---------- FIX GEOMETRY ISSUES ----------
-gdf = gdf[gdf.geometry.notnull()]          # Remove empty geometries
-gdf = gdf[gdf.is_valid]                   # Remove invalid shapes
-gdf["geometry"] = gdf["geometry"].buffer(0)  # Fix minor geometry errors
-
-# Convert all non-geometry columns to safe types
-for col in gdf.columns:
-    if col != "geometry":
-        gdf[col] = gdf[col].astype(str)
-
-# Convert to GeoJSON safely
-geojson_data = json.loads(gdf.to_json())
-
-    st.success(f"Loaded {len(gdf)} map features")
-
-    # ---------- CREATE MAP ----------
-    m = folium.Map(location=[17.5, 82.6], zoom_start=9)
-
-    folium.GeoJson(
-        geojson_data,
-        name="Resource Map",
-        style_function=lambda x: {
-            "color": "green",
-            "weight": 2,
-            "fillOpacity": 0.3
-        },
-        tooltip=folium.GeoJsonTooltip(
-            fields=[col for col in gdf.columns if col != "geometry"]
-        )
-    ).add_to(m)
-
-    folium.LayerControl().add_to(m)
-
-    st_folium(m, width=1200, height=600)
-
-else:
-    st.info("Upload a GeoJSON or KML file to view the map.")
-
-
+# display map
+st_folium(m, width=900)
