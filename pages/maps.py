@@ -8,9 +8,7 @@ st.subheader("Nereduvalasa Village GIS Map")
 # Base map
 m = folium.Map(location=[18.15, 82.70], zoom_start=14)
 
-# --- Village Boundary ---
-import json
-
+# -------- CLEAN FUNCTION --------
 def load_clean_geojson(path):
     with open(path) as f:
         data = json.load(f)
@@ -18,7 +16,6 @@ def load_clean_geojson(path):
     for feature in data.get("features", []):
         props = feature.get("properties", {})
 
-        # convert all values to safe string
         clean_props = {}
         for k, v in props.items():
             if v is None:
@@ -30,6 +27,9 @@ def load_clean_geojson(path):
 
     return data
 
+# -------- VILLAGE --------
+village = load_clean_geojson("maps/Nereduvalasa.geojson")
+
 folium.GeoJson(
     village,
     name="Village Boundary",
@@ -40,7 +40,7 @@ folium.GeoJson(
     }
 ).add_to(m)
 
-# --- EPRA Resources ---
+# -------- EPRA --------
 epra = load_clean_geojson("maps/Nereduvalasa_epra.geojson")
 
 folium.GeoJson(
@@ -54,7 +54,7 @@ folium.GeoJson(
     )
 ).add_to(m)
 
-# --- Proposed Irrigation ---
+# -------- IRRIGATION --------
 irrigation = load_clean_geojson("maps/Nereduvalasa_proposed_irrigation_area.geojson")
 
 folium.GeoJson(
@@ -66,8 +66,8 @@ folium.GeoJson(
     }
 ).add_to(m)
 
-# Layer control
+# -------- LAYER CONTROL --------
 folium.LayerControl().add_to(m)
 
-# Show map
+# -------- DISPLAY --------
 st_folium(m, width=900)
