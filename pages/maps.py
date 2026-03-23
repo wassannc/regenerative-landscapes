@@ -28,7 +28,7 @@ def load_clean_geojson(path):
     return data
 
 # -------- VILLAGE --------
-village = load_clean_geojson("maps/Nereduvalasa.geojson")
+village = load_clean_geojson("maps/nereduvalasa.geojson")
 
 folium.GeoJson(
     village,
@@ -55,7 +55,7 @@ folium.GeoJson(
 ).add_to(m)
 
 # -------- IRRIGATION --------
-irrigation = load_clean_geojson("maps/Nereduvalasa_proposed_irrigation_area.geojson")
+irrigation = load_clean_geojson("maps/Nereduvalasa_proposed_irrigation.geojson")
 
 folium.GeoJson(
     irrigation,
