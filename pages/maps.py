@@ -61,6 +61,18 @@ folium.GeoJson(
     )
 ).add_to(m)
 
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+polygons = load_clean_geojson(
+    os.path.join(BASE_DIR, "maps", "landuse_polygons.geojson")
+)
+
+points = load_clean_geojson(
+    os.path.join(BASE_DIR, "maps", "resources_points.geojson")
+)
+
 # -------- MAP BASE --------
 m = folium.Map(location=[18.15, 82.70], zoom_start=14, tiles="CartoDB positron")
 
