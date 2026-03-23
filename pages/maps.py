@@ -48,17 +48,17 @@ def get_color(land_type):
     land_type = land_type.lower()
 
     if "agriculture" in land_type:
-        return "#4CAF50"   # green
+        return "#7CB342"   # light green
     elif "irrigation" in land_type:
-        return "#2196F3"   # blue
+        return "#1E88E5"   # strong blue
     elif "water" in land_type:
-        return "#00BCD4"   # cyan
+        return "#00ACC1"   # cyan
     elif "orchard" in land_type:
         return "#2E7D32"   # dark green
     elif "pond" in land_type:
-        return "#009688"
+        return "#00897B"
     else:
-        return "#9E9E9E"   # gray
+        return "#BDBDBD"   # grey
 
 # -------- ADD POLYGONS --------
 folium.GeoJson(
@@ -80,20 +80,42 @@ folium.GeoJson(
 folium.GeoJson(
     points,
     name="Resources",
-    marker=folium.CircleMarker(
+    point_to_layer=lambda feature, latlng: folium.CircleMarker(
+        location=latlng,
         radius=6,
-        color="red",
+        color="black",
+        weight=1,
         fill=True,
         fill_color="red",
         fill_opacity=0.9
+    ),
+    tooltip=folium.GeoJsonTooltip(
+        fields=["resource_type"],
+        aliases=["Type:"]
     )
 ).add_to(m)
+
+folium.GeoJson(
+    polygons,
+    name="Boundary",
+    style_function=lambda feature: {
+        "color": "black",
+        "weight": 2,
+        "fillOpacity": 0
+    }
+).add_to(m)
+
+tooltip=folium.GeoJsonTooltip(
+    fields=["Land_Use"],
+    aliases=["Land Type:"],
+    sticky=True
+)
 
 # -------- LEGEND --------
 legend_html = """
 <div style="
 position: fixed; 
-bottom: 40px; left: 40px; width: 220px;
+bottom: 40px; left: 40px; width: 230px;
 background-color: white;
 border:2px solid grey;
 z-index:9999;
@@ -102,11 +124,11 @@ padding: 10px;
 border-radius:8px;
 ">
 <b>Legend</b><br><br>
-<span style="color:#4CAF50;">⬛</span> Agriculture<br>
-<span style="color:#2196F3;">⬛</span> Irrigation<br>
-<span style="color:#00BCD4;">⬛</span> Water bodies<br>
+<span style="color:#7CB342;">⬛</span> Agriculture<br>
+<span style="color:#1E88E5;">⬛</span> Irrigation<br>
+<span style="color:#00ACC1;">⬛</span> Water bodies<br>
 <span style="color:#2E7D32;">⬛</span> Orchard<br>
-<span style="color:#009688;">⬛</span> Farm Pond<br>
+<span style="color:#00897B;">⬛</span> Farm Pond<br>
 <span style="color:red;">⬤</span> Proposed Works
 </div>
 """
