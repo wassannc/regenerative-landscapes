@@ -1,15 +1,16 @@
-import os
 import folium
 from streamlit_folium import st_folium
 import json
 import streamlit as st
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+import os
+import math
+
 st.subheader("Nereduvalasa Village GIS Map")
 
-# Base map
-m = folium.Map(location=[18.15, 82.70], zoom_start=14)
+# -------- BASE PATH --------
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-# -------- CLEAN FUNCTION --------
+# -------- CLEAN GEOJSON FUNCTION --------
 def load_clean_geojson(path):
     with open(path) as f:
         data = json.load(f)
@@ -21,18 +22,40 @@ def load_clean_geojson(path):
         for k, v in props.items():
             if v is None:
                 clean_props[k] = ""
+            elif isinstance(v, float) and math.isnan(v):
+                clean_props[k] = ""
             else:
                 clean_props[k] = str(v)
 
         feature["properties"] = clean_props
 
+        # fix empty geometry
+        if feature.get("geometry") is None:
+            feature["geometry"] = {
+                "type": "Point",
+                "coordinates": [0, 0]
+            }
+
     return data
 
-# -------- VILLAGE --------
+# -------- LOAD FILES --------
 village = load_clean_geojson(
     os.path.join(BASE_DIR, "maps", "nereduvalasa.geojson")
 )
 
+epra = load_clean_geojson(
+    os.path.join(BASE_DIR, "maps", "Nereduvalasa_epra.geojson")
+)
+
+# ⚠️ make sure filename matches EXACTLY in GitHub
+irrigation = load_clean_geojson(
+    os.path.join(BASE_DIR, "maps", "Nereduvalasa_proposed_irrigation_area.geojson")
+)
+
+# -------- CREATE MAP --------
+m = folium.Map(location=[18.15, 82.70], zoom_start=14)
+
+# -------- VILLAGE BOUNDARY --------
 folium.GeoJson(
     village,
     name="Village Boundary",
@@ -43,16 +66,11 @@ folium.GeoJson(
     }
 ).add_to(m)
 
-# -------- EPRA --------
-epra = load_clean_geojson(
-    os.path.join(BASE_DIR, "maps", "Nereduvalasa_epra.geojson")
-)
-
+# -------- EPRA (POINTS) --------
 folium.GeoJson(
     epra,
     name="EPRA Resources",
-    point_to_layer=lambda feature, latlng: folium.CircleMarker(
-        location=latlng,
+    marker=folium.CircleMarker(
         radius=5,
         color="blue",
         fill=True
@@ -60,10 +78,6 @@ folium.GeoJson(
 ).add_to(m)
 
 # -------- IRRIGATION --------
-irrigation = load_clean_geojson(
-    os.path.join(BASE_DIR, "maps", "Nereduvalasa_proposed_irrigation_area.geojson")
-)
-
 folium.GeoJson(
     irrigation,
     name="Proposed Irrigation",
