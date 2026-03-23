@@ -97,10 +97,6 @@ folium.GeoJson(
         fill=True,
         fill_color="red",
         fill_opacity=0.9
-    ),
-    tooltip=folium.GeoJsonTooltip(
-        fields=["Name"],
-        aliases=["Type:"]
     )
 ).add_to(m)
 
@@ -113,12 +109,6 @@ folium.GeoJson(
         "fillOpacity": 0
     }
 ).add_to(m)
-
-tooltip=folium.GeoJsonTooltip(
-    fields=["Land_Use"],
-    aliases=["Land Type:"],
-    sticky=True
-)
 
 # -------- LEGEND --------
 legend_html = """
