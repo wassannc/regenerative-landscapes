@@ -19,6 +19,7 @@ def load_clean_geojson(path):
         data = json.load(f)
 
     for feature in data.get("features", []):
+        # FIX properties
         props = feature.get("properties", {})
 
         clean_props = {}
@@ -34,6 +35,13 @@ def load_clean_geojson(path):
                 clean_props[k] = ""
 
         feature["properties"] = clean_props
+
+        # FIX geometry (very important)
+        if feature.get("geometry") is None:
+            feature["geometry"] = {
+                "type": "Point",
+                "coordinates": [0, 0]
+            }
 
     return data
 
@@ -79,10 +87,6 @@ folium.GeoJson(
         "fillColor": get_color(feature["properties"].get("Land_Use", "")),
         "fillOpacity": 0.6,
     },
-    tooltip=folium.GeoJsonTooltip(
-        fields=["Land_Use"],
-        aliases=["Type:"]
-    )
 ).add_to(m)
 
 # -------- ADD POINTS --------
@@ -93,7 +97,6 @@ folium.GeoJson(
         location=latlng,
         radius=6,
         color="black",
-        weight=1,
         fill=True,
         fill_color="red",
         fill_opacity=0.9
@@ -102,11 +105,12 @@ folium.GeoJson(
 
 folium.GeoJson(
     polygons,
-    name="Boundary",
+    name="Land Use",
     style_function=lambda feature: {
         "color": "black",
-        "weight": 2,
-        "fillOpacity": 0
+        "weight": 1,
+        "fillColor": get_color(feature["properties"].get("Land_Use", "")),
+        "fillOpacity": 0.6,
     }
 ).add_to(m)
 
