@@ -61,7 +61,7 @@ folium.GeoJson(
 
 # -------- IRRIGATION --------
 irrigation = load_clean_geojson(
-    os.path.join(BASE_DIR, "maps", "Nereduvalasa_proposed_irrigation.geojson")
+    os.path.join(BASE_DIR, "maps", "Nereduvalasa_proposed_irrigation_area.geojson")
 )
 
 folium.GeoJson(
