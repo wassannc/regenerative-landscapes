@@ -37,30 +37,6 @@ def load_clean_geojson(path):
 
     return data
 
-# -------- LOAD FILES --------
-folium.GeoJson(
-    polygons,
-    name="Land Use",
-    style_function=lambda feature: {
-        "color": "black",
-        "weight": 1,
-        "fillColor": get_color(feature["properties"].get("Land_Use", "")),
-        "fillOpacity": 0.6,
-    }
-).add_to(m)
-folium.GeoJson(
-    points,
-    name="Resources",
-    point_to_layer=lambda feature, latlng: folium.CircleMarker(
-        location=latlng,
-        radius=6,
-        color="black",
-        fill=True,
-        fill_color="red",
-        fill_opacity=0.9
-    )
-).add_to(m)
-
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
