@@ -12,6 +12,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # -------- CLEAN FUNCTION --------
 def load_clean_geojson(path):
+    import json
+    import math
+
     with open(path) as f:
         data = json.load(f)
 
@@ -20,12 +23,15 @@ def load_clean_geojson(path):
 
         clean_props = {}
         for k, v in props.items():
-            if v is None:
+            try:
+                if v is None:
+                    clean_props[k] = ""
+                elif isinstance(v, float) and (math.isnan(v) or math.isinf(v)):
+                    clean_props[k] = ""
+                else:
+                    clean_props[k] = str(v)
+            except:
                 clean_props[k] = ""
-            elif isinstance(v, float) and math.isnan(v):
-                clean_props[k] = ""
-            else:
-                clean_props[k] = str(v)
 
         feature["properties"] = clean_props
 
@@ -63,7 +69,7 @@ def get_color(land_type):
 # -------- ADD POLYGONS --------
 folium.GeoJson(
     polygons,
-    name="Land Use",
+    name="Land_Use",
     style_function=lambda feature: {
         "color": "black",
         "weight": 1,
@@ -90,7 +96,7 @@ folium.GeoJson(
         fill_opacity=0.9
     ),
     tooltip=folium.GeoJsonTooltip(
-        fields=["resource_type"],
+        fields=["Name"],
         aliases=["Type:"]
     )
 ).add_to(m)
