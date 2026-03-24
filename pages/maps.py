@@ -54,7 +54,7 @@ points = load_geojson_safe(
 )
 # -------- VILLAGE DROPDOWN --------
 village_list = list(set(
-    [f["properties"].get("village", "") for f in polygons["features"]]
+    [f["properties"].get("Village", "") for f in polygons["features"]]
 ))
 
 selected_village = st.selectbox(
@@ -73,7 +73,7 @@ filtered_polygons = {
 
 filtered_points = [
     f for f in points["features"]
-    if f["properties"].get("village") == selected_village
+    if f["properties"].get("Village") == selected_village
 ]
 # -------- CREATE MAP --------
 m = folium.Map(location=[18.15, 82.70], zoom_start=14)
