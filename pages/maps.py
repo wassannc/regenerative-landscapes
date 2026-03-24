@@ -120,7 +120,8 @@ for feature in points["features"]:
             color="black",
             fill=True,
             fill_color="red",
-            fill_opacity=0.9
+            fill_opacity=0.9,
+            popup=label   # ✅ THIS IS NEW
         ).add_to(points_layer)
 
     except:
