@@ -113,6 +113,10 @@ points_layer = folium.FeatureGroup(name="Proposed Works", show=True)
 for feature in points["features"]:
     try:
         coords = feature["geometry"]["coordinates"]
+        props = feature.get("properties", {})
+
+        # ✅ ADD THIS LINE
+        label = props.get("resource_type", "Work")
 
         folium.CircleMarker(
             location=[coords[1], coords[0]],
@@ -121,7 +125,7 @@ for feature in points["features"]:
             fill=True,
             fill_color="red",
             fill_opacity=0.9,
-            popup=label   # ✅ THIS IS NEW
+            popup=label   # now works
         ).add_to(points_layer)
 
     except:
