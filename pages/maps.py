@@ -52,6 +52,16 @@ polygons = load_geojson_safe(
 points = load_geojson_safe(
     os.path.join(BASE_DIR, "maps", "resources_points.geojson")
 )
+# -------- VILLAGE DROPDOWN --------
+village_list = list(set(
+    [f["properties"].get("village", "") for f in polygons["features"]]
+))
+
+selected_village = st.selectbox(
+    "Select Village",
+    sorted(village_list)
+)
+
 # -------- FILTER BY VILLAGE --------
 filtered_polygons = {
     "type": "FeatureCollection",
