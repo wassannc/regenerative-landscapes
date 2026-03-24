@@ -101,19 +101,22 @@ folium.GeoJson(
     }
 ).add_to(m)
 
-# -------- ADD POINTS --------
-folium.GeoJson(
-    points,
-    name="Resources",
-    point_to_layer=lambda f, latlng: folium.CircleMarker(
-        location=latlng,
-        radius=5,
-        color="black",
-        fill=True,
-        fill_color="red",
-        fill_opacity=0.9
-    )
-).add_to(m)
+# -------- ADD POINTS (SAFE WAY) --------
+for feature in points["features"]:
+    try:
+        coords = feature["geometry"]["coordinates"]
 
+        folium.CircleMarker(
+            location=[coords[1], coords[0]],  # lat, lon
+            radius=5,
+            color="black",
+            fill=True,
+            fill_color="red",
+            fill_opacity=0.9
+        ).add_to(m)
+
+    except:
+        continue
+        
 # -------- DISPLAY --------
 st_folium(m, width=900)
