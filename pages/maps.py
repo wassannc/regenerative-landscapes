@@ -88,18 +88,23 @@ def get_color(val):
         return "#BDBDBD"
 
 # -------- POLYGON LAYER --------
+land_layer = folium.FeatureGroup(name="Land Use", show=True)
+
 folium.GeoJson(
     polygons,
-    name="Land Use",
     style_function=lambda f: {
         "color": "black",
         "weight": 1,
         "fillColor": get_color(f["properties"].get("Land_Use", "")),
         "fillOpacity": 0.6,
     }
-).add_to(m)
+).add_to(land_layer)
+
+land_layer.add_to(m)
 
 # -------- POINTS (SAFE LOOP) --------
+points_layer = folium.FeatureGroup(name="Proposed Works", show=True)
+
 for feature in points["features"]:
     try:
         coords = feature["geometry"]["coordinates"]
@@ -111,10 +116,12 @@ for feature in points["features"]:
             fill=True,
             fill_color="red",
             fill_opacity=0.9
-        ).add_to(m)
+        ).add_to(points_layer)
 
     except:
         continue
+
+points_layer.add_to(m)
 
 # -------- LEGEND --------
 legend_html = """
