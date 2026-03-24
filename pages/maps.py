@@ -70,7 +70,19 @@ points = load_geojson_safe(
 )
 
 # -------- MAP --------
-m = folium.Map(location=[18.15, 82.70], zoom_start=14)
+m = folium.Map(location=[18.15, 82.70], zoom_start=14, tiles=None)
+
+# Satellite layer
+folium.TileLayer(
+    tiles="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+    attr="Google",
+    name="Satellite",
+    max_zoom=20,
+    subdomains=["mt0", "mt1", "mt2", "mt3"],
+).add_to(m)
+
+# Optional: add normal map also
+folium.TileLayer("OpenStreetMap", name="Map").add_to(m)
 
 # -------- COLOR FUNCTION --------
 def get_color(val):
