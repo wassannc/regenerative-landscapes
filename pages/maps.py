@@ -9,7 +9,7 @@ st.subheader("🌍 Village GIS Map")
 # -------- BASE PATH --------
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-# -------- ULTRA SAFE GEOJSON FIX --------
+# -------- SAFE GEOJSON LOADER --------
 def load_geojson_safe(path):
     with open(path) as f:
         data = json.load(f)
@@ -21,34 +21,18 @@ def load_geojson_safe(path):
             geom = f.get("geometry", {})
             props = f.get("properties", {})
 
-            # ✅ Skip invalid geometry
-            if not geom:
+            # skip invalid geometry
+            if not geom or "type" not in geom or "coordinates" not in geom:
                 continue
 
-            if geom.get("type") not in ["Point", "Polygon", "MultiPolygon"]:
-                continue
-
-            coords = geom.get("coordinates")
-
-            # ✅ Skip bad coordinates
-            if coords is None:
-                continue
-
-            # ✅ Clean properties (force string)
+            # clean properties
             clean_props = {}
             for k, v in props.items():
-                try:
-                    clean_props[k] = "" if v is None else str(v)
-                except:
-                    clean_props[k] = ""
+                clean_props[k] = "" if v is None else str(v)
 
-            # ✅ Rebuild feature safely
             safe_features.append({
                 "type": "Feature",
-                "geometry": {
-                    "type": geom["type"],
-                    "coordinates": coords
-                },
+                "geometry": geom,
                 "properties": clean_props
             })
 
@@ -60,7 +44,7 @@ def load_geojson_safe(path):
         "features": safe_features
     }
 
-# -------- LOAD FILES --------
+# -------- LOAD DATA --------
 polygons = load_geojson_safe(
     os.path.join(BASE_DIR, "maps", "landuse_polygons.geojson")
 )
@@ -69,20 +53,22 @@ points = load_geojson_safe(
     os.path.join(BASE_DIR, "maps", "resources_points.geojson")
 )
 
-# -------- MAP --------
-m = folium.Map(location=[18.15, 82.70], zoom_start=14, tiles=None)
+# -------- CREATE MAP --------
+m = folium.Map(location=[18.15, 82.70], zoom_start=14)
 
-# Satellite layer
+# -------- BASE LAYERS --------
+folium.TileLayer(
+    "OpenStreetMap",
+    name="Street Map"
+).add_to(m)
+
 folium.TileLayer(
     tiles="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
     attr="Google",
     name="Satellite",
-    max_zoom=20,
     subdomains=["mt0", "mt1", "mt2", "mt3"],
+    max_zoom=20
 ).add_to(m)
-
-# Optional: add normal map also
-folium.TileLayer("OpenStreetMap", name="Map").add_to(m)
 
 # -------- COLOR FUNCTION --------
 def get_color(val):
@@ -101,7 +87,7 @@ def get_color(val):
     else:
         return "#BDBDBD"
 
-# -------- ADD POLYGONS --------
+# -------- POLYGON LAYER --------
 folium.GeoJson(
     polygons,
     name="Land Use",
@@ -113,13 +99,13 @@ folium.GeoJson(
     }
 ).add_to(m)
 
-# -------- ADD POINTS (SAFE WAY) --------
+# -------- POINTS (SAFE LOOP) --------
 for feature in points["features"]:
     try:
         coords = feature["geometry"]["coordinates"]
 
         folium.CircleMarker(
-            location=[coords[1], coords[0]],  # lat, lon
+            location=[coords[1], coords[0]],
             radius=5,
             color="black",
             fill=True,
@@ -129,6 +115,32 @@ for feature in points["features"]:
 
     except:
         continue
-        
+
+# -------- LEGEND --------
+legend_html = """
+<div style="
+position: fixed; 
+bottom: 40px; left: 40px; width: 230px;
+background-color: white;
+border:2px solid grey;
+z-index:9999;
+font-size:14px;
+padding: 10px;
+border-radius:8px;
+">
+<b>Legend</b><br><br>
+<span style="color:#7CB342;">⬛</span> Agriculture<br>
+<span style="color:#1E88E5;">⬛</span> Irrigation<br>
+<span style="color:#00ACC1;">⬛</span> Water bodies<br>
+<span style="color:#2E7D32;">⬛</span> Orchard<br>
+<span style="color:#00897B;">⬛</span> Farm Pond<br>
+<span style="color:red;">⬤</span> Proposed Works
+</div>
+"""
+m.get_root().html.add_child(folium.Element(legend_html))
+
+# -------- LAYER CONTROL --------
+folium.LayerControl(collapsed=False).add_to(m)
+
 # -------- DISPLAY --------
 st_folium(m, width=900)
