@@ -7,7 +7,7 @@ import os
 st.subheader("🌍 Village GIS Map")
 
 village_list = list(set(
-    [f["properties"].get("village", "") for f in polygons["features"]]
+    [f["properties"].get("Village", "") for f in polygons["features"]]
 ))
 
 selected_village = st.selectbox(
