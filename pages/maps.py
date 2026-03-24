@@ -6,15 +6,6 @@ import os
 
 st.subheader("🌍 Village GIS Map")
 
-village_list = list(set(
-    [f["properties"].get("Village", "") for f in polygons["features"]]
-))
-
-selected_village = st.selectbox(
-    "Select Village",
-    sorted(village_list)
-)
-
 # -------- BASE PATH --------
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
