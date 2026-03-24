@@ -129,12 +129,14 @@ padding: 10px;
 border-radius:8px;
 ">
 <b>Legend</b><br><br>
-<span style="color:#7CB342;">⬛</span> Agriculture<br>
-<span style="color:#1E88E5;">⬛</span> Irrigation<br>
-<span style="color:#00ACC1;">⬛</span> Water bodies<br>
-<span style="color:#2E7D32;">⬛</span> Orchard<br>
-<span style="color:#00897B;">⬛</span> Farm Pond<br>
-<span style="color:red;">⬤</span> Proposed Works
+
+<div><span style="background:#7CB342;width:12px;height:12px;display:inline-block;"></span> Agriculture</div>
+<div><span style="background:#1E88E5;width:12px;height:12px;display:inline-block;"></span> Irrigation</div>
+<div><span style="background:#00ACC1;width:12px;height:12px;display:inline-block;"></span> Water bodies</div>
+<div><span style="background:#2E7D32;width:12px;height:12px;display:inline-block;"></span> Orchard</div>
+<div><span style="background:#00897B;width:12px;height:12px;display:inline-block;"></span> Farm Pond</div>
+<div><span style="background:red;width:12px;height:12px;display:inline-block;"></span> Proposed Works</div>
+
 </div>
 """
 m.get_root().html.add_child(folium.Element(legend_html))
