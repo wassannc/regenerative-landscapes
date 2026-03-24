@@ -61,7 +61,19 @@ polygons = load_geojson_safe(
 points = load_geojson_safe(
     os.path.join(BASE_DIR, "maps", "resources_points.geojson")
 )
+# -------- FILTER BY VILLAGE --------
+filtered_polygons = {
+    "type": "FeatureCollection",
+    "features": [
+        f for f in polygons["features"]
+        if f["properties"].get("village") == selected_village
+    ]
+}
 
+filtered_points = [
+    f for f in points["features"]
+    if f["properties"].get("village") == selected_village
+]
 # -------- CREATE MAP --------
 m = folium.Map(location=[18.15, 82.70], zoom_start=14)
 
@@ -100,7 +112,7 @@ def get_color(val):
 land_layer = folium.FeatureGroup(name="Land Use", show=True)
 
 folium.GeoJson(
-    polygons,
+    filtered_polygons,
     style_function=lambda f: {
         "color": "black",
         "weight": 1,
@@ -119,7 +131,7 @@ land_layer.add_to(m)
 # -------- POINTS (SAFE LOOP) --------
 points_layer = folium.FeatureGroup(name="Proposed Works", show=True)
 
-for feature in points["features"]:
+for feature in filtered_points:
     try:
         coords = feature["geometry"]["coordinates"]
         props = feature.get("properties", {})
