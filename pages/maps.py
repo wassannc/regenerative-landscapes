@@ -1,95 +1,97 @@
+import streamlit as st
 import folium
 from streamlit_folium import st_folium
 import json
-import streamlit as st
 import os
-import math
 
 st.subheader("🌍 Village GIS Map")
 
 # -------- BASE PATH --------
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-# -------- CLEAN FUNCTION --------
-def load_clean_geojson(path):
-    import json
-    import math
-
+# -------- SAFE GEOJSON LOADER (FINAL FIX) --------
+def safe_geojson(path):
     with open(path) as f:
         data = json.load(f)
 
-    for feature in data.get("features", []):
-        # FIX properties
-        props = feature.get("properties", {})
+    clean_features = []
 
-        clean_props = {}
-        for k, v in props.items():
-            try:
-                if v is None:
-                    clean_props[k] = ""
-                elif isinstance(v, float) and (math.isnan(v) or math.isinf(v)):
-                    clean_props[k] = ""
-                else:
-                    clean_props[k] = str(v)
-            except:
-                clean_props[k] = ""
+    for f in data.get("features", []):
+        try:
+            geom = f.get("geometry")
+            props = f.get("properties", {})
 
-        feature["properties"] = clean_props
+            # skip invalid geometry
+            if not geom or "type" not in geom or "coordinates" not in geom:
+                continue
 
-        # FIX geometry (very important)
-        if feature.get("geometry") is None:
-            feature["geometry"] = {
-                "type": "Point",
-                "coordinates": [0, 0]
-            }
+            # clean properties (convert everything to string)
+            clean_props = {}
+            for k, v in props.items():
+                clean_props[k] = "" if v is None else str(v)
 
-    return data
+            clean_features.append({
+                "type": "Feature",
+                "geometry": geom,
+                "properties": clean_props
+            })
 
-import os
+        except:
+            continue
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+    return {
+        "type": "FeatureCollection",
+        "features": clean_features
+    }
 
-polygons = load_clean_geojson(
+# -------- LOAD FILES --------
+polygons = safe_geojson(
     os.path.join(BASE_DIR, "maps", "landuse_polygons.geojson")
 )
 
-points = load_clean_geojson(
+points = safe_geojson(
     os.path.join(BASE_DIR, "maps", "resources_points.geojson")
 )
 
 # -------- MAP BASE --------
-m = folium.Map(location=[18.15, 82.70], zoom_start=14, tiles="CartoDB positron")
+m = folium.Map(
+    location=[18.15, 82.70],
+    zoom_start=14,
+    tiles="CartoDB positron"
+)
 
 # -------- COLOR FUNCTION --------
 def get_color(land_type):
     land_type = land_type.lower()
 
     if "agriculture" in land_type:
-        return "#7CB342"   # light green
+        return "#7CB342"
     elif "irrigation" in land_type:
-        return "#1E88E5"   # strong blue
+        return "#1E88E5"
     elif "water" in land_type:
-        return "#00ACC1"   # cyan
+        return "#00ACC1"
     elif "orchard" in land_type:
-        return "#2E7D32"   # dark green
+        return "#2E7D32"
     elif "pond" in land_type:
         return "#00897B"
     else:
-        return "#BDBDBD"   # grey
+        return "#BDBDBD"
 
-# -------- ADD POLYGONS --------
+# -------- POLYGON LAYER --------
 folium.GeoJson(
     polygons,
-    name="Land_Use",
+    name="Land Use",
     style_function=lambda feature: {
         "color": "black",
         "weight": 1,
-        "fillColor": get_color(feature["properties"].get("Land_Use", "")),
+        "fillColor": get_color(
+            feature["properties"].get("Land_Use", "")
+        ),
         "fillOpacity": 0.6,
-    },
+    }
 ).add_to(m)
 
-# -------- ADD POINTS --------
+# -------- POINT LAYER --------
 folium.GeoJson(
     points,
     name="Resources",
@@ -101,17 +103,6 @@ folium.GeoJson(
         fill_color="red",
         fill_opacity=0.9
     )
-).add_to(m)
-
-folium.GeoJson(
-    polygons,
-    name="Land Use",
-    style_function=lambda feature: {
-        "color": "black",
-        "weight": 1,
-        "fillColor": get_color(feature["properties"].get("Land_Use", "")),
-        "fillOpacity": 0.6,
-    }
 ).add_to(m)
 
 # -------- LEGEND --------
