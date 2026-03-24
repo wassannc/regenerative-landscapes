@@ -115,8 +115,8 @@ for feature in points["features"]:
         coords = feature["geometry"]["coordinates"]
         props = feature.get("properties", {})
 
-        # ✅ ADD THIS LINE
-        label = props.get("resource_type", "Name")
+        # ✅ PLACE IT HERE
+        label = props.get("Name", "Work")
 
         folium.CircleMarker(
             location=[coords[1], coords[0]],
@@ -125,7 +125,8 @@ for feature in points["features"]:
             fill=True,
             fill_color="red",
             fill_opacity=0.9,
-            popup=label   # now works
+            tooltip=label,
+            popup=label
         ).add_to(points_layer)
 
     except:
