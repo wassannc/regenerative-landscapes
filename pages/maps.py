@@ -116,7 +116,7 @@ for feature in points["features"]:
         props = feature.get("properties", {})
 
         # ✅ ADD THIS LINE
-        label = props.get("resource_type", "Work")
+        label = props.get("resource_type", "Name")
 
         folium.CircleMarker(
             location=[coords[1], coords[0]],
