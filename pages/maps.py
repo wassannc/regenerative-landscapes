@@ -83,8 +83,20 @@ filtered_points = [
 st.markdown("### 📊 Village Summary")
 
 # Counts
-total_polygons = len(filtered_polygons["features"])
+# -------- AREA CALCULATION --------
+total_area = 0
+
+for f in filtered_polygons["features"]:
+    try:
+        area_val = float(f["properties"].get("area", 0))
+        total_area += area_val
+    except:
+        continue
 total_points = len(filtered_points)
+# Display
+col1, col2 = st.columns(2)
+col1.metric("Total Area (Acres)", round(total_area, 2))
+col2.metric("Proposed Works", total_points)
 
 from collections import Counter
 
