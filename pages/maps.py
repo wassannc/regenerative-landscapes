@@ -67,14 +67,20 @@ filtered_polygons = {
     "type": "FeatureCollection",
     "features": [
         f for f in polygons["features"]
-        if f["properties"].get("village") == selected_village
+        if str(f["properties"].get("Village", "")).strip().lower()
+        == selected_village.strip().lower()
     ]
 }
-
 filtered_points = [
     f for f in points["features"]
-    if f["properties"].get("Village") == selected_village
+    if str(f["properties"].get("Village", "")).strip().lower()
+    == selected_village.strip().lower()
 ]
+if filtered_polygons["features"]:
+    coords = filtered_polygons["features"][0]["geometry"]["coordinates"][0][0]
+    m.location = [coords[1], coords[0]]
+    m.zoom_start = 15
+    
 # -------- CREATE MAP --------
 m = folium.Map(location=[18.15, 82.70], zoom_start=14)
 
