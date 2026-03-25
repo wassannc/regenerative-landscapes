@@ -134,6 +134,11 @@ def get_color(val):
     else:
         return "#BDBDBD"
 
+for f in filtered_polygons["features"]:
+    props = f.get("properties", {})
+    if "Land_Use" not in props or props["Land_Use"] is None:
+        props["Land_Use"] = "Unknown"
+
 # -------- POLYGON LAYER --------
 land_layer = folium.FeatureGroup(name="Land Use", show=True)
 
@@ -144,7 +149,13 @@ folium.GeoJson(
         "weight": 1,
         "fillColor": get_color(f["properties"].get("Land_Use", "")),
         "fillOpacity": 0.6,
-    }
+    },
+    tooltip=folium.GeoJsonTooltip(
+        fields=["Land_Use"],
+        aliases=["Type:"],
+        sticky=True,
+        labels=True
+    )
 ).add_to(land_layer)
 
 land_layer.add_to(m)
