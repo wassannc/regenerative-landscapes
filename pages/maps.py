@@ -77,9 +77,28 @@ filtered_points = [
     == selected_village.strip().lower()
 ]
 if filtered_polygons["features"]:
-    coords = filtered_polygons["features"][0]["geometry"]["coordinates"][0][0]
-    m.location = [coords[1], coords[0]]
-    m.zoom_start = 15
+    try:
+        coords_list = []
+
+        for f in filtered_polygons["features"]:
+            geom = f["geometry"]
+
+            if geom["type"] == "Polygon":
+                coords_list.extend(geom["coordinates"][0])
+
+            elif geom["type"] == "MultiPolygon":
+                for poly in geom["coordinates"]:
+                    coords_list.extend(poly[0])
+
+        # calculate center
+        lat = sum([c[1] for c in coords_list]) / len(coords_list)
+        lon = sum([c[0] for c in coords_list]) / len(coords_list)
+
+        m.location = [lat, lon]
+        m.zoom_start = 15
+
+    except:
+        pass
     
 # -------- CREATE MAP --------
 m = folium.Map(location=[18.15, 82.70], zoom_start=14)
