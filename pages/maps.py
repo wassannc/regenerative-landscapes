@@ -113,10 +113,16 @@ col1.metric("Total Area (Acres)", round(total_area, 2))
 col2.metric("Proposed Works", total_points)
 
 # Breakdown
-st.markdown("### 🌱 Land Use Distribution")
+import pandas as pd
 
-for k, v in land_use_counts.items():
-    st.write(f"{k}: {v}")
+st.markdown("### 🌱 Land Use Distribution (Acres)")
+
+df = pd.DataFrame([
+    {"Land Use": k, "Area (Acres)": round(v, 2)}
+    for k, v in land_use_area.items()
+])
+
+st.dataframe(df, use_container_width=True)
     
 if filtered_polygons["features"]:
     try:
