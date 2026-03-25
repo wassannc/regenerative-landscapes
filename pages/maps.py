@@ -112,6 +112,18 @@ col1, col2 = st.columns(2)
 col1.metric("Total Area (Acres)", round(total_area, 2))
 col2.metric("Proposed Works", total_points)
 
+from collections import defaultdict
+
+land_use_area = defaultdict(float)
+
+for f in filtered_polygons["features"]:
+    try:
+        land_type = f["properties"].get("Land_Use", "Unknown")
+        area_val = float(f["properties"].get("area", 0))
+
+        land_use_area[land_type] += area_val
+    except:
+        continue
 # Breakdown
 import pandas as pd
 
