@@ -76,6 +76,36 @@ filtered_points = [
     if str(f["properties"].get("Village", "")).strip().lower()
     == selected_village.strip().lower()
 ]
+# ===============================
+# 📊 VILLAGE STATS (ADD HERE)
+# ===============================
+
+st.markdown("### 📊 Village Summary")
+
+# Counts
+total_polygons = len(filtered_polygons["features"])
+total_points = len(filtered_points)
+
+from collections import Counter
+
+land_use_list = [
+    f["properties"].get("Land_Use", "Unknown")
+    for f in filtered_polygons["features"]
+]
+
+land_use_counts = Counter(land_use_list)
+
+# Display metrics
+col1, col2 = st.columns(2)
+col1.metric("Total Land Parcels", total_polygons)
+col2.metric("Proposed Works", total_points)
+
+# Breakdown
+st.markdown("### 🌱 Land Use Distribution")
+
+for k, v in land_use_counts.items():
+    st.write(f"{k}: {v}")
+    
 if filtered_polygons["features"]:
     try:
         coords_list = []
