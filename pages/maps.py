@@ -119,12 +119,7 @@ folium.GeoJson(
         "weight": 1,
         "fillColor": get_color(f["properties"].get("Land_Use", "")),
         "fillOpacity": 0.6,
-    },
-    tooltip=folium.GeoJsonTooltip(
-        fields=["Land_Use"],
-        aliases=["Type:"],
-        sticky=True
-    )
+    }
 ).add_to(land_layer)
 
 land_layer.add_to(m)
