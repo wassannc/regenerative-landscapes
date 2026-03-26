@@ -132,6 +132,7 @@ df = pd.DataFrame([
 st.dataframe(df, use_container_width=True)
     
 # -------- AUTO ZOOM --------
+# -------- AUTO ZOOM --------
 if filtered_polygons["features"]:
     try:
         coords_list = []
@@ -149,6 +150,28 @@ if filtered_polygons["features"]:
     except:
         pass
 
+
+# ===============================
+# 📍 PROPOSED WORKS TABLE
+# ===============================
+
+st.markdown("### 📍 Proposed Works Details")
+
+works_data = []
+
+for f in filtered_points:
+    props = f.get("properties", {})
+
+    works_data.append({
+        "Name": props.get("Name", "Work"),
+        "Type": props.get("type", "N/A"),
+        "Village": props.get("Village", "")
+    })
+
+import pandas as pd
+df_works = pd.DataFrame(works_data)
+
+st.dataframe(df_works, use_container_width=True)
 
 # ===============================
 # 📍 PROPOSED WORKS TABLE
