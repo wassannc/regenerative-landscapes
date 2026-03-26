@@ -146,6 +146,13 @@ if filtered_polygons["features"]:
                 for poly in geom["coordinates"]:
                     coords_list.extend(poly[0])
 
+        if coords_list:
+            lat = sum([c[1] for c in coords_list]) / len(coords_list)
+            lon = sum([c[0] for c in coords_list]) / len(coords_list)
+
+            m.location = [lat, lon]
+            m.zoom_start = 15
+
     except:
         pass
 
