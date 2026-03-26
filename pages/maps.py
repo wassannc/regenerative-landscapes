@@ -132,7 +132,6 @@ df = pd.DataFrame([
 st.dataframe(df, use_container_width=True)
     
 # -------- AUTO ZOOM --------
-# -------- AUTO ZOOM --------
 if filtered_polygons["features"]:
     try:
         coords_list = []
