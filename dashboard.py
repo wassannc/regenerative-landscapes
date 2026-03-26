@@ -21,24 +21,22 @@ def clean_numeric(df, cols):
     
 SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
 spreadsheet = client.open_by_key(SHEET_ID)
-# ---------- GOOGLE CONNECTION ----------
-@st.cache_resource
-def init_connection():
+# -------- GOOGLE CONNECTION --------
+scope = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
 
-    scope = [
-        "https://www.googleapis.com/auth/spreadsheets",
-        "https://www.googleapis.com/auth/drive"
-    ]
+creds = Credentials.from_service_account_info(
+    st.secrets["gcp"], scopes=scope
+)
 
-    creds = Credentials.from_service_account_info(
-        st.secrets["gcp"],
-        scopes=scope
-    )
+client = gspread.authorize(creds)
 
-    client = gspread.authorize(creds)
+# -------- SHEET --------
+SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
 
-    return client
-
+spreadsheet = client.open_by_key(SHEET_ID)
 
 # ---------- LOAD GOOGLE SHEET ----------
 @st.cache_data(ttl=600)
