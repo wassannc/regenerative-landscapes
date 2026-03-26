@@ -237,7 +237,7 @@ for feature in filtered_points:
 points_layer.add_to(m)
 
 # -------- LAYER CONTROL --------
-folium.LayerControl(collapsed=False).add_to(m)
+folium.LayerControl(position="topright", collapsed=False).add_to(m)
 
 # -------- DISPLAY --------
 st_folium(m, width=900)
