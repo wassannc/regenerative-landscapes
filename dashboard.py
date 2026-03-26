@@ -6,7 +6,6 @@ import plotly.express as px
 
 # -------- CLEAN NUMERIC DATA --------
 def clean_numeric(df, cols):
-
     for col in cols:
         if col in df.columns:
             df[col] = (
