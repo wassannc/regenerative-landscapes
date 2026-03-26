@@ -144,6 +144,9 @@ if filtered_polygons["features"]:
             elif geom["type"] == "MultiPolygon":
                 for poly in geom["coordinates"]:
                     coords_list.extend(poly[0])
+
+    except:
+        pass
 st.markdown("### 📍 Proposed Works Details")
 
 import pandas as pd
