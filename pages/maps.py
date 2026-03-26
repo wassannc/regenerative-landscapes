@@ -133,19 +133,6 @@ st.dataframe(df, use_container_width=True)
     
 # -------- CREATE MAP --------
 m = folium.Map(location=[18.15, 82.70], zoom_start=14)
-
-# -------- ADD LAYERS TO MAP --------
-agri_layer.add_to(m)
-irrigation_layer.add_to(m)
-water_layer.add_to(m)
-orchard_layer.add_to(m)
-pond_layer.add_to(m)
-
-# -------- LAYER CONTROL --------
-folium.LayerControl(collapsed=False).add_to(m)
-# -------- DISPLAY --------
-st_folium(m, width=900)
-
 # -------- AUTO ZOOM --------
 if filtered_polygons["features"]:
     coords_list = []
@@ -166,6 +153,17 @@ if filtered_polygons["features"]:
 
         m.location = [lat, lon]
         m.zoom_start = 15
+# -------- ADD LAYERS TO MAP --------
+agri_layer.add_to(m)
+irrigation_layer.add_to(m)
+water_layer.add_to(m)
+orchard_layer.add_to(m)
+pond_layer.add_to(m)
+
+# -------- LAYER CONTROL --------
+folium.LayerControl(collapsed=False).add_to(m)
+# -------- DISPLAY --------
+st_folium(m, width=900)
 
 # -------- BASE LAYERS --------
 folium.TileLayer(
