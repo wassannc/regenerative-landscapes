@@ -220,8 +220,6 @@ orchard_layer.add_to(m)
 pond_layer.add_to(m)
 
 # -------- POINTS LAYER --------
-points_layer = folium.FeatureGroup(name="Proposed Works", show=True)
-
 if show_points:
     for feature in filtered_points:
         try:
