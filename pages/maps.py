@@ -131,6 +131,9 @@ df = pd.DataFrame([
 
 st.dataframe(df, use_container_width=True)
     
+# -------- CREATE MAP --------
+m = folium.Map(location=[18.15, 82.70], zoom_start=14)
+
 # -------- AUTO ZOOM --------
 if filtered_polygons["features"]:
     coords_list = []
@@ -151,9 +154,6 @@ if filtered_polygons["features"]:
 
         m.location = [lat, lon]
         m.zoom_start = 15
-    
-# -------- CREATE MAP --------
-m = folium.Map(location=[18.15, 82.70], zoom_start=14)
 
 # -------- BASE LAYERS --------
 folium.TileLayer(
