@@ -229,8 +229,6 @@ for f in filtered_polygons["features"]:
     elif "pond" in land_type:
         style["fillColor"] = "#00897B"
         folium.GeoJson(f, style_function=lambda x, s=style: s).add_to(pond_layer)
- # -------- SEPARATE LAND USE LAYERS --------
-(for loop block here...)
 
 # 👇 STEP 3 (ADD HERE)
 agri_layer.add_to(m)
