@@ -19,8 +19,6 @@ def clean_numeric(df, cols):
 
     return df
     
-SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
-spreadsheet = client.open_by_key(SHEET_ID)
 # -------- GOOGLE CONNECTION --------
 scope = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -32,7 +30,8 @@ creds = Credentials.from_service_account_info(
 )
 
 client = gspread.authorize(creds)
-
+SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
+spreadsheet = client.open_by_key(SHEET_ID)
 # -------- SHEET --------
 SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
 
