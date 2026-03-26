@@ -107,11 +107,6 @@ land_use_list = [
 
 land_use_counts = Counter(land_use_list)
 
-# Display metrics
-col1, col2 = st.columns(2)
-col1.metric("Total Area (Acres)", round(total_area, 2))
-col2.metric("Proposed Works", total_points)
-
 from collections import defaultdict
 
 land_use_area = defaultdict(float)
