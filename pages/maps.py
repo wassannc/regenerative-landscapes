@@ -133,28 +133,24 @@ st.dataframe(df, use_container_width=True)
     
 # -------- AUTO ZOOM --------
 if filtered_polygons["features"]:
-    try:
-        coords_list = []
+    coords_list = []
 
-        for f in filtered_polygons["features"]:
-            geom = f["geometry"]
+    for f in filtered_polygons["features"]:
+        geom = f["geometry"]
 
-            if geom["type"] == "Polygon":
-                coords_list.extend(geom["coordinates"][0])
+        if geom["type"] == "Polygon":
+            coords_list.extend(geom["coordinates"][0])
 
-            elif geom["type"] == "MultiPolygon":
-                for poly in geom["coordinates"]:
-                    coords_list.extend(poly[0])
+        elif geom["type"] == "MultiPolygon":
+            for poly in geom["coordinates"]:
+                coords_list.extend(poly[0])
 
-        if coords_list:
-            lat = sum([c[1] for c in coords_list]) / len(coords_list)
-            lon = sum([c[0] for c in coords_list]) / len(coords_list)
+    if coords_list:
+        lat = sum([c[1] for c in coords_list]) / len(coords_list)
+        lon = sum([c[0] for c in coords_list]) / len(coords_list)
 
-            m.location = [lat, lon]
-            m.zoom_start = 15
-
-    except:
-        pass
+        m.location = [lat, lon]
+        m.zoom_start = 15
         # calculate center
         lat = sum([c[1] for c in coords_list]) / len(coords_list)
         lon = sum([c[0] for c in coords_list]) / len(coords_list)
