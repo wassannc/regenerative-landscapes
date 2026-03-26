@@ -155,7 +155,6 @@ if filtered_polygons["features"]:
 
     except:
         pass
-
         # calculate center
         lat = sum([c[1] for c in coords_list]) / len(coords_list)
         lon = sum([c[0] for c in coords_list]) / len(coords_list)
