@@ -130,6 +130,15 @@ df = pd.DataFrame([
 ])
 
 st.dataframe(df, use_container_width=True)
+
+st.markdown("### 🗂️ Select Layers")
+
+show_agri = st.checkbox("Agriculture", True)
+show_irrigation = st.checkbox("Irrigation", True)
+show_water = st.checkbox("Water Bodies", True)
+show_orchard = st.checkbox("Orchard", True)
+show_pond = st.checkbox("Farm Pond", True)
+show_points = st.checkbox("Proposed Works", True)
     
 # -------- CREATE MAP --------
 m = folium.Map(location=[18.15, 82.70], zoom_start=14)
@@ -183,25 +192,25 @@ for f in filtered_polygons["features"]:
         "fillOpacity": 0.6
     }
 
-    if "agriculture" in land_type:
-        style["fillColor"] = "#7CB342"
-        folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(agri_layer)
+    if "agriculture" in land_type and show_agri:
+    style["fillColor"] = "#7CB342"
+    folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(m)
 
-    elif "irrigation" in land_type:
-        style["fillColor"] = "#1E88E5"
-        folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(irrigation_layer)
+elif "irrigation" in land_type and show_irrigation:
+    style["fillColor"] = "#1E88E5"
+    folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(m)
 
-    elif "water" in land_type:
-        style["fillColor"] = "#00ACC1"
-        folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(water_layer)
+elif "water" in land_type and show_water:
+    style["fillColor"] = "#00ACC1"
+    folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(m)
 
-    elif "orchard" in land_type:
-        style["fillColor"] = "#2E7D32"
-        folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(orchard_layer)
+elif "orchard" in land_type and show_orchard:
+    style["fillColor"] = "#2E7D32"
+    folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(m)
 
-    elif "pond" in land_type:
-        style["fillColor"] = "#00897B"
-        folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(pond_layer)
+elif "pond" in land_type and show_pond:
+    style["fillColor"] = "#00897B"
+    folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(m)er)
 
 # -------- ADD LAND LAYERS TO MAP --------
 agri_layer.add_to(m)
@@ -213,28 +222,27 @@ pond_layer.add_to(m)
 # -------- POINTS LAYER --------
 points_layer = folium.FeatureGroup(name="Proposed Works", show=True)
 
-for feature in filtered_points:
-    try:
-        coords = feature["geometry"]["coordinates"]
-        props = feature.get("properties", {})
+if show_points:
+    for feature in filtered_points:
+        try:
+            coords = feature["geometry"]["coordinates"]
+            props = feature.get("properties", {})
 
-        label = props.get("Name", "Work")
+            label = props.get("Name", "Work")
 
-        folium.CircleMarker(
-            location=[coords[1], coords[0]],
-            radius=5,
-            color="black",
-            fill=True,
-            fill_color="red",
-            fill_opacity=0.9,
-            tooltip=label,
-            popup=label
-        ).add_to(points_layer)
+            folium.CircleMarker(
+                location=[coords[1], coords[0]],
+                radius=5,
+                color="black",
+                fill=True,
+                fill_color="red",
+                fill_opacity=0.9,
+                tooltip=label,
+                popup=label
+            ).add_to(m)
 
-    except:
-        continue
-
-points_layer.add_to(m)
+        except:
+            continue
 
 # -------- LAYER CONTROL --------
 folium.LayerControl().add_to(m)
