@@ -133,6 +133,18 @@ st.dataframe(df, use_container_width=True)
     
 # -------- CREATE MAP --------
 m = folium.Map(location=[18.15, 82.70], zoom_start=14)
+
+# -------- BASE LAYERS --------
+folium.TileLayer("OpenStreetMap", name="Street Map").add_to(m)
+
+folium.TileLayer(
+    tiles="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+    attr="Google",
+    name="Satellite",
+    subdomains=["mt0", "mt1", "mt2", "mt3"],
+    max_zoom=20
+).add_to(m)
+
 # -------- AUTO ZOOM --------
 if filtered_polygons["features"]:
     coords_list = []
@@ -153,64 +165,15 @@ if filtered_polygons["features"]:
 
         m.location = [lat, lon]
         m.zoom_start = 15
-# -------- ADD LAYERS TO MAP --------
-agri_layer.add_to(m)
-irrigation_layer.add_to(m)
-water_layer.add_to(m)
-orchard_layer.add_to(m)
-pond_layer.add_to(m)
 
-# -------- LAYER CONTROL --------
-folium.LayerControl(collapsed=False).add_to(m)
-# -------- DISPLAY --------
-st_folium(m, width=900)
-
-# -------- BASE LAYERS --------
-folium.TileLayer(
-    "OpenStreetMap",
-    name="Street Map"
-).add_to(m)
-
-folium.TileLayer(
-    tiles="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
-    attr="Google",
-    name="Satellite",
-    subdomains=["mt0", "mt1", "mt2", "mt3"],
-    max_zoom=20
-).add_to(m)
-
-# -------- COLOR FUNCTION --------
-def get_color(val):
-    val = val.lower()
-
-    if "agriculture" in val:
-        return "#7CB342"
-    elif "irrigation" in val:
-        return "#1E88E5"
-    elif "water" in val:
-        return "#00ACC1"
-    elif "orchard" in val:
-        return "#2E7D32"
-    elif "pond" in val:
-        return "#00897B"
-    else:
-        return "#BDBDBD"
-
-for f in filtered_polygons["features"]:
-    props = f.get("properties", {})
-    if "Land_Use" not in props or props["Land_Use"] is None:
-        props["Land_Use"] = "Unknown"
-
-# -------- POLYGON LAYER --------
-land_layer = folium.FeatureGroup(name="Land Use", show=True)
-
-# -------- SEPARATE LAND USE LAYERS --------
+# -------- CREATE LAND USE LAYERS --------
 agri_layer = folium.FeatureGroup(name="Agriculture", show=True)
 irrigation_layer = folium.FeatureGroup(name="Irrigation", show=True)
 water_layer = folium.FeatureGroup(name="Water Bodies", show=True)
 orchard_layer = folium.FeatureGroup(name="Orchard", show=True)
 pond_layer = folium.FeatureGroup(name="Farm Pond", show=True)
 
+# -------- ADD FEATURES TO LAYERS --------
 for f in filtered_polygons["features"]:
     land_type = f["properties"].get("Land_Use", "").lower()
 
@@ -240,7 +203,14 @@ for f in filtered_polygons["features"]:
         style["fillColor"] = "#00897B"
         folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(pond_layer)
 
-# -------- POINTS (ONLY ONCE) --------
+# -------- ADD LAND LAYERS TO MAP --------
+agri_layer.add_to(m)
+irrigation_layer.add_to(m)
+water_layer.add_to(m)
+orchard_layer.add_to(m)
+pond_layer.add_to(m)
+
+# -------- POINTS LAYER --------
 points_layer = folium.FeatureGroup(name="Proposed Works", show=True)
 
 for feature in filtered_points:
@@ -265,3 +235,9 @@ for feature in filtered_points:
         continue
 
 points_layer.add_to(m)
+
+# -------- LAYER CONTROL --------
+folium.LayerControl(collapsed=False).add_to(m)
+
+# -------- DISPLAY --------
+st_folium(m, width=900)
