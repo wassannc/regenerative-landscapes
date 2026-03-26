@@ -183,6 +183,12 @@ def get_color(val):
         return "#2E7D32"
     elif "pond" in val:
         return "#00897B"
+    elif "coffee" in val:
+        return "#6D4C41"   # brown
+    elif "grazing" in val:
+        return "#C0CA33"   # yellow-green
+    elif "nregs" in val:
+        return "#F4511E"   # orange
     else:
         return "#BDBDBD"
 
@@ -259,6 +265,9 @@ border-radius:8px;
 <div><span style="background:#2E7D32;width:12px;height:12px;display:inline-block;"></span> Orchard</div>
 <div><span style="background:#00897B;width:12px;height:12px;display:inline-block;"></span> Farm Pond</div>
 <div><span style="background:red;width:12px;height:12px;display:inline-block;"></span> Proposed Works</div>
+<div><span style="background:#6D4C41;width:12px;height:12px;display:inline-block;"></span> Coffee</div>
+<div><span style="background:#C0CA33;width:12px;height:12px;display:inline-block;"></span> Grazing Land</div>
+<div><span style="background:#F4511E;width:12px;height:12px;display:inline-block;"></span> NREGS Works</div>
 
 </div>
 """
