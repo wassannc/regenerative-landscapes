@@ -150,27 +150,6 @@ if filtered_polygons["features"]:
     except:
         pass
 
-# ===============================
-# 📍 PROPOSED WORKS TABLE
-# ===============================
-
-st.markdown("### 📍 Proposed Works Details")
-
-works_data = []
-
-for f in filtered_points:
-    props = f.get("properties", {})
-
-    works_data.append({
-        "Name": props.get("Name", "Work"),
-        "Type": props.get("type", "N/A"),
-        "Village": props.get("Village", "")
-    })
-
-df_works = pd.DataFrame(works_data)
-
-st.dataframe(df_works, use_container_width=True)
-
         # calculate center
         lat = sum([c[1] for c in coords_list]) / len(coords_list)
         lon = sum([c[0] for c in coords_list]) / len(coords_list)
