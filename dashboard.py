@@ -410,9 +410,133 @@ elif menu == "Small Ruminants":
     pass
     
 elif menu == "Crop Systems":
-    st.header("🌾 Crop Systems")
-    st.info("Crop systems dashboard coming soon.")
 
+    st.subheader("🌾 Crop Systems")
+
+    profile_ws = spreadsheet.worksheet("village profile")
+    df = pd.DataFrame(profile_ws.get_all_records())
+
+    # ---------------- SELECT IMPORTANT COLUMNS ----------------
+    df = df[[
+        "mandal","panchayath","village",
+        "Total HHs",
+        "Households-farming_hhs",
+        "Total land in the village_acre",
+        "Crops-kharif_acres",
+        "Crops-rabi_acres",
+        "Crops-irrigated_acrs",
+        "Crops-rainfed_acrs",
+        "Crops-kharif_farmers",
+        "Crops-rabi_farmers",
+        "Crops-rabi_irrigation_acres",
+        "Crops-streambed_acrs",
+        "Crops-paddy_kharif_ext_acrs",
+        "Crops-ragi_kharif_ext_acrs",
+        "Crops-ginger_kharif_ext_acrs",
+        "Crops-turmeric_kharif_ext_acrs",
+        "agri_practices_-Coffee_mono_acres",
+        "agri_practices_-Coffee_with_pepper_acres",
+        "agri_practices_-Millet_linesowing_acres",
+        "agri_practices_-SRI_paddy_acres",
+        "agri_practices_-crop_insurance_acres"
+    ]]
+
+    # ---------------- CONVERT NUMERIC ----------------
+    for col in df.columns:
+        if col not in ["mandal","panchayath","village"]:
+            df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+
+    # ---------------- FILTER ----------------
+    mandal = st.selectbox("Select Mandal", ["All"] + sorted(df["mandal"].dropna().unique()))
+    if mandal != "All":
+        df = df[df["mandal"] == mandal]
+
+    # ---------------- TABLE ----------------
+    st.markdown("### 🌾 Village Wise Crop Data")
+    st.dataframe(df)
+
+    # ---------------- METRICS ----------------
+    col1, col2, col3, col4 = st.columns(4)
+
+    col1.metric("🌱 Farming HHs", int(df["Households-farming_hhs"].sum()))
+    col2.metric("🌾 Kharif Area", int(df["Crops-kharif_acres"].sum()))
+    col3.metric("🌿 Rabi Area", int(df["Crops-rabi_acres"].sum()))
+    col4.metric("💧 Irrigated Area", int(df["Crops-irrigated_acrs"].sum()))
+
+    # ---------------- CROP DISTRIBUTION ----------------
+    st.markdown("### 🌾 Major Crop Area")
+
+    crop_summary = {
+        "Paddy": df["Crops-paddy_kharif_ext_acrs"].sum(),
+        "Ragi": df["Crops-ragi_kharif_ext_acrs"].sum(),
+        "Ginger": df["Crops-ginger_kharif_ext_acrs"].sum(),
+        "Turmeric": df["Crops-turmeric_kharif_ext_acrs"].sum()
+    }
+
+    st.bar_chart(pd.DataFrame.from_dict(crop_summary, orient="index", columns=["Acres"]))
+
+    # ---------------- IRRIGATION ----------------
+    st.markdown("### 💧 Irrigation Overview")
+
+    irrigation = {
+        "Irrigated": df["Crops-irrigated_acrs"].sum(),
+        "Rainfed": df["Crops-rainfed_acrs"].sum(),
+        "Streambed": df["Crops-streambed_acrs"].sum()
+    }
+
+    st.bar_chart(pd.DataFrame.from_dict(irrigation, orient="index", columns=["Area"]))
+
+    # ---------------- AGRI PRACTICES ----------------
+    st.markdown("### 🌿 Agri Practices")
+
+    practices = {
+        "Coffee Mono": df["agri_practices_-Coffee_mono_acres"].sum(),
+        "Coffee + Pepper": df["agri_practices_-Coffee_with_pepper_acres"].sum(),
+        "Millet Line Sowing": df["agri_practices_-Millet_linesowing_acres"].sum(),
+        "SRI Paddy": df["agri_practices_-SRI_paddy_acres"].sum()
+    }
+
+    st.bar_chart(pd.DataFrame.from_dict(practices, orient="index", columns=["Area"]))
+
+    # ---------------- GP SUMMARY ----------------
+    st.markdown("### 📍 Panchayath Summary")
+
+    gp_summary = df.groupby("panchayath").agg({
+        "village":"nunique",
+        "Households-farming_hhs":"sum",
+        "Crops-kharif_acres":"sum",
+        "Crops-rabi_acres":"sum",
+        "Crops-irrigated_acrs":"sum",
+        "Crops-rainfed_acrs":"sum"
+    }).reset_index()
+
+    st.dataframe(gp_summary)
+
+    st.download_button(
+        "Download GP Summary",
+        gp_summary.to_csv(index=False),
+        "crop_gp_summary.csv"
+    )
+
+    # ---------------- MANDAL SUMMARY ----------------
+    st.markdown("### 🗺️ Mandal Summary")
+
+    mandal_summary = df.groupby("mandal").agg({
+        "panchayath":"nunique",
+        "village":"nunique",
+        "Households-farming_hhs":"sum",
+        "Crops-kharif_acres":"sum",
+        "Crops-rabi_acres":"sum",
+        "Crops-irrigated_acrs":"sum"
+    }).reset_index()
+
+    st.dataframe(mandal_summary)
+
+    st.download_button(
+        "Download Mandal Summary",
+        mandal_summary.to_csv(index=False),
+        "crop_mandal_summary.csv"
+    )
 
 elif menu == "Fisheries":
     st.subheader("🐟 Fisheries")
