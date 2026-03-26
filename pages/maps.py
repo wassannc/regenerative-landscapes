@@ -212,54 +212,34 @@ for f in filtered_polygons["features"]:
 
     if "agriculture" in land_type:
         style["fillColor"] = "#7CB342"
-        folium.GeoJson(f, style_function=lambda x, s=style: s).add_to(agri_layer)
+        folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(agri_layer)
 
     elif "irrigation" in land_type:
         style["fillColor"] = "#1E88E5"
-        folium.GeoJson(f, style_function=lambda x, s=style: s).add_to(irrigation_layer)
+        folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(irrigation_layer)
 
     elif "water" in land_type:
         style["fillColor"] = "#00ACC1"
-        folium.GeoJson(f, style_function=lambda x, s=style: s).add_to(water_layer)
+        folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(water_layer)
 
     elif "orchard" in land_type:
         style["fillColor"] = "#2E7D32"
-        folium.GeoJson(f, style_function=lambda x, s=style: s).add_to(orchard_layer)
+        folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(orchard_layer)
 
     elif "pond" in land_type:
         style["fillColor"] = "#00897B"
-        folium.GeoJson(f, style_function=lambda x, s=style: s).add_to(pond_layer)
+        folium.GeoJson(f, style_function=lambda feature, s=style: s).add_to(pond_layer)
 
-# 👇 STEP 3 (ADD HERE)
+
+# -------- ADD LAYERS TO MAP --------
 agri_layer.add_to(m)
 irrigation_layer.add_to(m)
 water_layer.add_to(m)
 orchard_layer.add_to(m)
 pond_layer.add_to(m)
 
-# -------- POINTS --------
-points_layer = folium.FeatureGroup(name="Proposed Works", show=True)
 
-for feature in filtered_points:
-    coords = feature["geometry"]["coordinates"]
-    props = feature.get("properties", {})
-
-    label = props.get("Name", "Work")
-
-    folium.CircleMarker(
-        location=[coords[1], coords[0]],
-        radius=5,
-        color="black",
-        fill=True,
-        fill_color="red",
-        fill_opacity=0.9,
-        tooltip=label
-    ).add_to(points_layer)
-
-points_layer.add_to(m)
-
-
-# -------- POINTS (SAFE LOOP) --------
+# -------- POINTS (ONLY ONCE) --------
 points_layer = folium.FeatureGroup(name="Proposed Works", show=True)
 
 for feature in filtered_points:
@@ -267,7 +247,6 @@ for feature in filtered_points:
         coords = feature["geometry"]["coordinates"]
         props = feature.get("properties", {})
 
-        # ✅ PLACE IT HERE
         label = props.get("Name", "Work")
 
         folium.CircleMarker(
@@ -286,29 +265,6 @@ for feature in filtered_points:
 
 points_layer.add_to(m)
 
-# -------- LEGEND --------
-legend_html = """
-<div style="
-position: fixed; 
-bottom: 40px; left: 40px; width: 230px;
-background-color: white;
-border:2px solid grey;
-z-index:9999;
-font-size:14px;
-padding: 10px;
-border-radius:8px;
-">
-<b>Legend</b><br><br>
-
-<div><span style="background:#7CB342;width:12px;height:12px;display:inline-block;"></span> Agriculture</div>
-<div><span style="background:#1E88E5;width:12px;height:12px;display:inline-block;"></span> Irrigation</div>
-<div><span style="background:#00ACC1;width:12px;height:12px;display:inline-block;"></span> Water bodies</div>
-<div><span style="background:#2E7D32;width:12px;height:12px;display:inline-block;"></span> Orchard</div>
-<div><span style="background:#00897B;width:12px;height:12px;display:inline-block;"></span> Farm Pond</div>
-<div><span style="background:red;width:12px;height:12px;display:inline-block;"></span> Proposed Works</div>
-
-</div>
-"""
 
 # -------- LAYER CONTROL --------
 folium.LayerControl(collapsed=False).add_to(m)
