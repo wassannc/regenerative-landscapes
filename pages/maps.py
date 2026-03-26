@@ -195,7 +195,6 @@ for f in filtered_polygons["features"]:
 land_layer = folium.FeatureGroup(name="Land Use", show=True)
 
 # -------- SEPARATE LAND USE LAYERS --------
-
 agri_layer = folium.FeatureGroup(name="Agriculture", show=True)
 irrigation_layer = folium.FeatureGroup(name="Irrigation", show=True)
 water_layer = folium.FeatureGroup(name="Water Bodies", show=True)
