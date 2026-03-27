@@ -778,7 +778,11 @@ elif menu == "Migration":
         "Type of work during the migration",
         "Average earning per annum per family"
     ]].fillna(0)
-
+    
+    df_mig.columns = df_mig.columns.str.strip()
+df_mig["Average earning per annum per family"] = pd.to_numeric(
+    df_mig["Average earning per annum per family"], errors="coerce"
+)
     mandal = st.selectbox("Select Mandal",["All"]+sorted(df_mig["mandal"].unique()))
     if mandal!="All":
         df_mig = df_mig[df_mig["mandal"]==mandal]
