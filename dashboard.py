@@ -815,6 +815,25 @@ for col in numeric_cols:
         "Average earning per annum per family":"sum"
     }).reset_index()
 
+    st.dataframe(gp_summary)
+    st.download_button("Download GP Summary", gp_summary.to_csv(index=False),"migration_gp.csv")
+
+    st.markdown("### Mandal Wise Summary")
+
+    mandal_summary = df_mig.groupby("mandal").agg({
+        "panchayath":"nunique",
+        "village":"nunique",
+        "Total HHs":"sum",
+        "Total no of land less HHs":"sum",
+        "No of HHs not having Job cards":"sum",
+        "HHs going for seasonal migraion":"sum",
+        "Average no of days in a year going for migraion":"sum",
+        "Average earning per annum per family":"sum"
+    }).reset_index()
+
+    st.dataframe(mandal_summary)
+    st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False),"migration_mandal.csv")
+    pass
 
 elif menu == "Farm mechanization":
     st.subheader("🚜 Farm Mechanization")
