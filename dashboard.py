@@ -763,7 +763,7 @@ elif menu == "Land Development":
         mandal_summary.to_csv(index=False),
         "land_development_mandal.csv"
     )
-    pass
+    
 
 elif menu == "Migration":
     st.subheader("🧳 Migration")    
