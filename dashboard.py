@@ -768,7 +768,9 @@ elif menu == "Land Development":
 
 elif menu == "Migration":
     st.subheader("🧳 Migration")    
+
     df_mig = df_profile.copy()
+
     df_mig = df_mig[[
         "mandal","panchayath","village",
         "Total HHs",
@@ -780,31 +782,32 @@ elif menu == "Migration":
         "Average earning per annum per family"
     ]].fillna(0)
 
-# 👇 ADD HERE (THIS EXACT PLACE)
-df_mig.columns = df_mig.columns.str.strip()
-
-numeric_cols = [
-    "Total HHs",
-    "Total no of land less HHs",
-    "No of HHs not having Job cards",
-    "HHs going for seasonal migraion",
-    "Average no of days in a year going for migraion",
-    "Average earning per annum per family"
-]
-
-for col in numeric_cols:
-    df_mig[col] = pd.to_numeric(df_mig[col], errors="coerce").fillna(0)
+    # ✅ CLEAN
     df_mig.columns = df_mig.columns.str.strip()
-   
-    mandal = st.selectbox("Select Mandal",["All"]+sorted(df_mig["mandal"].unique()))
-    if mandal!="All":
-        df_mig = df_mig[df_mig["mandal"]==mandal]
+
+    numeric_cols = [
+        "Total HHs",
+        "Total no of land less HHs",
+        "No of HHs not having Job cards",
+        "HHs going for seasonal migraion",
+        "Average no of days in a year going for migraion",
+        "Average earning per annum per family"
+    ]
+
+    # ✅ ONLY THIS INSIDE LOOP
+    for col in numeric_cols:
+        df_mig[col] = pd.to_numeric(df_mig[col], errors="coerce").fillna(0)
+
+    # ✅ NOW OUTSIDE LOOP
+    mandal = st.selectbox("Select Mandal", ["All"] + sorted(df_mig["mandal"].unique()))
+    if mandal != "All":
+        df_mig = df_mig[df_mig["mandal"] == mandal]
 
     st.markdown("### Village Wise")
     st.dataframe(df_mig)
 
     st.markdown("### Panchayath Wise Summary")
-    
+
     gp_summary = df_mig.groupby("panchayath").agg({
         "village":"nunique",
         "Total HHs":"sum",
@@ -816,7 +819,7 @@ for col in numeric_cols:
     }).reset_index()
 
     st.dataframe(gp_summary)
-    st.download_button("Download GP Summary", gp_summary.to_csv(index=False),"migration_gp.csv")
+    st.download_button("Download GP Summary", gp_summary.to_csv(index=False), "migration_gp.csv")
 
     st.markdown("### Mandal Wise Summary")
 
@@ -832,8 +835,7 @@ for col in numeric_cols:
     }).reset_index()
 
     st.dataframe(mandal_summary)
-    st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False),"migration_mandal.csv")
-    pass
+    st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False), "migration_mandal.csv")
 
 elif menu == "Farm mechanization":
     st.subheader("🚜 Farm Mechanization")
