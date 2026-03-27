@@ -832,7 +832,7 @@ for col in numeric_cols:
 
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False),"migration_mandal.csv")
-    pass
+    
 
 elif menu == "Farm mechanization":
 
@@ -983,7 +983,7 @@ elif menu == "Farm mechanization":
 
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Report", mandal_summary.to_csv(index=False), "farm_mech_mandal.csv")
-    pass
+    
 
 elif menu == "Desi Poultry":
     st.subheader("🐔 Desi Poultry")
@@ -1067,7 +1067,7 @@ elif menu == "Desi Poultry":
 
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False), "desi_poultry_mandal.csv")
-    pass
+    
 
 elif menu == "Natural Farming":
     st.subheader("🌱 Natural Farming")
@@ -1160,7 +1160,7 @@ elif menu == "Natural Farming":
 
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal NF Report", mandal_summary.to_csv(index=False), "nf_mandal_summary.csv")
-    pass
+    
     # refresh
 
 
