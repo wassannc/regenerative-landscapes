@@ -21,9 +21,6 @@ def clean_numeric(df, cols):
     
 # -------- SHEET --------
 SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
-
-spreadsheet = client.open_by_key(SHEET_ID)
-
 import gspread
 from google.oauth2.service_account import Credentials
 import streamlit as st
