@@ -190,10 +190,6 @@ st.markdown("""
 st.sidebar.markdown("## RLV PORTAL")
 st.sidebar.markdown("---")
 
-section = st.sidebar.selectbox(
-    "Select Section",
-    ["Dashboard", "Planning", "Maps", "Reports"]
-)
 menu = st.sidebar.radio(
     "Select Thematic Area",
     ["Large Ruminants", "Small Ruminants", "Desi Poultry", "Crop Systems", "Natural Farming", "Fisheries", "Land Development", "Migration", "Farm mechanization"]
