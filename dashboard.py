@@ -528,7 +528,8 @@ elif menu == "Crop Systems":
         mandal_summary.to_csv(index=False),
         "crop_mandal_summary.csv"
     )
-
+    pass
+    
 elif menu == "Fisheries":
     st.subheader("🐟 Fisheries")
     df_f_profile = df_profile.copy()
@@ -763,7 +764,7 @@ elif menu == "Land Development":
         mandal_summary.to_csv(index=False),
         "land_development_mandal.csv"
     )
-    
+    pass
 
 elif menu == "Migration":
     st.subheader("🧳 Migration")    
