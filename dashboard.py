@@ -833,7 +833,6 @@ for col in numeric_cols:
 
     st.dataframe(mandal_summary)
     st.download_button("Download Mandal Summary", mandal_summary.to_csv(index=False),"migration_mandal.csv")
-    )
     pass
 
 elif menu == "Farm mechanization":
