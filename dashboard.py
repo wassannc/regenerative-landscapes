@@ -406,7 +406,7 @@ elif menu == "Crop Systems":
 
     st.subheader("🌾 Crop Systems")
 
-    profile_ws = spreadsheet.worksheet("village profile")
+    df_profile = load_sheet("village profile")
     df = pd.DataFrame(profile_ws.get_all_records())
 
     # ---------------- SELECT IMPORTANT COLUMNS ----------------
