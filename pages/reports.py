@@ -2,17 +2,18 @@ import streamlit as st
 import pandas as pd
 from docx import Document
 from io import BytesIO
+from dashboard import load_sheet
 
 st.title("📄 Village Reports")
+
 df_profile = load_sheet("village profile")
 df_plan = load_sheet("village plan")
 
 village_list = sorted(df_profile["village"].dropna().unique())
-
 selected_village = st.selectbox("Select Village", village_list)
-village_list = sorted(df_profile["village"].dropna().unique())
 
-selected_village = st.selectbox("Select Village", village_list)
+df_v = df_profile[df_profile["village"] == selected_village]
+df_p = df_plan[df_plan["village"] == selected_village]
 
 def generate_report(df_v, df_p, village):
 
