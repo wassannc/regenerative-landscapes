@@ -28,7 +28,7 @@ import streamlit as st
 
 def init_connection():
     creds = Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"],
+        st.secrets["gcp"],   # ✅ FIXED
         scopes=["https://www.googleapis.com/auth/spreadsheets"]
     )
     client = gspread.authorize(creds)
