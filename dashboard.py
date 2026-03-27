@@ -778,7 +778,21 @@ elif menu == "Migration":
         "Type of work during the migration",
         "Average earning per annum per family"
     ]].fillna(0)
-    
+
+# 👇 ADD HERE (THIS EXACT PLACE)
+df_mig.columns = df_mig.columns.str.strip()
+
+numeric_cols = [
+    "Total HHs",
+    "Total no of land less HHs",
+    "No of HHs not having Job cards",
+    "HHs going for seasonal migraion",
+    "Average no of days in a year going for migraion",
+    "Average earning per annum per family"
+]
+
+for col in numeric_cols:
+    df_mig[col] = pd.to_numeric(df_mig[col], errors="coerce").fillna(0)
     df_mig.columns = df_mig.columns.str.strip()
     df_mig["Average earning per annum per family"] = pd.to_numeric(
     df_mig["Average earning per annum per family"], errors="coerce"
