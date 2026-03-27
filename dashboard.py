@@ -37,6 +37,18 @@ SHEET_ID = "1pq1_1H3Y87D2jWGaOMVM9ypR0039RkQnaW0h2pFAxqs"
 
 spreadsheet = client.open_by_key(SHEET_ID)
 
+import gspread
+from google.oauth2.service_account import Credentials
+import streamlit as st
+
+def init_connection():
+    creds = Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"],
+        scopes=["https://www.googleapis.com/auth/spreadsheets"]
+    )
+    client = gspread.authorize(creds)
+    return client
+    
 # ---------- LOAD GOOGLE SHEET ----------
 @st.cache_data(ttl=600)
 def load_sheet(sheet_name):
