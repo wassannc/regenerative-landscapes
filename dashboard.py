@@ -794,8 +794,7 @@ numeric_cols = [
 for col in numeric_cols:
     df_mig[col] = pd.to_numeric(df_mig[col], errors="coerce").fillna(0)
     df_mig.columns = df_mig.columns.str.strip()
-    df_mig["Average earning per annum per family"] = pd.to_numeric(
-    
+   
     mandal = st.selectbox("Select Mandal",["All"]+sorted(df_mig["mandal"].unique()))
     if mandal!="All":
         df_mig = df_mig[df_mig["mandal"]==mandal]
