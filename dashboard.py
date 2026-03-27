@@ -100,6 +100,7 @@ st.markdown(f"""
     <a href="/" class="{{'active' if page=='dashboard' else ''}}">Dashboard</a>
     <a href="/maps" class="{{'active' if page=='maps' else ''}}">Maps</a>
     <a href="/planning" class="{{'active' if page=='planning' else ''}}">Planning</a>
+    <a href="/reports" class="{{'active' if page=='reports' else ''}}">Reports</a>
 </div>
 """, unsafe_allow_html=True)
 
