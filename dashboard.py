@@ -835,7 +835,6 @@ for col in numeric_cols:
     pass
 
 elif menu == "Farm mechanization":
-
     st.subheader("🚜 Farm Mechanization")
 
     df_profile = df_profile.copy()
