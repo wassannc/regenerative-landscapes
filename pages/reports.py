@@ -74,26 +74,29 @@ def create_doc(text, df_v, village):
     # TITLE
     doc.add_heading("Village Development Report", 0)
 
+    # LOCATION
     location = f"{row.get('village_gps-Latitude','')}, {row.get('village_gps-Longitude','')}"
 
-data = [
-    ("Village", village),
-    ("Location (Lat, Long)", location),
-    ("Mandal", row.get("mandal", "")),
-    ("Panchayath", row.get("panchayath", "")),
-    ("VO Name", row.get("VO_name", "")),
-    ("Raithu Seva Kendra", row.get("RSK_name", "")),
-    ("Sachivalayam", row.get("RSK_name", ""))
-]
+    # TABLE DATA
+    data = [
+        ("Village", village),
+        ("Location (Lat, Long)", location),
+        ("Mandal", row.get("mandal", "")),
+        ("Panchayath", row.get("panchayath", "")),
+        ("VO Name", row.get("VO_name", "")),
+        ("Raithu Seva Kendra", row.get("RSK_name", "")),
+        ("Sachivalayam", row.get("RSK_name", ""))
+    ]
 
-table = doc.add_table(rows=len(data), cols=2)
-table.style = "Table Grid"
+    # CREATE TABLE
+    table = doc.add_table(rows=len(data), cols=2)
+    table.style = "Table Grid"
 
-for i, (key, val) in enumerate(data):
-    table.rows[i].cells[0].text = str(key)
-    table.rows[i].cells[1].text = str(val)
+    for i, (key, val) in enumerate(data):
+        table.rows[i].cells[0].text = str(key)
+        table.rows[i].cells[1].text = str(val)
 
-    # ✅ PARAGRAPH (your requirement)
+    # PARAGRAPH
     doc.add_paragraph("")
 
     total_pop = row.get("population", "NA")
@@ -113,7 +116,6 @@ for i, (key, val) in enumerate(data):
     job_yes = row.get("Households-mnregs_cards", 0)
     job_no = row.get("No of HHs not having Job cards", 0)
 
-    # convert safely
     job_yes = int(job_yes) if pd.notna(job_yes) else 0
     job_no = int(job_no) if pd.notna(job_no) else 0
 
@@ -124,9 +126,10 @@ for i, (key, val) in enumerate(data):
 
     doc.add_paragraph(para)
 
-    # EXISTING TEXT BELOW
+    # EXISTING TEXT
     doc.add_paragraph(text)
 
+    # SAVE
     buffer = BytesIO()
     doc.save(buffer)
     buffer.seek(0)
