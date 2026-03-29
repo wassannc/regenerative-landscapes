@@ -93,6 +93,37 @@ def create_doc(text, df_v, village):
     for i, (key, val) in enumerate(data):
         table.rows[i].cells[0].text = str(key)
         table.rows[i].cells[1].text = str(val)
+# 👇 ADD HERE (exact place)
+
+doc.add_paragraph("")
+
+# values from dataset
+total_pop = row.get("population", "NA")
+male = row.get("Households-male", "NA")
+female = row.get("Households-femlae", "NA")
+hh = row.get("Total HHs", "NA")
+
+children_icds = row.get("children_icds", "NA")
+children_school = row.get("children_school", "NA")
+
+school = str(row.get("school", "")).strip().lower()
+school_name = row.get("school_name", "")
+kg = str(row.get("kg_school", "")).strip().lower()
+
+water = row.get("drinking_water_source", "NA")
+
+job_yes = row.get("Households-mnregs_cards", "NA")
+job_no = row.get("No of HHs not having Job cards", "NA")
+
+if school in ["yes", "y"]:
+
+    para = f"""{village} is a small village with a total population of {total_pop} people, comprising {male} males and {female} females across {hh} households. The village has {children_icds} children enrolled in ICDS and {children_school} children attending {school_name}. A kitchen garden is {'available' if kg in ['yes','y'] else 'not available'} at the school. Drinking water in the village is sourced from {water}. In terms of livelihoods, {job_yes} households possess job cards, while {job_no} households do not have access to them."""
+
+else:
+
+    para = f"""{village} is a small village with a total population of {total_pop} people, comprising {male} males and {female} females across {hh} households. The village has {children_icds} children enrolled in ICDS; however, there is no functioning school currently, and no children are attending school despite the presence of a {school_name}. Drinking water in the village is sourced from {water}. In terms of livelihoods, {job_yes} households possess job cards, while {job_no} households do not have access to them."""
+
+doc.add_paragraph(para)
 
     # ✅ ADD TEXT BELOW TABLE
     doc.add_paragraph(text)
