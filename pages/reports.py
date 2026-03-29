@@ -19,13 +19,28 @@ def generate_report(df_v, df_p, village):
 
     row = df_v.iloc[0]
 
-    text = f"""
-VILLAGE DEVELOPMENT REPORT
+    row = df_v.iloc[0]
 
-Village: {village}
-Mandal: {row.get('mandal','')}
-Panchayath: {row.get('panchayath','')}
+doc.add_heading("Village Development Report", 0)
 
+# 📊 TABLE
+table = doc.add_table(rows=6, cols=2)
+table.style = "Table Grid"
+
+location = f"{row.get('village_gps-Latitude','')}, {row.get('village_gps-Longitude','')}"
+
+data = [
+    ("Village", village),
+    ("Location (Lat, Long)", location),
+    ("Mandal", row.get("mandal", "")),
+    ("Panchayath", row.get("panchayath", "")),
+    ("Raithu Seva Kendra", row.get("RSK_name", "")),
+    ("Sachivalayam", row.get("RSK_name", ""))
+]
+
+for i, (key, val) in enumerate(data):
+    table.rows[i].cells[0].text = str(key)
+    table.rows[i].cells[1].text = str(val)
 ----------------------------------------
 
 1. DEMOGRAPHICS
