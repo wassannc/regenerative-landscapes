@@ -72,7 +72,7 @@ def create_doc(text, df_v, village):
     row = df_v.iloc[0]
 
     # TITLE
-    doc.add_heading("Village Development Report", 0)
+    doc.add_heading("Village Report", 0)
 
     # LOCATION
     location = f"{row.get('village_gps-Latitude','')}, {row.get('village_gps-Longitude','')}"
