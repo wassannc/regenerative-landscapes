@@ -19,26 +19,7 @@ def generate_report(df_v, df_p, village):
 
     row = df_v.iloc[0]
 
-doc.add_heading("Village Development Report", 0)
-
-# 📊 TABLE
-table = doc.add_table(rows=6, cols=2)
-table.style = "Table Grid"
-
-location = f"{row.get('village_gps-Latitude','')}, {row.get('village_gps-Longitude','')}"
-
-data = [
-    ("Village", village),
-    ("Location (Lat, Long)", location),
-    ("Mandal", row.get("mandal", "")),
-    ("Panchayath", row.get("panchayath", "")),
-    ("Raithu Seva Kendra", row.get("RSK_name", "")),
-    ("Sachivalayam", row.get("RSK_name", ""))
-]
-
-for i, (key, val) in enumerate(data):
-    table.rows[i].cells[0].text = str(key)
-    table.rows[i].cells[1].text = str(val)
+    text = f"""
 ----------------------------------------
 
 1. DEMOGRAPHICS
@@ -83,19 +64,43 @@ Livestock contributes to income.
     text += "\n\n----------------------------------------\nConclusion: Development interventions required."
 
     return text
+    
+def create_doc(text, df_v, village):
 
-def create_doc(text):
     doc = Document()
 
-    for line in text.split("\n"):
-        doc.add_paragraph(line)
+    row = df_v.iloc[0]
+
+    # ✅ TITLE
+    doc.add_heading("Village Development Report", 0)
+
+    # ✅ TABLE (TOP SECTION)
+    table = doc.add_table(rows=6, cols=2)
+    table.style = "Table Grid"
+
+    location = f"{row.get('village_gps-Latitude','')}, {row.get('village_gps-Longitude','')}"
+
+    data = [
+        ("Village", village),
+        ("Location (Lat, Long)", location),
+        ("Mandal", row.get("mandal", "")),
+        ("Panchayath", row.get("panchayath", "")),
+        ("Raithu Seva Kendra", row.get("RSK_name", "")),
+        ("Sachivalayam", row.get("RSK_name", ""))
+    ]
+
+    for i, (key, val) in enumerate(data):
+        table.rows[i].cells[0].text = str(key)
+        table.rows[i].cells[1].text = str(val)
+
+    # ✅ ADD TEXT BELOW TABLE
+    doc.add_paragraph(text)
 
     buffer = BytesIO()
     doc.save(buffer)
     buffer.seek(0)
 
     return buffer
-
 # button
 if st.button("Generate Report"):
 
