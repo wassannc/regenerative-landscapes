@@ -19,8 +19,6 @@ def generate_report(df_v, df_p, village):
 
     row = df_v.iloc[0]
 
-    row = df_v.iloc[0]
-
 doc.add_heading("Village Development Report", 0)
 
 # 📊 TABLE
