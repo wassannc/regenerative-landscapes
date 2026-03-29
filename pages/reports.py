@@ -74,10 +74,6 @@ def create_doc(text, df_v, village):
     # TITLE
     doc.add_heading("Village Development Report", 0)
 
-    # TABLE
-    table = doc.add_table(rows=6, cols=2)
-    table.style = "Table Grid"
-
     location = f"{row.get('village_gps-Latitude','')}, {row.get('village_gps-Longitude','')}"
 
 data = [
