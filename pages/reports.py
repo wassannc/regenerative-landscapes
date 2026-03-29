@@ -80,19 +80,22 @@ def create_doc(text, df_v, village):
 
     location = f"{row.get('village_gps-Latitude','')}, {row.get('village_gps-Longitude','')}"
 
-    data = [
-        ("Village", village),
-        ("Location (Lat, Long)", location),
-        ("Mandal", row.get("mandal", "")),
-        ("Panchayath", row.get("panchayath", "")),
-        ("VO Name", row.get("VO_name", "")),
-        ("Raithu Seva Kendra", row.get("RSK_name", "")),
-        ("Sachivalayam", row.get("RSK_name", ""))
-    ]
+data = [
+    ("Village", village),
+    ("Location (Lat, Long)", location),
+    ("Mandal", row.get("mandal", "")),
+    ("Panchayath", row.get("panchayath", "")),
+    ("VO Name", row.get("VO_name", "")),
+    ("Raithu Seva Kendra", row.get("RSK_name", "")),
+    ("Sachivalayam", row.get("RSK_name", ""))
+]
 
-    for i, (key, val) in enumerate(data):
-        table.rows[i].cells[0].text = str(key)
-        table.rows[i].cells[1].text = str(val)
+table = doc.add_table(rows=len(data), cols=2)
+table.style = "Table Grid"
+
+for i, (key, val) in enumerate(data):
+    table.rows[i].cells[0].text = str(key)
+    table.rows[i].cells[1].text = str(val)
 
     # ✅ PARAGRAPH (your requirement)
     doc.add_paragraph("")
