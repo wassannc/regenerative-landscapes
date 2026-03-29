@@ -112,11 +112,11 @@ def create_doc(text, df_v, village):
     water = row.get("drinking_water_source", "NA")
 
     job_yes = row.get("Households-mnregs_cards", 0)
-job_no = row.get("No of HHs not having Job cards", 0)
+    job_no = row.get("No of HHs not having Job cards", 0)
 
-# convert safely
-job_yes = int(job_yes) if pd.notna(job_yes) else 0
-job_no = int(job_no) if pd.notna(job_no) else 0
+    # convert safely
+    job_yes = int(job_yes) if pd.notna(job_yes) else 0
+    job_no = int(job_no) if pd.notna(job_no) else 0
 
     if school in ["yes", "y"]:
         para = f"""{village} is a small village with a total population of {total_pop} people, comprising {male} males and {female} females across {hh} households. The village has {children_icds} children enrolled in ICDS and {children_school} children attending {school_name}. A kitchen garden is {'available' if kg in ['yes','y'] else 'not available'} at the school. Drinking water in the village is sourced from {water}. In terms of livelihoods, {job_yes} households possess job cards, while {job_no} households do not have access to them."""
