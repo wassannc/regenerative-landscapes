@@ -85,6 +85,7 @@ def create_doc(text, df_v, village):
         ("Location (Lat, Long)", location),
         ("Mandal", row.get("mandal", "")),
         ("Panchayath", row.get("panchayath", "")),
+        ("Name of the VO", row.get("VO_name", "")),
         ("Raithu Seva Kendra", row.get("RSK_name", "")),
         ("Sachivalayam", row.get("RSK_name", ""))
     ]
