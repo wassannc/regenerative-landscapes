@@ -21,12 +21,6 @@ def generate_report(df_v, df_p, village):
 
     text = f"""
 ----------------------------------------
-
-1. DEMOGRAPHICS
-Total Households: {row.get('Total HHs',0)}
-
-----------------------------------------
-
 2. AGRICULTURE & LAND
 The village depends on agriculture and allied activities.
 
