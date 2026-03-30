@@ -138,6 +138,31 @@ def create_doc(text, df_v, village):
 {mig_hhs} households undertake seasonal migration involving {mig_members} members. On average, migration lasts for about {mig_days} days per year, with an average annual earning of ₹{mig_income} per family."""
 
     doc.add_paragraph(para)
+    # -------- COMMUNITY TABLE --------
+    doc.add_heading("Community-wise Households", 1)
+
+    community_data = [
+        ("Kotia", row.get("Households-Kotia", 0)),
+        ("Porja", row.get("Households-Porja", 0)),
+        ("Kondadora", row.get("Households-Kondadora", 0)),
+        ("Nookadora", row.get("Households-Nookadora", 0)),
+        ("Kammari", row.get("Households-Kammari", 0)),
+        ("Bhagatha", row.get("Households-Bhagatha", 0)),
+        ("Valmiki", row.get("Households-Valmiki", 0)),
+        ("Kondhu PVTG", row.get("Households-Kondu_PVTG", 0)),
+        ("Others", row.get("Households-community_others_hhs", 0)),
+    ]
+
+    # create table
+    table2 = doc.add_table(rows=len(community_data), cols=2)
+    table2.style = "Table Grid"
+
+    for i, (name, val) in enumerate(community_data):
+        val = pd.to_numeric(val, errors="coerce")
+        val = int(val) if pd.notna(val) else 0
+
+        table2.rows[i].cells[0].text = name
+        table2.rows[i].cells[1].text = str(val)
 
     # -------- OTHER SECTIONS --------
     doc.add_paragraph(text)
