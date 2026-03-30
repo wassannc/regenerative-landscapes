@@ -208,6 +208,54 @@ def create_doc(text, df_v, village):
             table3.rows[i].cells[1].text = str(val)
     else:
         doc.add_paragraph("No land data available.")
+
+    # -------- AGRICULTURE PARAGRAPH --------
+    doc.add_paragraph("")
+
+    farming_hhs = pd.to_numeric(row.get("Households-farming_hhs", 0), errors="coerce")
+    landless = pd.to_numeric(row.get("Total no of land less HHs", 0), errors="coerce")
+
+    kharif_farmers = pd.to_numeric(row.get("Crops-kharif_farmers", 0), errors="coerce")
+    kharif_acres = pd.to_numeric(row.get("Crops-kharif_acres", 0), errors="coerce")
+
+    rabi_farmers = pd.to_numeric(row.get("Crops-rabi_farmers", 0), errors="coerce")
+    rabi_acres = pd.to_numeric(row.get("Crops-rabi_acres", 0), errors="coerce")
+
+    irrig_sources = row.get("Crops-irrigation_sources", "NA")
+    kharif_crops = row.get("Crops-crops_kharif", "NA")
+    rabi_crops = row.get("Crops-crops_rabi", "NA")
+
+    rainfed = pd.to_numeric(row.get("Crops-rainfed_acrs", 0), errors="coerce")
+    irrigated = pd.to_numeric(row.get("Crops-irrigated_acrs", 0), errors="coerce")
+
+    new_irrig = row.get("Crops-new_irrigation_source", "NA")
+    irrig_type = row.get("Crops-potential_irrigation", "NA")
+
+    grazing = row.get("Crops-Grazing", "NA")
+    ntfp = row.get("Crops-NTFP", "NA")
+
+# safe int conversion
+    def safe_int(val):
+        return int(val) if pd.notna(val) else 0
+
+    farming_hhs = safe_int(farming_hhs)
+    landless = safe_int(landless)
+    kharif_farmers = safe_int(kharif_farmers)
+    kharif_acres = safe_int(kharif_acres)
+    rabi_farmers = safe_int(rabi_farmers)
+    rabi_acres = safe_int(rabi_acres)
+    rainfed = safe_int(rainfed)
+    irrigated = safe_int(irrigated)
+
+    agri_para = f"""Agriculture is the primary livelihood activity in the village, with {farming_hhs} households engaged in farming, while {landless} households are landless. 
+
+    During the Kharif season, {kharif_farmers} farmers cultivate crops over an extent of {kharif_acres} acres, mainly growing {kharif_crops}. In the Rabi season, {rabi_farmers} farmers cultivate crops over {rabi_acres} acres, with crops such as {rabi_crops}. 
+
+    The village largely depends on rainfed agriculture covering {rainfed} acres, with only {irrigated} acres under irrigation. Major irrigation sources include {irrig_sources}. There is {'availability' if str(new_irrig).lower()=='yes' else 'no availability'} of new irrigation sources, and potential irrigation options include {irrig_type}. 
+
+    Livestock grazing follows a {grazing} system, and Non-Timber Forest Products (NTFP) such as {ntfp} are available in the village, contributing to livelihoods."""
+
+    doc.add_paragraph(agri_para)
     
     # -------- OTHER SECTIONS --------
     doc.add_paragraph(text)
