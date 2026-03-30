@@ -177,6 +177,38 @@ def create_doc(text, df_v, village):
         table2.rows[i].cells[0].text = str(name)
         table2.rows[i].cells[1].text = str(val)
 
+# -------- AGRICULTURE: LAND DETAILS --------
+    doc.add_heading("Agriculture - Land Details", 1)
+
+    land_data_raw = [
+        ("Mettu Land (acres)", row.get("mettu_total_land_acr", 0)),
+        ("Pallam Land (acres)", row.get("Total pallam land", 0)),
+        ("Podu Land (acres)", row.get("podu_total_land_acr", 0)),
+        ("Banjaru Land (acres)", row.get("banjaru-acres", 0)),
+        ("Coffee/Cashew Land (acres)", row.get("coffee_cashew_land_acr", 0)),
+        ("Total Land (acres)", row.get("Total land in the village_acre", 0)),
+    ]
+
+    land_data = []
+
+    for name, val in land_data_raw:
+        val = pd.to_numeric(val, errors="coerce")
+        val = int(val) if pd.notna(val) else 0
+
+        if val > 0:
+            land_data.append((name, val))
+
+    # create table only if data exists
+    if land_data:
+        table3 = doc.add_table(rows=len(land_data), cols=2)
+        table3.style = "Table Grid"
+
+        for i, (name, val) in enumerate(land_data):
+            table3.rows[i].cells[0].text = name
+            table3.rows[i].cells[1].text = str(val)
+    else:
+        doc.add_paragraph("No land data available.")
+    
     # -------- OTHER SECTIONS --------
     doc.add_paragraph(text)
 
