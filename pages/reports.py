@@ -139,30 +139,43 @@ def create_doc(text, df_v, village):
 
     doc.add_paragraph(para)
     # -------- COMMUNITY TABLE --------
-    doc.add_heading("Community-wise Households", 1)
+doc.add_heading("Community-wise Households", 1)
 
-    community_data = [
-        ("Kotia", row.get("Households-Kotia", 0)),
-        ("Porja", row.get("Households-Porja", 0)),
-        ("Kondadora", row.get("Households-Kondadora", 0)),
-        ("Nookadora", row.get("Households-Nookadora", 0)),
-        ("Kammari", row.get("Households-Kammari", 0)),
-        ("Bhagatha", row.get("Households-Bhagatha", 0)),
-        ("Valmiki", row.get("Households-Valmiki", 0)),
-        ("Kondhu PVTG", row.get("Households-Kondu_PVTG", 0)),
-        ("Others", row.get("Households-community_others_hhs", 0)),
-    ]
+others_name = row.get("Households-community_others", "Others")
 
-    # create table
-    table2 = doc.add_table(rows=len(community_data), cols=2)
-    table2.style = "Table Grid"
+raw_data = [
+    ("Kotia", row.get("Households-Kotia", 0)),
+    ("Porja", row.get("Households-Porja", 0)),
+    ("Kondadora", row.get("Households-Kondadora", 0)),
+    ("Nookadora", row.get("Households-Nookadora", 0)),
+    ("Kammari", row.get("Households-Kammari", 0)),
+    ("Bhagatha", row.get("Households-Bhagatha", 0)),
+    ("Valmiki", row.get("Households-Valmiki", 0)),
+    ("Kondhu PVTG", row.get("Households-Kondu_PVTG", 0)),
+    (others_name, row.get("Households-community_others_hhs", 0)),
+]
 
-    for i, (name, val) in enumerate(community_data):
-        val = pd.to_numeric(val, errors="coerce")
-        val = int(val) if pd.notna(val) else 0
+clean_data = []
+total = 0
 
-        table2.rows[i].cells[0].text = name
-        table2.rows[i].cells[1].text = str(val)
+for name, val in raw_data:
+    val = pd.to_numeric(val, errors="coerce")
+    val = int(val) if pd.notna(val) else 0
+
+    if val > 0:   # ✅ skip zero rows
+        clean_data.append((name, val))
+        total += val
+
+# always add total
+clean_data.append(("Total", total))
+
+# create table
+table2 = doc.add_table(rows=len(clean_data), cols=2)
+table2.style = "Table Grid"
+
+for i, (name, val) in enumerate(clean_data):
+    table2.rows[i].cells[0].text = str(name)
+    table2.rows[i].cells[1].text = str(val)
 
     # -------- OTHER SECTIONS --------
     doc.add_paragraph(text)
