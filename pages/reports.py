@@ -4,17 +4,25 @@ from docx import Document
 from io import BytesIO
 from dashboard import load_sheet
 def get_val(row, col):
+    # direct match
     if col in row:
         return row[col]
-    
-    alt1 = col.replace("-", "_")
-    alt2 = col.replace("_", "-")
-    alt3 = col.replace("-", "_").replace("__", "_")
-    
-    for c in [alt1, alt2, alt3]:
+
+    # possible variations
+    variants = [
+        col.replace("-", "_"),
+        col.replace("_", "-"),
+        col.replace("-", "_").replace("__", "_"),
+        col.replace("-", "_").replace("_", "__"),
+        col.replace("-", "_").replace("_", "_"),
+        col.replace("agri_practices-", "agri_practices_-"),   # 🔥 KEY FIX
+        col.replace("agri_practices_", "agri_practices_-"),   # 🔥 KEY FIX
+    ]
+
+    for c in variants:
         if c in row:
             return row[c]
-    
+
     return 0
 
 st.title("📄 Village Reports")
