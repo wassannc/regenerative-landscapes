@@ -643,8 +643,77 @@ def create_doc(text, df_v, village):
     for i, (name, val) in enumerate(poultry_data):
         table_poultry.rows[i].cells[0].text = name
         table_poultry.rows[i].cells[1].text = str(val)
+
+    # -------- LARGE RUMINANTS --------
+    doc.add_paragraph("")
+    doc.add_heading("Large Ruminants", 2)
+
+    total_hhs = pd.to_numeric(row.get("Total HHs", 0), errors="coerce")
+
+    cows_hhs = pd.to_numeric(row.get("livestock-cows_hhs", 0), errors="coerce")
+    bull_hhs = pd.to_numeric(row.get("livestock-bullocks_hhs", 0), errors="coerce")
+    buff_hhs = pd.to_numeric(row.get("livestock-baffaloes_hhs", 0), errors="coerce")
+
+    cows = pd.to_numeric(row.get("livestock-cows_nos", 0), errors="coerce")
+    bulls = pd.to_numeric(row.get("livestock-bullocks_nos", 0), errors="coerce")
+    buff = pd.to_numeric(row.get("livestock-baffaloes_nos", 0), errors="coerce")
+
+    immunized = pd.to_numeric(row.get("Total animals immunized", 0), errors="coerce")
+    mortality = pd.to_numeric(row.get("Mortality", 0), errors="coerce")
+
+    sheds = pd.to_numeric(row.get("no of cattle sheds", 0), errors="coerce")
+    renovated = pd.to_numeric(row.get("no of sheds renovated", 0), errors="coerce")
+
+    def safe_int(val):
+        return int(val) if pd.notna(val) else 0
+
+    total_hhs = safe_int(total_hhs)
+    cows_hhs, bull_hhs, buff_hhs = safe_int(cows_hhs), safe_int(bull_hhs), safe_int(buff_hhs)
+    cows, bulls, buff = safe_int(cows), safe_int(bulls), safe_int(buff)
+    immunized, mortality = safe_int(immunized), safe_int(mortality)
+    sheds, renovated = safe_int(sheds), safe_int(renovated)
+
+    total_animals = cows + bulls + buff
+    total_livestock_hhs = cows_hhs + bull_hhs + buff_hhs
+
+    # -------- LOGIC --------
+    if total_animals == 0:
+        lr_para = "Large ruminant rearing is not significantly practiced in the village."
+    else:
+        lr_para = f"""Large ruminants are reared by {total_livestock_hhs} households out of {total_hhs} households in the village, with a total of {total_animals} animals. During the last year, {mortality} animal deaths were reported."""
+
+        # sheds
+        if sheds > 0:
+            lr_para += f". The village has {sheds} cattle sheds, of which {renovated} have been renovated"
+
+        # immunization
+        if immunized > 0:
+            lr_para += f". A total of {immunized} animals have been immunized"
+        else:
+            lr_para += ". Animal immunization needs to be strengthened"
+
+        lr_para += "."
+
+    doc.add_paragraph(lr_para)  
+
+    # -------- LARGE RUMINANTS TABLE --------
+    lr_data = [
+        ("Households with Cows", cows_hhs),
+        ("Total Cows", cows),
+        ("Households with Bullocks", bull_hhs),
+        ("Total Bullocks", bulls),
+        ("Households with Buffaloes", buff_hhs),
+        ("Total Buffaloes", buff),
+    ]
+
+    table_lr = doc.add_table(rows=len(lr_data), cols=2)
+    table_lr.style = "Table Grid"
+
+    for i, (name, val) in enumerate(lr_data):
+        table_lr.rows[i].cells[0].text = name
+        table_lr.rows[i].cells[1].text = str(val)
         
-        # -------- OTHER SECTIONS --------
+    # -------- OTHER SECTIONS --------
         doc.add_paragraph(text)
 
     # SAVE
