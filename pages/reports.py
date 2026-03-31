@@ -506,7 +506,50 @@ def create_doc(text, df_v, village):
             table_nf.rows[i].cells[2].text = str(acres)
 
     else:
-        doc.add_paragraph("No natural farming activity data available.")
+        doc.add_paragraph("No natural farming activity available.")
+
+    # -------- AGRI SERVICE & PROCESSING --------
+    doc.add_paragraph("")
+    doc.add_heading("Agri Service Center & Processing Facilities", 1)
+
+    storage = str(row.get("infrastructure-storage_facility", "")).strip().lower()
+    post_harvest = str(row.get("infrastructure-post_harvest_facility", "")).strip().lower()
+    value_add = str(row.get("infrastructure-value_adding_facility", "")).strip().lower()
+
+    asc = str(row.get("farmeasy_asc", "")).strip().lower()
+    asc_plan = str(row.get("farmeasy_asc_businessplan", "")).strip().lower()
+
+    # -------- LOGIC --------
+    if asc in ["yes", "y"]:
+
+        para_asc = "An Agri Service Center (ASC) is available in the village, supporting agricultural activities and farmer services."
+
+        # facilities
+        if storage == "yes":
+            para_asc += " Storage facilities for agricultural produce are available."
+        else:
+            para_asc += " Storage facilities for agricultural produce are not available."
+
+        if post_harvest == "yes":
+            para_asc += " Post-harvest processing facilities are available."
+        else:
+            para_asc += " Post-harvest processing facilities are not available."
+
+        if value_add == "yes":
+            para_asc += " Value addition facilities are available."
+        else:
+            para_asc += " Value addition facilities are not available."
+
+        # business plan
+        if asc_plan in ["yes", "y"]:
+            para_asc += " The Agri Service Center has a business plan in place."
+        else:
+            para_asc += " A business plan needs to be developed to strengthen the Agri Service Center."
+
+    else:
+        para_asc = "No Agri Service Center is available in the village, and there is a need to establish one to support farmers and improve agricultural services."
+
+    doc.add_paragraph(para_asc)
     
     # -------- OTHER SECTIONS --------
     doc.add_paragraph(text)
