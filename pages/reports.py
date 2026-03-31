@@ -8,7 +8,11 @@ st.title("📄 Village Reports")
 
 df_profile = load_sheet("village profile")
 df_plan = load_sheet("village plan")
-
+# 🔧 FIX COLUMN NAMES (VERY IMPORTANT)
+df_profile.columns = df_profile.columns.str.strip()
+df_profile.columns = df_profile.columns.str.replace(" ", "_")
+df_profile.columns = df_profile.columns.str.replace("_", "_")
+df_profile.columns = df_profile.columns.str.replace("__", "_")
 village_list = sorted(df_profile["village"].dropna().unique())
 selected_village = st.selectbox("Select Village", village_list)
 
@@ -16,36 +20,36 @@ df_v = df_profile[df_profile["village"] == selected_village]
 df_p = df_plan[df_plan["village"] == selected_village]
 
 
-# ---------------- REPORT TEXT ----------------
+# ________________ REPORT TEXT ________________
 def generate_report(df_v, df_p, village):
 
     text = f"""
-----------------------------------------
+________________________________________
 
 2. AGRICULTURE & LAND
 The village depends on agriculture and allied activities.
 
-----------------------------------------
+________________________________________
 
 3. NATURAL RESOURCES
 Water bodies, land, and vegetation support livelihoods.
 
-----------------------------------------
+________________________________________
 
 4. IRRIGATION
 Limited irrigation sources are available.
 
-----------------------------------------
+________________________________________
 
 5. MIGRATION
 Seasonal migration exists due to lack of employment.
 
-----------------------------------------
+________________________________________
 
 6. LIVESTOCK
 Livestock contributes to income.
 
-----------------------------------------
+________________________________________
 
 7. REQUIRED WORKS
 """
@@ -54,14 +58,14 @@ Livestock contributes to income.
         if "required" in col.lower():
             val = df_p[col].sum()
             if val > 0:
-                text += f"\n- {col.replace('_',' ')}: {int(val)}"
+                text += f"\n_ {col.replace('_',' ')}: {int(val)}"
 
-    text += "\n\n----------------------------------------\nConclusion: Development interventions required."
+    text += "\n\n________________________________________\nConclusion: Development interventions required."
 
     return text
 
 
-# ---------------- DOC CREATION ----------------
+# ________________ DOC CREATION ________________
 def create_doc(text, df_v, village):
 
     doc = Document()
@@ -71,7 +75,7 @@ def create_doc(text, df_v, village):
     doc.add_heading("Village Report", 0)
 
     # LOCATION
-    location = f"{row.get('village_gps-Latitude','')}, {row.get('village_gps-Longitude','')}"
+    location = f"{row.get('village_gps_Latitude','')}, {row.get('village_gps_Longitude','')}"
 
     # TABLE
     data = [
@@ -94,10 +98,10 @@ def create_doc(text, df_v, village):
     # SPACE
     doc.add_paragraph("")
 
-    # -------- VALUES --------
+    # ________ VALUES ________
     total_pop = row.get("population", "NA")
-    male = row.get("Households-male", "NA")
-    female = row.get("Households-femlae", "NA")
+    male = row.get("Households_male", "NA")
+    female = row.get("Households_femlae", "NA")
     hh = row.get("Total HHs", "NA")
 
     children_icds = row.get("children_icds", "NA")
@@ -109,9 +113,9 @@ def create_doc(text, df_v, village):
 
     water = row.get("drinking_water_source", "NA")
 
-    # -------- JOB CARDS --------
+    # ________ JOB CARDS ________
     total_hhs = pd.to_numeric(row.get("Total HHs", 0), errors="coerce")
-    job_yes = pd.to_numeric(row.get("Households-mnregs_cards", 0), errors="coerce")
+    job_yes = pd.to_numeric(row.get("Households_mnregs_cards", 0), errors="coerce")
     job_no = pd.to_numeric(row.get("No of HHs not having Job cards", 0), errors="coerce")
 
     total_hhs = int(total_hhs) if pd.notna(total_hhs) else 0
@@ -128,7 +132,7 @@ def create_doc(text, df_v, village):
     
     # MIGRATION
     mig_hhs = pd.to_numeric(row.get("HHs going for seasonal migraion", 0), errors="coerce")
-    mig_members = pd.to_numeric(row.get("Households-migration_members", 0), errors="coerce")
+    mig_members = pd.to_numeric(row.get("Households_migration_members", 0), errors="coerce")
     mig_days = pd.to_numeric(row.get("Average no of days in a year going for migraion", 0), errors="coerce")
     mig_income = pd.to_numeric(row.get("Average earning per annum per family", 0), errors="coerce")
 
@@ -137,7 +141,7 @@ def create_doc(text, df_v, village):
     mig_days = int(mig_days) if pd.notna(mig_days) else 0
     mig_income = int(mig_income) if pd.notna(mig_income) else 0
 
-    # -------- PARAGRAPH --------
+    # ________ PARAGRAPH ________
     if school in ["yes", "y"]:
         para = f"""{village} is a small village with a total population of {total_pop} people, comprising {male} males and {female} females across {hh} households. The village has {children_icds} children enrolled in ICDS and {children_school} children attending {school_name}. A kitchen garden is {'available' if kg in ['yes','y'] else 'not available'} at the school. Drinking water in the village is sourced from {water}. In terms of livelihoods, {job_yes} households possess job cards, while {job_no} households do not have access to them.
 
@@ -148,21 +152,21 @@ def create_doc(text, df_v, village):
 {mig_hhs} households undertake seasonal migration involving {mig_members} members. On average, migration lasts for about {mig_days} days per year, with an average annual earning of ₹{mig_income} per family."""
 
     doc.add_paragraph(para)
-    # -------- COMMUNITY TABLE --------
-    doc.add_heading("Community-wise Households", 1)
+    # ________ COMMUNITY TABLE ________
+    doc.add_heading("Community_wise Households", 1)
 
-    others_name = row.get("Households-community_others", "Others")
+    others_name = row.get("Households_community_others", "Others")
 
     raw_data = [
-        ("Kotia", row.get("Households-Kotia", 0)),
-        ("Porja", row.get("Households-Porja", 0)),
-        ("Kondadora", row.get("Households-Kondadora", 0)),
-        ("Nookadora", row.get("Households-Nookadora", 0)),
-        ("Kammari", row.get("Households-Kammari", 0)),
-        ("Bhagatha", row.get("Households-Bhagatha", 0)),
-        ("Valmiki", row.get("Households-Valmiki", 0)),
-        ("Kondhu PVTG", row.get("Households-Kondu_PVTG", 0)),
-        (others_name, row.get("Households-community_others_hhs", 0)),
+        ("Kotia", row.get("Households_Kotia", 0)),
+        ("Porja", row.get("Households_Porja", 0)),
+        ("Kondadora", row.get("Households_Kondadora", 0)),
+        ("Nookadora", row.get("Households_Nookadora", 0)),
+        ("Kammari", row.get("Households_Kammari", 0)),
+        ("Bhagatha", row.get("Households_Bhagatha", 0)),
+        ("Valmiki", row.get("Households_Valmiki", 0)),
+        ("Kondhu PVTG", row.get("Households_Kondu_PVTG", 0)),
+        (others_name, row.get("Households_community_others_hhs", 0)),
     ]
 
     clean_data = []
@@ -187,14 +191,14 @@ def create_doc(text, df_v, village):
         table2.rows[i].cells[0].text = str(name)
         table2.rows[i].cells[1].text = str(val)
 
-# -------- AGRICULTURE: LAND DETAILS --------
-    doc.add_heading("Agriculture - Land Details", 1)
+# ________ AGRICULTURE: LAND DETAILS ________
+    doc.add_heading("Agriculture _ Land Details", 1)
 
     land_data_raw = [
         ("Mettu Land (acres)", row.get("mettu_total_land_acr", 0)),
         ("Pallam Land (acres)", row.get("Total pallam land", 0)),
         ("Podu Land (acres)", row.get("podu_total_land_acr", 0)),
-        ("Banjaru Land (acres)", row.get("banjaru-acres", 0)),
+        ("Banjaru Land (acres)", row.get("banjaru_acres", 0)),
         ("Coffee/Cashew Land (acres)", row.get("coffee_cashew_land_acr", 0)),
         ("Total Land (acres)", row.get("Total land in the village_acre", 0)),
     ]
@@ -219,30 +223,30 @@ def create_doc(text, df_v, village):
     else:
         doc.add_paragraph("No land data available.")
 
-    # -------- AGRICULTURE PARAGRAPH --------
+    # ________ AGRICULTURE PARAGRAPH ________
     doc.add_paragraph("")
 
-    farming_hhs = pd.to_numeric(row.get("Households-farming_hhs", 0), errors="coerce")
+    farming_hhs = pd.to_numeric(row.get("Households_farming_hhs", 0), errors="coerce")
     landless = pd.to_numeric(row.get("Total no of land less HHs", 0), errors="coerce")
 
-    kharif_farmers = pd.to_numeric(row.get("Crops-kharif_farmers", 0), errors="coerce")
-    kharif_acres = pd.to_numeric(row.get("Crops-kharif_acres", 0), errors="coerce")
+    kharif_farmers = pd.to_numeric(row.get("Crops_kharif_farmers", 0), errors="coerce")
+    kharif_acres = pd.to_numeric(row.get("Crops_kharif_acres", 0), errors="coerce")
 
-    rabi_farmers = pd.to_numeric(row.get("Crops-rabi_farmers", 0), errors="coerce")
-    rabi_acres = pd.to_numeric(row.get("Crops-rabi_acres", 0), errors="coerce")
+    rabi_farmers = pd.to_numeric(row.get("Crops_rabi_farmers", 0), errors="coerce")
+    rabi_acres = pd.to_numeric(row.get("Crops_rabi_acres", 0), errors="coerce")
 
-    irrig_sources = row.get("Crops-irrigation_sources", "NA")
-    kharif_crops = row.get("Crops-crops_kharif", "NA")
-    rabi_crops = row.get("Crops-crops_rabi", "NA")
+    irrig_sources = row.get("Crops_irrigation_sources", "NA")
+    kharif_crops = row.get("Crops_crops_kharif", "NA")
+    rabi_crops = row.get("Crops_crops_rabi", "NA")
 
-    rainfed = pd.to_numeric(row.get("Crops-rainfed_acrs", 0), errors="coerce")
-    irrigated = pd.to_numeric(row.get("Crops-irrigated_acrs", 0), errors="coerce")
+    rainfed = pd.to_numeric(row.get("Crops_rainfed_acrs", 0), errors="coerce")
+    irrigated = pd.to_numeric(row.get("Crops_irrigated_acrs", 0), errors="coerce")
 
-    new_irrig = row.get("Crops-new_irrigation_source", "NA")
-    irrig_type = row.get("Crops-potential_irrigation", "NA")
+    new_irrig = row.get("Crops_new_irrigation_source", "NA")
+    irrig_type = row.get("Crops_potential_irrigation", "NA")
 
-    grazing = row.get("Crops-Grazing", "NA")
-    ntfp = row.get("Crops-NTFP", "NA")
+    grazing = row.get("Crops_Grazing", "NA")
+    ntfp = row.get("Crops_NTFP", "NA")
 
 # safe int conversion
     def safe_int(val):
@@ -263,101 +267,101 @@ def create_doc(text, df_v, village):
 
     The village largely depends on rainfed agriculture covering {rainfed} acres, with only {irrigated} acres under irrigation. Major irrigation sources include {irrig_sources}. There is {'availability' if str(new_irrig).lower()=='yes' else 'no availability'} of new irrigation sources, and potential irrigation options include {irrig_type}. 
 
-    Livestock grazing follows a {grazing} system, and Non-Timber Forest Products (NTFP) such as {ntfp} are available in the village, contributing to livelihoods."""
+    Livestock grazing follows a {grazing} system, and Non_Timber Forest Products (NTFP) such as {ntfp} are available in the village, contributing to livelihoods."""
 
     doc.add_paragraph(agri_para)
 
-    # -------- CROP MODELS TABLE (WITH YIELD) --------
+    # ________ CROP MODELS TABLE (WITH YIELD) ________
     doc.add_heading("Crop Models Practiced in the Village", 1)
 
     crop_models_raw = [
         ("Cashew Mono",
-         row.get("agri_practices-Cashew_mono_acres", 0),
-         row.get("agri_practices-Cashew_mono_yield_qntl_acr", 0)),
+         row.get("agri_practices_Cashew_mono_acres", 0),
+         row.get("agri_practices_Cashew_mono_yield_qntl_acr", 0)),
 
         ("Cashew Poly",
-         row.get("agri_practices-Cashew_poly_acres", 0),
-         row.get("agri_practices-Cashew_poly_yield_qntl_acr", 0)),
+         row.get("agri_practices_Cashew_poly_acres", 0),
+         row.get("agri_practices_Cashew_poly_yield_qntl_acr", 0)),
 
         ("Mango Mono",
-         row.get("agri_practices-Mango_mono_acres", 0),
-         row.get("agri_practices-Mango_mono_yield_qntl_acr", 0)),
+         row.get("agri_practices_Mango_mono_acres", 0),
+         row.get("agri_practices_Mango_mono_yield_qntl_acr", 0)),
 
         ("Mango Poly",
-         row.get("agri_practices-Mango_poly_acres", 0),
-         row.get("agri_practices-Mango_poly_yield_qntl_acr", 0)),
+         row.get("agri_practices_Mango_poly_acres", 0),
+         row.get("agri_practices_Mango_poly_yield_qntl_acr", 0)),
 
         ("Coffee Mono",
-         row.get("agri_practices-Coffee_mono_acres", 0),
-         row.get("agri_practices-Coffee_mono_yield_qntl_acr", 0)),
+         row.get("agri_practices_Coffee_mono_acres", 0),
+         row.get("agri_practices_Coffee_mono_yield_qntl_acr", 0)),
 
         ("Coffee with Pepper",
-         row.get("agri_practices-Coffee_with_pepper_acres", 0),
-         row.get("agri_practices-Coffee_with_pepper_yield_qntl_acr", 0)),
+         row.get("agri_practices_Coffee_with_pepper_acres", 0),
+         row.get("agri_practices_Coffee_with_pepper_yield_qntl_acr", 0)),
 
         ("Millet Broadcasting",
-         row.get("agri_practices-Millet_broadcasting_acres", 0),
-         row.get("agri_practices-Millet_broadcasting_yield_qntl_acr", 0)),
+         row.get("agri_practices_Millet_broadcasting_acres", 0),
+         row.get("agri_practices_Millet_broadcasting_yield_qntl_acr", 0)),
 
         ("Millet Line Sowing",
-         row.get("agri_practices-Millet_linesowing_acres", 0),
-         row.get("agri_practices-Millet_linesowing_yield_qntl_acr", 0)),
+         row.get("agri_practices_Millet_linesowing_acres", 0),
+         row.get("agri_practices_Millet_linesowing_yield_qntl_acr", 0)),
 
         ("Guliragi Mono",
-         row.get("agri_practices-Guliragi_acres", 0),
-         row.get("agri_practices-Guliragi_yield_qntl_acr", 0)),
+         row.get("agri_practices_Guliragi_acres", 0),
+         row.get("agri_practices_Guliragi_yield_qntl_acr", 0)),
 
         ("Guliragi Poly",
-         row.get("agri_practices-Guliragi_poly_acres", 0),
-         row.get("agri_practices-Guliragi_poly_yield_qntl_acr", 0)),
+         row.get("agri_practices_Guliragi_poly_acres", 0),
+         row.get("agri_practices_Guliragi_poly_yield_qntl_acr", 0)),
 
         ("Sirisama Mono",
-         row.get("agri_practices-Sirisama_mono_acres", 0),
-         row.get("agri_practices-Sirisama_mono_yield_qntl_acr", 0)),
+         row.get("agri_practices_Sirisama_mono_acres", 0),
+         row.get("agri_practices_Sirisama_mono_yield_qntl_acr", 0)),
 
         ("Sirisama Poly",
-         row.get("agri_practices-Sirisama_poly_acres", 0),
-         row.get("agri_practices-Sirisama_poly_yield_qntl_acr", 0)),
+         row.get("agri_practices_Sirisama_poly_acres", 0),
+         row.get("agri_practices_Sirisama_poly_yield_qntl_acr", 0)),
 
         ("SRI Paddy",
-         row.get("agri_practices-SRI_paddy_acres", 0),
-         row.get("agri_practices-SRI_paddy_yield_qntl_acr", 0)),
+         row.get("agri_practices_SRI_paddy_acres", 0),
+         row.get("agri_practices_SRI_paddy_yield_qntl_acr", 0)),
 
         ("Paddy Line Sowing",
-         row.get("agri_practices-Paddy_linesowing_acres", 0),
-         row.get("agri_practices-Paddy_linesowing_yield_qntl_acr", 0)),
+         row.get("agri_practices_Paddy_linesowing_acres", 0),
+         row.get("agri_practices_Paddy_linesowing_yield_qntl_acr", 0)),
 
         ("Ginger Mono",
-         row.get("agri_practices-Ginger_mono_acres", 0),
-         row.get("agri_practices-Ginger_mono_yield_qntl_acr", 0)),
+         row.get("agri_practices_Ginger_mono_acres", 0),
+         row.get("agri_practices_Ginger_mono_yield_qntl_acr", 0)),
 
         ("Ginger Poly",
-         row.get("agri_practices-Ginger_poly_acres", 0),
-         row.get("agri_practices-Ginger_poly_yield_qntl_acr", 0)),
+         row.get("agri_practices_Ginger_poly_acres", 0),
+         row.get("agri_practices_Ginger_poly_yield_qntl_acr", 0)),
 
         ("Turmeric Mono",
-         row.get("agri_practices-Turmeric_mono_acres", 0),
-         row.get("agri_practices-Turmeric_mono_yield_qntl_acr", 0)),
+         row.get("agri_practices_Turmeric_mono_acres", 0),
+         row.get("agri_practices_Turmeric_mono_yield_qntl_acr", 0)),
 
         ("Turmeric Poly",
-         row.get("agri_practices-Turmeric_poly_acres", 0),
-         row.get("agri_practices-Turmeric_poly_yield_qntl_acr", 0)),
+         row.get("agri_practices_Turmeric_poly_acres", 0),
+         row.get("agri_practices_Turmeric_poly_yield_qntl_acr", 0)),
 
         ("Redgram Mono",
-         row.get("agri_practices-Redgram_mono_acres", 0),
-         row.get("agri_practices-Redgram_mono_yield_qntl_acr", 0)),
+         row.get("agri_practices_Redgram_mono_acres", 0),
+         row.get("agri_practices_Redgram_mono_yield_qntl_acr", 0)),
 
         ("Redgram Poly",
-         row.get("agri_practices-Redgram_poly_acres", 0),
-         row.get("agri_practices-Redgram_poly_yield_qntl_acr", 0)),
+         row.get("agri_practices_Redgram_poly_acres", 0),
+         row.get("agri_practices_Redgram_poly_yield_qntl_acr", 0)),
 
         ("Rajma Broadcasting",
-         row.get("agri_practices-Rajma_broadcast_acres", 0),
-         row.get("agri_practices-Rajma_broadcast_yield_qntl_acr", 0)),
+         row.get("agri_practices_Rajma_broadcast_acres", 0),
+         row.get("agri_practices_Rajma_broadcast_yield_qntl_acr", 0)),
 
         ("Rajma Line Sowing",
-         row.get("agri_practices-Rajma_linesowing_acres", 0),
-         row.get("agri_practices-Rajma_linesowing_yield_qntl_acr", 0)),
+         row.get("agri_practices_Rajma_linesowing_acres", 0),
+         row.get("agri_practices_Rajma_linesowing_yield_qntl_acr", 0)),
     ]
 
     crop_data = []
@@ -392,7 +396,7 @@ def create_doc(text, df_v, village):
     else:
         doc.add_paragraph("No crop model data available.")
 
-    # -------- NATURAL FARMING PARAGRAPH --------
+    # ________ NATURAL FARMING PARAGRAPH ________
     doc.add_paragraph("")
 
     nf_hhs = pd.to_numeric(row.get("Total HH practicing NF", 0), errors="coerce")
@@ -422,7 +426,7 @@ def create_doc(text, df_v, village):
     farmers_nf = safe_int(farmers_nf)
     brc_area = safe_int(brc_area)
 
-    # -------- LOGIC --------
+    # ________ LOGIC ________
     if nf_hhs == 0 and nf_area == 0:
 
         nf_para = "There is no natural farming being practiced in this village."
@@ -433,7 +437,7 @@ def create_doc(text, df_v, village):
 
     # 👉 ONLY IF BRC AVAILABLE
     if brc_available in ["yes", "y"]:
-        nf_para += f""" A Bio-Resource Center (BRC) is available in the village, managed by {brc_name}, supporting {villages_nf} villages and {farmers_nf} farmers with natural farming inputs, covering an extent of {brc_area} acres."""
+        nf_para += f""" A Bio_Resource Center (BRC) is available in the village, managed by {brc_name}, supporting {villages_nf} villages and {farmers_nf} farmers with natural farming inputs, covering an extent of {brc_area} acres."""
 
     # 👉 BUSINESS PLAN LOGIC (INSIDE BRC)
         if business_plan in ["yes", "y"]:
@@ -444,19 +448,19 @@ def create_doc(text, df_v, village):
         # add to doc
         doc.add_paragraph(nf_para)
 
-    # -------- NF ACTIVITY TABLE --------
+    # ________ NF ACTIVITY TABLE ________
     doc.add_heading("Natural Farming Activities", 2)
 
     nf_activity_raw = [
-        ("PMDS", row.get("nf_activities-pmds_hhs", 0), row.get("nf_activities-pmds_acres", 0)),
-        ("365DCC", row.get("nf_activities-_365dcc_hhs", 0), row.get("nf_activities-_365dcc_acres", 0)),
-        ("RDS", row.get("nf_activities-rds_hhs", 0), row.get("nf_activities-rds_acres", 0)),
-        ("5 Layer", row.get("nf_activities-_5layer_hhs", 0), row.get("nf_activities-_5layer_acres", 0)),
-        ("Ghana Jeevamrutham", row.get("nf_activities-gja_hhs", 0), row.get("nf_activities-gja_acres", 0)),
-        ("Dharajeeramrutham", row.get("nf_activities-dja_hhs", 0), row.get("nf_activities-dja_acres", 0)),
-        ("Bheejamrutham", row.get("nf_activities-bheeejamruth_hhs", 0), row.get("nf_activities-bheeejamruth_acres", 0)),
-        ("Concoctions", row.get("nf_activities-concoctions_hhs", 0), row.get("nf_activities-concoctions_acres", 0)),
-        ("Mulching", row.get("nf_activities-mulching_hhs", 0), row.get("nf_activities-mulching_acres", 0)),
+        ("PMDS", row.get("nf_activities_pmds_hhs", 0), row.get("nf_activities_pmds_acres", 0)),
+        ("365DCC", row.get("nf_activities__365dcc_hhs", 0), row.get("nf_activities__365dcc_acres", 0)),
+        ("RDS", row.get("nf_activities_rds_hhs", 0), row.get("nf_activities_rds_acres", 0)),
+        ("5 Layer", row.get("nf_activities__5layer_hhs", 0), row.get("nf_activities__5layer_acres", 0)),
+        ("Ghana Jeevamrutham", row.get("nf_activities_gja_hhs", 0), row.get("nf_activities_gja_acres", 0)),
+        ("Dharajeeramrutham", row.get("nf_activities_dja_hhs", 0), row.get("nf_activities_dja_acres", 0)),
+        ("Bheejamrutham", row.get("nf_activities_bheeejamruth_hhs", 0), row.get("nf_activities_bheeejamruth_acres", 0)),
+        ("Concoctions", row.get("nf_activities_concoctions_hhs", 0), row.get("nf_activities_concoctions_acres", 0)),
+        ("Mulching", row.get("nf_activities_mulching_hhs", 0), row.get("nf_activities_mulching_acres", 0)),
     ]
 
     nf_data = []
@@ -491,7 +495,7 @@ def create_doc(text, df_v, village):
     else:
         doc.add_paragraph("No natural farming activity data available.")
     
-    # -------- OTHER SECTIONS --------
+    # ________ OTHER SECTIONS ________
     doc.add_paragraph(text)
 
     # SAVE
@@ -502,7 +506,7 @@ def create_doc(text, df_v, village):
     return buffer
 
 
-# ---------------- BUTTON ----------------
+# ________________ BUTTON ________________
 if st.button("Generate Report"):
 
     report = generate_report(df_v, df_p, selected_village)
@@ -512,7 +516,7 @@ if st.button("Generate Report"):
         "Download Report",
         data=file,
         file_name=f"{selected_village}_report.docx",
-        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        mime="application/vnd.openxmlformats_officedocument.wordprocessingml.document"
     )
 
     st.text_area("Preview", report, height=400)
