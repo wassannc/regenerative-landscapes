@@ -719,14 +719,14 @@ def create_doc(text, df_v, village):
 
     total_hhs = pd.to_numeric(row.get("Total HHs", 0), errors="coerce")
 
-    goat_hhs = pd.to_numeric(row.get("livestock-goats_hhs", 0), errors="coerce")
-    sheep_hhs = pd.to_numeric(row.get("livestock-sheep_hhs", 0), errors="coerce")
+    goat_hhs = pd.to_numeric(get_val(row, "livestock-goats_hhs"), errors="coerce")
+    sheep_hhs = pd.to_numeric(get_val(row, "livestock-sheep_hhs"), errors="coerce")
 
-    goats = pd.to_numeric(row.get("livestock-goats_nos", 0), errors="coerce")
-    sheep = pd.to_numeric(row.get("livestock-sheep_nos", 0), errors="coerce")
+    goats = pd.to_numeric(get_val(row, "livestock-goats_nos"), errors="coerce")
+    sheep = pd.to_numeric(get_val(row, "livestock-sheep_nos"), errors="coerce")
 
-    mortality = pd.to_numeric(row.get("small_ruminants_mortality", 0), errors="coerce")
-    immunized = pd.to_numeric(row.get("small_ruminants_immunized", 0), errors="coerce")
+    mortality = pd.to_numeric(get_val(row, "small_ruminants_mortality"), errors="coerce")
+    immunized = pd.to_numeric(get_val(row, "small_ruminants_immunized"), errors="coerce")
 
     def safe_int(val):
         return int(val) if pd.notna(val) else 0
