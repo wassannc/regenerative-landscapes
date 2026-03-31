@@ -719,31 +719,34 @@ def create_doc(text, df_v, village):
 
     total_hhs = pd.to_numeric(row.get("Total HHs", 0), errors="coerce")
 
-    goat_hhs = pd.to_numeric(get_val(row, "livestock-goats_hhs"), errors="coerce")
-    sheep_hhs = pd.to_numeric(get_val(row, "livestock-sheep_hhs"), errors="coerce")
+    sr_hhs = pd.to_numeric(get_val(row, "livestock-sheep_goats_hhs"), errors="coerce")
+    sr_animals = pd.to_numeric(get_val(row, "livestock-sheep_goats_nos"), errors="coerce")
 
-    goats = pd.to_numeric(get_val(row, "livestock-goats_nos"), errors="coerce")
-    sheep = pd.to_numeric(get_val(row, "livestock-sheep_nos"), errors="coerce")
+    mortality = pd.to_numeric(get_val(row, "SR Mortality"), errors="coerce")
+    immunized = pd.to_numeric(get_val(row, "SR immunized"), errors="coerce")
 
-    mortality = pd.to_numeric(get_val(row, "small_ruminants_mortality"), errors="coerce")
-    immunized = pd.to_numeric(get_val(row, "small_ruminants_immunized"), errors="coerce")
+    sheds = pd.to_numeric(get_val(row, "no of sheep / goat sheds"), errors="coerce")
+    elevated = pd.to_numeric(get_val(row, "no of elevated sheds"), errors="coerce")
 
     def safe_int(val):
         return int(val) if pd.notna(val) else 0
 
     total_hhs = safe_int(total_hhs)
-    goat_hhs, sheep_hhs = safe_int(goat_hhs), safe_int(sheep_hhs)
-    goats, sheep = safe_int(goats), safe_int(sheep)
-    mortality, immunized = safe_int(mortality), safe_int(immunized)
-
-    total_animals = goats + sheep
-    total_hhs_sr = goat_hhs + sheep_hhs
+    sr_hhs = safe_int(sr_hhs)
+    sr_animals = safe_int(sr_animals)
+    mortality = safe_int(mortality)
+    immunized = safe_int(immunized)
+    sheds = safe_int(sheds)
+    elevated = safe_int(elevated)
 
     # -------- LOGIC --------
-    if total_animals == 0:
+    if sr_animals == 0:
         sr_para = "Small ruminant rearing is not significantly practiced in the village."
     else:
-        sr_para = f"""Small ruminants are reared by {total_hhs_sr} households out of {total_hhs} households in the village, with a total of {total_animals} animals. During the last year, {mortality} animal deaths were reported"""
+        sr_para = f"""Small ruminants are reared by {sr_hhs} households out of {total_hhs} households in the village, with a total of {sr_animals} animals. During the last year, {mortality} animal deaths were reported"""
+
+        if sheds > 0:
+            sr_para += f". The village has {sheds} sheds, including {elevated} elevated sheds"
 
         if immunized > 0:
             sr_para += f". A total of {immunized} animals have been immunized"
@@ -756,10 +759,12 @@ def create_doc(text, df_v, village):
 
     # -------- SMALL RUMINANTS TABLE --------
     sr_data = [
-        ("Households with Goats", goat_hhs),
-        ("Total Goats", goats),
-        ("Households with Sheep", sheep_hhs),
-        ("Total Sheep", sheep),
+        ("Households with Small Ruminants", sr_hhs),
+        ("Total Sheep & Goats", sr_animals),
+        ("Animal Mortality (Last Year)", mortality),
+        ("Animals Immunized", immunized),
+        ("Sheep/Goat Sheds", sheds),
+        ("Elevated Sheds", elevated),
     ]
 
     table_sr = doc.add_table(rows=len(sr_data), cols=2)
