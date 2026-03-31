@@ -263,6 +263,9 @@ def create_doc(text, df_v, village):
     nf_hhs = pd.to_numeric(row.get("Total HH practicing NF", 0), errors="coerce")
     nf_area = pd.to_numeric(row.get("Total land under NF practice_acre", 0), errors="coerce")
 
+    total_hhs = pd.to_numeric(row.get("Total HHs", 0), errors="coerce")
+    total_land = pd.to_numeric(row.get("Total land in the village_acre", 0), errors="coerce")
+
     brc_available = str(row.get("brc available", "")).strip().lower()
     brc_name = row.get("Name of the BRC entrepreneur", "")
 
@@ -272,25 +275,33 @@ def create_doc(text, df_v, village):
 
     business_plan = str(row.get("Is business plan developed", "")).strip().lower()
 
-    #safe conversion
+    # safe conversion
     def safe_int(val):
         return int(val) if pd.notna(val) else 0
 
     nf_hhs = safe_int(nf_hhs)
     nf_area = safe_int(nf_area)
+    total_hhs = safe_int(total_hhs)
+    total_land = safe_int(total_land)
     villages_nf = safe_int(villages_nf)
     farmers_nf = safe_int(farmers_nf)
     brc_area = safe_int(brc_area)
 
-    # -------- PARAGRAPH BUILD --------
-    nf_para = f"""Natural farming practices are being adopted in the village, with {nf_hhs} households practicing natural farming over an extent of {nf_area} acres."""
+    # -------- LOGIC --------
+    if nf_hhs == 0 and nf_area == 0:
+
+        nf_para = "There is no natural farming being practiced in this village."
+
+    else:
+
+        nf_para = f"""Natural farming is being practiced in the village, with {nf_hhs} households out of {total_hhs} households adopting natural farming over an extent of {nf_area} acres out of the total {total_land} acres in the village."""
 
     # 👉 ONLY IF BRC AVAILABLE
-    if brc_available in ["yes", "y"]:
-        nf_para += f""" A Bio-Resource Center (BRC) is available in the village, managed by {brc_name}, supporting {villages_nf} villages and {farmers_nf} farmers with natural farming inputs, covering an extent of {brc_area} acres."""
+        if brc_available in ["yes", "y"]:
+            nf_para += f""" A Bio-Resource Center (BRC) is available in the village, managed by {brc_name}, supporting {villages_nf} villages and {farmers_nf} farmers with natural farming inputs, covering an extent of {brc_area} acres."""
 
-        if business_plan in ["yes", "y"]:
-            nf_para += " A business plan has been developed for strengthening the BRC operations."
+            if business_plan in ["yes", "y"]:
+                nf_para += " A business plan has been developed for strengthening the BRC operations."
 
     # add to doc
     doc.add_paragraph(nf_para)
