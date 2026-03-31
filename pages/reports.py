@@ -267,6 +267,61 @@ def create_doc(text, df_v, village):
 
     doc.add_paragraph(agri_para)
 
+    # -------- CROP MODELS TABLE --------
+    doc.add_heading("Crop Models Practiced in the Village", 1)
+
+    crop_models_raw = [
+        ("Cashew Mono", row.get("agri_practices-Cashew_mono_acres", 0)),
+        ("Cashew Poly", row.get("agri_practices-Cashew_poly_acres", 0)),
+        ("Mango Mono", row.get("agri_practices-Mango_mono_acres", 0)),
+        ("Mango Poly", row.get("agri_practices-Mango_poly_acres", 0)),
+        ("Coffee Mono", row.get("agri_practices-Coffee_mono_acres", 0)),
+        ("Coffee with Pepper", row.get("agri_practices-Coffee_with_pepper_acres", 0)),
+        ("Millet Broadcasting", row.get("agri_practices-Millet_broadcasting_acres", 0)),
+        ("Millet Line Sowing", row.get("agri_practices-Millet_linesowing_acres", 0)),
+        ("Guliragi Mono", row.get("agri_practices-Guliragi_acres", 0)),
+        ("Guliragi Poly", row.get("agri_practices-Guliragi_poly_acres", 0)),
+        ("Sirisama Mono", row.get("agri_practices-Sirisama_mono_acres", 0)),
+        ("Sirisama Poly", row.get("agri_practices-Sirisama_poly_acres", 0)),
+        ("SRI Paddy", row.get("agri_practices-SRI_paddy_acres", 0)),
+        ("Paddy Line Sowing", row.get("agri_practices-Paddy_linesowing_acres", 0)),
+        ("Ginger Mono", row.get("agri_practices-Ginger_mono_acres", 0)),
+        ("Ginger Poly", row.get("agri_practices-Ginger_poly_acres", 0)),
+        ("Turmeric Mono", row.get("agri_practices-Turmeric_mono_acres", 0)),
+        ("Turmeric Poly", row.get("agri_practices-Turmeric_poly_acres", 0)),
+        ("Redgram Mono", row.get("agri_practices-Redgram_mono_acres", 0)),
+        ("Redgram Poly", row.get("agri_practices-Redgram_poly_acres", 0)),
+        ("Rajma Broadcasting", row.get("agri_practices-Rajma_broadcast_acres", 0)),
+        ("Rajma Line Sowing", row.get("agri_practices-Rajma_linesowing_acres", 0)),
+    ]
+
+    crop_data = []
+
+    for name, val in crop_models_raw:
+        val = pd.to_numeric(val, errors="coerce")
+        val = float(val) if pd.notna(val) else 0
+
+        # ✅ skip zero values
+        if val > 0:
+            crop_data.append((name, round(val, 2)))
+
+    # create table
+    if crop_data:
+        table_crop = doc.add_table(rows=len(crop_data) + 1, cols=2)
+        table_crop.style = "Table Grid"
+
+        # header
+        table_crop.rows[0].cells[0].text = "Crop Model"
+        table_crop.rows[0].cells[1].text = "Area (Acres)"
+
+        # rows
+        for i, (name, val) in enumerate(crop_data, start=1):
+            table_crop.rows[i].cells[0].text = name
+            table_crop.rows[i].cells[1].text = str(val)
+
+    else:
+        doc.add_paragraph("No crop models data available.")
+
     # -------- NATURAL FARMING PARAGRAPH --------
     doc.add_paragraph("")
 
