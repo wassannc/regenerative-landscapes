@@ -267,97 +267,111 @@ def create_doc(text, df_v, village):
 
     doc.add_paragraph(agri_para)
 
+    def get_val(row, col):
+    if col in row:
+        return row[col]
+    
+    alt1 = col.replace("-", "_")
+    alt2 = col.replace("_", "-")
+    alt3 = col.replace("-", "_").replace("__", "_")
+    
+    for c in [alt1, alt2, alt3]:
+        if c in row:
+            return row[c]
+    
+    return 0
+
     # -------- CROP MODELS TABLE (WITH YIELD) --------
     doc.add_heading("Crop Models Practiced in the Village", 1)
 
     crop_models_raw = [
         ("Cashew Mono",
-         row.get("agri_practices-Cashew_mono_acres", 0),
-         row.get("agri_practices-Cashew_mono_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Cashew_mono_acres"),
+         get_val(row, "agri_practices-Cashew_mono_yield_qntl_acr")),
 
         ("Cashew Poly",
-         row.get("agri_practices-Cashew_poly_acres", 0),
-         row.get("agri_practices-Cashew_poly_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Cashew_poly_acres"),
+         get_val(row, "agri_practices-Cashew_poly_yield_qntl_acr")),
 
         ("Mango Mono",
-         row.get("agri_practices-Mango_mono_acres", 0),
-         row.get("agri_practices-Mango_mono_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Mango_mono_acres"),
+         get_val(row, "agri_practices-Mango_mono_yield_qntl_acr")),
 
         ("Mango Poly",
-         row.get("agri_practices-Mango_poly_acres", 0),
-         row.get("agri_practices-Mango_poly_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Mango_poly_acres"),
+         get_val(row, "agri_practices-Mango_poly_yield_qntl_acr")),
 
         ("Coffee Mono",
-         row.get("agri_practices-Coffee_mono_acres", 0),
-         row.get("agri_practices-Coffee_mono_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Coffee_mono_acres"),
+         get_val(row, "agri_practices-Coffee_mono_yield_qntl_acr")),
 
         ("Coffee with Pepper",
-         row.get("agri_practices-Coffee_with_pepper_acres", 0),
-         row.get("agri_practices-Coffee_with_pepper_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Coffee_with_pepper_acres"),
+         get_val(row, "agri_practices-Coffee_with_pepper_yield_qntl_acr")),
 
         ("Millet Broadcasting",
-         row.get("agri_practices-Millet_broadcasting_acres", 0),
-         row.get("agri_practices-Millet_broadcasting_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Millet_broadcasting_acres"),
+         get_val(row, "agri_practices-Millet_broadcasting_yield_qntl_acr")),
 
         ("Millet Line Sowing",
-         row.get("agri_practices-Millet_linesowing_acres", 0),
-         row.get("agri_practices-Millet_linesowing_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Millet_linesowing_acres"),
+         get_val(row, "agri_practices-Millet_linesowing_yield_qntl_acr")),
 
         ("Guliragi Mono",
-         row.get("agri_practices-Guliragi_acres", 0),
-         row.get("agri_practices-Guliragi_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Guliragi_acres"),
+         get_val(row, "agri_practices-Guliragi_yield_qntl_acr")),
 
         ("Guliragi Poly",
-         row.get("agri_practices-Guliragi_poly_acres", 0),
-         row.get("agri_practices-Guliragi_poly_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Guliragi_poly_acres"),
+         get_val(row, "agri_practices-Guliragi_poly_yield_qntl_acr")),
 
         ("Sirisama Mono",
-         row.get("agri_practices-Sirisama_mono_acres", 0),
-         row.get("agri_practices-Sirisama_mono_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Sirisama_mono_acres"),
+         get_val(row, "agri_practices-Sirisama_mono_yield_qntl_acr")),
 
         ("Sirisama Poly",
-         row.get("agri_practices-Sirisama_poly_acres", 0),
-         row.get("agri_practices-Sirisama_poly_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Sirisama_poly_acres"),
+         get_val(row, "agri_practices-Sirisama_poly_yield_qntl_acr")),
 
         ("SRI Paddy",
-         row.get("agri_practices-SRI_paddy_acres", 0),
-         row.get("agri_practices-SRI_paddy_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-SRI_paddy_acres"),
+         get_val(row, "agri_practices-SRI_paddy_yield_qntl_acr")),
 
         ("Paddy Line Sowing",
-         row.get("agri_practices-Paddy_linesowing_acres", 0),
-         row.get("agri_practices-Paddy_linesowing_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Paddy_linesowing_acres"),
+         get_val(row, "agri_practices-Paddy_linesowing_yield_qntl_acr")),
 
         ("Ginger Mono",
-         row.get("agri_practices-Ginger_mono_acres", 0),
-         row.get("agri_practices-Ginger_mono_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Ginger_mono_acres"),
+         get_val(row, "agri_practices-Ginger_mono_yield_qntl_acr")),
 
         ("Ginger Poly",
-         row.get("agri_practices-Ginger_poly_acres", 0),
-         row.get("agri_practices-Ginger_poly_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Ginger_poly_acres"),
+         get_val(row, "agri_practices-Ginger_poly_yield_qntl_acr")),
 
         ("Turmeric Mono",
-         row.get("agri_practices-Turmeric_mono_acres", 0),
-         row.get("agri_practices-Turmeric_mono_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Turmeric_mono_acres"),
+         get_val(row, "agri_practices-Turmeric_mono_yield_qntl_acr")),
 
         ("Turmeric Poly",
-         row.get("agri_practices-Turmeric_poly_acres", 0),
-         row.get("agri_practices-Turmeric_poly_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Turmeric_poly_acres"),
+         get_val(row, "agri_practices-Turmeric_poly_yield_qntl_acr")),
 
         ("Redgram Mono",
-         row.get("agri_practices-Redgram_mono_acres", 0),
-         row.get("agri_practices-Redgram_mono_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Redgram_mono_acres"),
+         get_val(row, "agri_practices-Redgram_mono_yield_qntl_acr")),
 
         ("Redgram Poly",
-         row.get("agri_practices-Redgram_poly_acres", 0),
-         row.get("agri_practices-Redgram_poly_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Redgram_poly_acres"),
+         get_val(row, "agri_practices-Redgram_poly_yield_qntl_acr")),
 
         ("Rajma Broadcasting",
-         row.get("agri_practices-Rajma_broadcast_acres", 0),
-         row.get("agri_practices-Rajma_broadcast_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Rajma_broadcast_acres"),
+         get_val(row, "agri_practices-Rajma_broadcast_yield_qntl_acr")),
 
         ("Rajma Line Sowing",
-         row.get("agri_practices-Rajma_linesowing_acres", 0),
-         row.get("agri_practices-Rajma_linesowing_yield_qntl_acr", 0)),
+         get_val(row, "agri_practices-Rajma_linesowing_acres"),
+         get_val(row, "agri_practices-Rajma_linesowing_yield_qntl_acr")),
     ]
 
     crop_data = []
@@ -369,21 +383,17 @@ def create_doc(text, df_v, village):
         area = float(area) if pd.notna(area) else 0
         yield_val = float(yield_val) if pd.notna(yield_val) else 0
 
-        # ✅ skip if both zero
         if area > 0 or yield_val > 0:
             crop_data.append((name, round(area, 2), round(yield_val, 2)))
 
-    # create table
     if crop_data:
         table_crop = doc.add_table(rows=len(crop_data) + 1, cols=3)
         table_crop.style = "Table Grid"
 
-        # header
         table_crop.rows[0].cells[0].text = "Crop Model"
         table_crop.rows[0].cells[1].text = "Area (Acres)"
         table_crop.rows[0].cells[2].text = "Yield (Quintal/Acre)"
 
-        # rows
         for i, (name, area, yield_val) in enumerate(crop_data, start=1):
             table_crop.rows[i].cells[0].text = name
             table_crop.rows[i].cells[1].text = str(area)
