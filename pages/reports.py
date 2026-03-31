@@ -318,6 +318,53 @@ def create_doc(text, df_v, village):
 
         # add to doc
         doc.add_paragraph(nf_para)
+
+    # -------- NF ACTIVITY TABLE --------
+    doc.add_heading("Natural Farming Activities", 2)
+
+    nf_activity_raw = [
+        ("PMDS", row.get("nf_activities-pmds_hhs", 0), row.get("nf_activities-pmds_acres", 0)),
+        ("365DCC", row.get("nf_activities-_365dcc_hhs", 0), row.get("nf_activities-_365dcc_acres", 0)),
+        ("RDS", row.get("nf_activities-rds_hhs", 0), row.get("nf_activities-rds_acres", 0)),
+        ("5 Layer", row.get("nf_activities-_5layer_hhs", 0), row.get("nf_activities-_5layer_acres", 0)),
+        ("Ghana Jeevamrutham", row.get("nf_activities-gja_hhs", 0), row.get("nf_activities-gja_acres", 0)),
+        ("Dharajeeramrutham", row.get("nf_activities-dja_hhs", 0), row.get("nf_activities-dja_acres", 0)),
+        ("Bheejamrutham", row.get("nf_activities-bheeejamruth_hhs", 0), row.get("nf_activities-bheeejamruth_acres", 0)),
+        ("Concoctions", row.get("nf_activities-concoctions_hhs", 0), row.get("nf_activities-concoctions_acres", 0)),
+        ("Mulching", row.get("nf_activities-mulching_hhs", 0), row.get("nf_activities-mulching_acres", 0)),
+    ]
+
+    nf_data = []
+
+    for name, hhs, acres in nf_activity_raw:
+        hhs = pd.to_numeric(hhs, errors="coerce")
+        acres = pd.to_numeric(acres, errors="coerce")
+
+        hhs = int(hhs) if pd.notna(hhs) else 0
+        acres = int(acres) if pd.notna(acres) else 0
+
+        # ✅ skip zero rows
+        if hhs > 0 or acres > 0:
+            nf_data.append((name, hhs, acres))
+
+    # create table only if data exists
+    if nf_data:
+        table_nf = doc.add_table(rows=len(nf_data) + 1, cols=3)
+        table_nf.style = "Table Grid"
+
+        # header
+        table_nf.rows[0].cells[0].text = "NF Activity"
+        table_nf.rows[0].cells[1].text = "Farmers"
+        table_nf.rows[0].cells[2].text = "Acres"
+
+        # data rows
+        for i, (name, hhs, acres) in enumerate(nf_data, start=1):
+            table_nf.rows[i].cells[0].text = name
+            table_nf.rows[i].cells[1].text = str(hhs)
+            table_nf.rows[i].cells[2].text = str(acres)
+
+    else:
+        doc.add_paragraph("No natural farming activity data available.")
     
     # -------- OTHER SECTIONS --------
     doc.add_paragraph(text)
