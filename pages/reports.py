@@ -550,9 +550,55 @@ def create_doc(text, df_v, village):
         para_asc = "No Agri Service Center is available in the village, and there is a need to establish one to support farmers and improve agricultural services."
 
     doc.add_paragraph(para_asc)
+
+    # -------- PROCESSING FACILITIES TABLE --------
+    doc.add_paragraph("")
+    doc.add_heading("Processing & Farm Mechanization Facilities", 1)
+
+    facilities = [
+        ("Power weeder", "farmeasy_Power_weeder_available", "farmeasy_Power_weeder_users"),
+        ("Cycle weeder", "farmeasy_Cycle_weeder_available", "farmeasy_Cycle_weeder_users"),
+        ("Plastic drums", "farmeasy_Plastic_drums_available", "farmeasy_Plastic_drums_users"),
+        ("Cono weeder", "farmeasy_Cono_Weeder_available", "farmeasy_Cono_Weeder_users"),
+        ("Sprayers", "farmeasy_Sprayers_available", "farmeasy_Sprayers_users"),
+        ("Power sprayers", "farmeasy_Power_sprayers_available", "farmeasy_Power_sprayers_users"),
+        ("Tarpaulin", "farmeasy_Taurplin_available", "farmeasy_Taurplin_users"),
+        ("Graders", "farmeasy_Graders_available", "farmeasy_Graders_users"),
+        ("Power tiller", "farmeasy_Power_tiller_available", "farmeasy_Power_tiller_users"),
+        ("Tractor", "farmeasy_Tractor_available", "farmeasy_Tractor_users"),
+        ("Coffee pulper", "farmeasy_Coffee_pulper_available", "farmeasy_Coffee_pulper_users"),
+        ("Pepper thresher", "farmeasy_Pepper_thresher_available", "farmeasy_Pepper_thresher_users"),
+        ("Multigrain thresher", "farmeasy_Multigrain_thresher_available", "farmeasy_Multigrain_thresher_users"),
+        ("Turmeric polisher", "farmeasy_Turmeric_polisher_available", "farmeasy_Turmeric_polisher_users"),
+        ("Turmeric boiler", "farmeasy_Turmeric_boiler_available", "farmeasy_Turmeric_boiler_users"),
+        ("Micro dehullers", "processing_facilities-Millet_mixer", "processing_facilities-Millet_mixer_users"),
+        ("Pulveriser", "processing_facilities-Pulveriser", "processing_facilities-Pulveriser_users"),
+    ]
+
+    # create table
+    table_fac = doc.add_table(rows=len(facilities) + 1, cols=3)
+    table_fac.style = "Table Grid"
+
+    # header
+    table_fac.rows[0].cells[0].text = "Facility"
+    table_fac.rows[0].cells[1].text = "Units Available"
+    table_fac.rows[0].cells[2].text = "Households Using"
+
+    # rows
+    for i, (name, col_avail, col_users) in enumerate(facilities, start=1):
+
+        avail = pd.to_numeric(row.get(col_avail, 0), errors="coerce")
+        users = pd.to_numeric(row.get(col_users, 0), errors="coerce")
+
+        avail = int(avail) if pd.notna(avail) else 0
+        users = int(users) if pd.notna(users) else 0
+
+        table_fac.rows[i].cells[0].text = name
+        table_fac.rows[i].cells[1].text = str(avail)
+        table_fac.rows[i].cells[2].text = str(users)
     
-    # -------- OTHER SECTIONS --------
-    doc.add_paragraph(text)
+        # -------- OTHER SECTIONS --------
+        doc.add_paragraph(text)
 
     # SAVE
     buffer = BytesIO()
