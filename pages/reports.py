@@ -256,6 +256,44 @@ def create_doc(text, df_v, village):
     Livestock grazing follows a {grazing} system, and Non-Timber Forest Products (NTFP) such as {ntfp} are available in the village, contributing to livelihoods."""
 
     doc.add_paragraph(agri_para)
+
+    # -------- NATURAL FARMING PARAGRAPH --------
+    doc.add_paragraph("")
+
+    nf_hhs = pd.to_numeric(row.get("Total HH practicing NF", 0), errors="coerce")
+    nf_area = pd.to_numeric(row.get("Total land under NF practice_acre", 0), errors="coerce")
+
+    brc_available = str(row.get("brc available", "")).strip().lower()
+    brc_name = row.get("Name of the BRC entrepreneur", "")
+
+    villages_nf = pd.to_numeric(row.get("No of villages accessing NF inputs", 0), errors="coerce")
+    farmers_nf = pd.to_numeric(row.get("No of farmers accessing NF inputs", 0), errors="coerce")
+    brc_area = pd.to_numeric(row.get("Extent covered under BRC_acres", 0), errors="coerce")
+
+    business_plan = str(row.get("Is business plan developed", "")).strip().lower()
+
+    #safe conversion
+    def safe_int(val):
+        return int(val) if pd.notna(val) else 0
+
+    nf_hhs = safe_int(nf_hhs)
+    nf_area = safe_int(nf_area)
+    villages_nf = safe_int(villages_nf)
+    farmers_nf = safe_int(farmers_nf)
+    brc_area = safe_int(brc_area)
+
+    # -------- PARAGRAPH BUILD --------
+    nf_para = f"""Natural farming practices are being adopted in the village, with {nf_hhs} households practicing natural farming over an extent of {nf_area} acres."""
+
+    # 👉 ONLY IF BRC AVAILABLE
+    if brc_available in ["yes", "y"]:
+        nf_para += f""" A Bio-Resource Center (BRC) is available in the village, managed by {brc_name}, supporting {villages_nf} villages and {farmers_nf} farmers with natural farming inputs, covering an extent of {brc_area} acres."""
+
+        if business_plan in ["yes", "y"]:
+            nf_para += " A business plan has been developed for strengthening the BRC operations."
+
+    # add to doc
+    doc.add_paragraph(nf_para)
     
     # -------- OTHER SECTIONS --------
     doc.add_paragraph(text)
