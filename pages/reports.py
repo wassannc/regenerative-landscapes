@@ -712,6 +712,62 @@ def create_doc(text, df_v, village):
     for i, (name, val) in enumerate(lr_data):
         table_lr.rows[i].cells[0].text = name
         table_lr.rows[i].cells[1].text = str(val)
+
+    # -------- SMALL RUMINANTS --------
+    doc.add_paragraph("")
+    doc.add_heading("Small Ruminants", 2)
+
+    total_hhs = pd.to_numeric(row.get("Total HHs", 0), errors="coerce")
+
+    goat_hhs = pd.to_numeric(row.get("livestock-goats_hhs", 0), errors="coerce")
+    sheep_hhs = pd.to_numeric(row.get("livestock-sheep_hhs", 0), errors="coerce")
+
+    goats = pd.to_numeric(row.get("livestock-goats_nos", 0), errors="coerce")
+    sheep = pd.to_numeric(row.get("livestock-sheep_nos", 0), errors="coerce")
+
+    mortality = pd.to_numeric(row.get("small_ruminants_mortality", 0), errors="coerce")
+    immunized = pd.to_numeric(row.get("small_ruminants_immunized", 0), errors="coerce")
+
+    def safe_int(val):
+        return int(val) if pd.notna(val) else 0
+
+    total_hhs = safe_int(total_hhs)
+    goat_hhs, sheep_hhs = safe_int(goat_hhs), safe_int(sheep_hhs)
+    goats, sheep = safe_int(goats), safe_int(sheep)
+    mortality, immunized = safe_int(mortality), safe_int(immunized)
+
+    total_animals = goats + sheep
+    total_hhs_sr = goat_hhs + sheep_hhs
+
+    # -------- LOGIC --------
+    if total_animals == 0:
+        sr_para = "Small ruminant rearing is not significantly practiced in the village."
+    else:
+        sr_para = f"""Small ruminants are reared by {total_hhs_sr} households out of {total_hhs} households in the village, with a total of {total_animals} animals. During the last year, {mortality} animal deaths were reported"""
+
+        if immunized > 0:
+            sr_para += f". A total of {immunized} animals have been immunized"
+        else:
+            sr_para += ". Animal health services need strengthening, particularly immunization"
+
+        sr_para += "."
+
+    doc.add_paragraph(sr_para)
+
+    # -------- SMALL RUMINANTS TABLE --------
+    sr_data = [
+        ("Households with Goats", goat_hhs),
+        ("Total Goats", goats),
+        ("Households with Sheep", sheep_hhs),
+        ("Total Sheep", sheep),
+    ]
+
+    table_sr = doc.add_table(rows=len(sr_data), cols=2)
+    table_sr.style = "Table Grid"
+
+    for i, (name, val) in enumerate(sr_data):
+        table_sr.rows[i].cells[0].text = name
+        table_sr.rows[i].cells[1].text = str(val)
         
     # -------- OTHER SECTIONS --------
         doc.add_paragraph(text)
