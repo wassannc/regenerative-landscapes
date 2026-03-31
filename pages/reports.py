@@ -3,6 +3,19 @@ import pandas as pd
 from docx import Document
 from io import BytesIO
 from dashboard import load_sheet
+def get_val(row, col):
+    if col in row:
+        return row[col]
+    
+    alt1 = col.replace("-", "_")
+    alt2 = col.replace("_", "-")
+    alt3 = col.replace("-", "_").replace("__", "_")
+    
+    for c in [alt1, alt2, alt3]:
+        if c in row:
+            return row[c]
+    
+    return 0
 
 st.title("📄 Village Reports")
 
@@ -266,20 +279,6 @@ def create_doc(text, df_v, village):
     Livestock grazing follows a {grazing} system, and Non-Timber Forest Products (NTFP) such as {ntfp} are available in the village, contributing to livelihoods."""
 
     doc.add_paragraph(agri_para)
-
-    def get_val(row, col):
-    if col in row:
-        return row[col]
-    
-    alt1 = col.replace("-", "_")
-    alt2 = col.replace("_", "-")
-    alt3 = col.replace("-", "_").replace("__", "_")
-    
-    for c in [alt1, alt2, alt3]:
-        if c in row:
-            return row[c]
-    
-    return 0
 
     # -------- CROP MODELS TABLE (WITH YIELD) --------
     doc.add_heading("Crop Models Practiced in the Village", 1)
