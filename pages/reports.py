@@ -803,41 +803,7 @@ def create_doc(text, df_v, village):
         table_fish.rows[i].cells[0].text = name
         table_fish.rows[i].cells[1].text = str(val)
 
-    # -------- SHG & FPO TABLE --------
-    doc.add_paragraph("")
-    doc.add_heading("SHGs and Farmer Producer Organizations", 1)
-
-    shg = pd.to_numeric(get_val(row, "SHG_nos"), errors="coerce")
-    fpo_groups = pd.to_numeric(get_val(row, "fpo-farmer_groups"), errors="coerce")
-    fpo_member_flag = str(get_val(row, "fpo-fpo_fpc_membership")).strip()
-    fpo_name = str(get_val(row, "fpo-fpo_fpc_name"))
-    fpo_members = pd.to_numeric(get_val(row, "fpo-fpo_fpc_members"), errors="coerce")
-
-    # safe conversion
-    def safe_int(val):
-        return int(val) if pd.notna(val) else 0
-
-    shg = safe_int(shg)
-    fpo_groups = safe_int(fpo_groups)
-    fpo_members = safe_int(fpo_members)
-
-    # table data (no filtering)
-    shg_data = [
-        ("No. of SHGs", shg),
-        ("No. of Farmer Producer Groups", fpo_groups),
-        ("FPO/FPC Membership Available", fpo_member_flag),
-        ("FPO/FPC Name", fpo_name),
-        ("No. of FPO Members", fpo_members),
-    ]
-
-    table_shg = doc.add_table(rows=len(shg_data), cols=2)
-    table_shg.style = "Table Grid"
-
-    for i, (name, val) in enumerate(shg_data):
-        table_shg.rows[i].cells[0].text = str(name)
-        table_shg.rows[i].cells[1].text = str(val)
-
-        # -------- WATER RESOURCE DEVELOPMENT --------
+    # -------- WATER RESOURCE DEVELOPMENT --------
         doc.add_paragraph("")
         doc.add_heading("Water Resource Development", 1)
 
@@ -877,6 +843,40 @@ def create_doc(text, df_v, village):
             para_water = "No check dam is available in the village. There is a need for water harvesting structures."
 
         doc.add_paragraph(para_water)
+
+    # -------- SHG & FPO TABLE --------
+    doc.add_paragraph("")
+    doc.add_heading("SHGs and Farmer Producer Organizations", 1)
+
+    shg = pd.to_numeric(get_val(row, "SHG_nos"), errors="coerce")
+    fpo_groups = pd.to_numeric(get_val(row, "fpo-farmer_groups"), errors="coerce")
+    fpo_member_flag = str(get_val(row, "fpo-fpo_fpc_membership")).strip()
+    fpo_name = str(get_val(row, "fpo-fpo_fpc_name"))
+    fpo_members = pd.to_numeric(get_val(row, "fpo-fpo_fpc_members"), errors="coerce")
+
+    # safe conversion
+    def safe_int(val):
+        return int(val) if pd.notna(val) else 0
+
+    shg = safe_int(shg)
+    fpo_groups = safe_int(fpo_groups)
+    fpo_members = safe_int(fpo_members)
+
+    # table data (no filtering)
+    shg_data = [
+        ("No. of SHGs", shg),
+        ("No. of Farmer Producer Groups", fpo_groups),
+        ("FPO/FPC Membership Available", fpo_member_flag),
+        ("FPO/FPC Name", fpo_name),
+        ("No. of FPO Members", fpo_members),
+    ]
+
+    table_shg = doc.add_table(rows=len(shg_data), cols=2)
+    table_shg.style = "Table Grid"
+
+    for i, (name, val) in enumerate(shg_data):
+        table_shg.rows[i].cells[0].text = str(name)
+        table_shg.rows[i].cells[1].text = str(val)
 
         # -------- OTHER WORKS --------
     doc.add_paragraph("")
