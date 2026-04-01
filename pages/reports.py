@@ -874,34 +874,29 @@ def create_doc(text, df_v, village):
     checkdam = str(get_val(row, "checkdam-checkdam_in_village")).strip().lower()
     repair = str(get_val(row, "checkdam-checkdam_repairs")).strip().lower()
 
-    year = get_val(row, "checkdam-Checkdam_year")
+    year = str(get_val(row, "checkdam-Checkdam_year"))
     before = pd.to_numeric(get_val(row, "checkdam-actual_coverage_before_repair"), errors="coerce")
     after = pd.to_numeric(get_val(row, "checkdam-expected_coverage_after_repair"), errors="coerce")
 
-    def safe_num(val):
-        return float(val) if pd.notna(val) else 0
+    before = int(before) if pd.notna(before) else 0
+    after = int(after) if pd.notna(after) else 0
 
-    before = safe_num(before)
-    after = safe_num(after)
-
-    # -------- LOGIC --------
     if checkdam in ["yes", "y"]:
-    
-        para_water = f"A check dam is available in the village"
+        para_water = "A check dam is available in the village"
 
         if year:
-            para_water += f", constructed in {str(year)[:4]}"
+            para_water += ", constructed in " + year[:4]
 
         if repair in ["yes", "y"]:
-            para_water += ". The check dam requires repair interventions"
+            para_water += ". The check dam requires repairs"
 
         if before > 0 or after > 0:
-            para_water += f", with an existing irrigation coverage of {before} acres, which is expected to increase to {after} acres after repair"
+            para_water += ", irrigation coverage is " + str(before) + " acres and may increase to " + str(after) + " acres"
 
-        para_water += ", indicating its importance in enhancing water availability and supporting agricultural activities."
+        para_water += ". This structure supports water availability and agriculture."
 
     else:
-        para_water = "There is no check dam in the village, indicating a need for developing water harvesting structures to improve irrigation and groundwater recharge."
+        para_water = "No check dam is available in the village. There is a need for water harvesting structures."
 
     doc.add_paragraph(para_water)
 
