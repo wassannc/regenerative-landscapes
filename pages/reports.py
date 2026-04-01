@@ -866,7 +866,45 @@ def create_doc(text, df_v, village):
     for i, (name, val) in enumerate(shg_data):
         table_shg.rows[i].cells[0].text = str(name)
         table_shg.rows[i].cells[1].text = str(val)
-     
+
+    # -------- WATER RESOURCE DEVELOPMENT --------
+    doc.add_paragraph("")
+    doc.add_heading("Water Resource Development", 1)
+
+    checkdam = str(get_val(row, "checkdam-checkdam_in_village")).strip().lower()
+    repair = str(get_val(row, "checkdam-checkdam_repairs")).strip().lower()
+
+    year = get_val(row, "checkdam-Checkdam_year")
+    before = pd.to_numeric(get_val(row, "checkdam-actual_coverage_before_repair"), errors="coerce")
+    after = pd.to_numeric(get_val(row, "checkdam-expected_coverage_after_repair"), errors="coerce")
+
+    def safe_num(val):
+        return float(val) if pd.notna(val) else 0
+
+    before = safe_num(before)
+    after = safe_num(after)
+
+    # -------- LOGIC --------
+    if checkdam in ["yes", "y"]:
+    
+        para_water = f"A check dam is available in the village"
+
+        if year:
+            para_water += f", constructed in {str(year)[:4]}"
+
+        if repair in ["yes", "y"]:
+            para_water += ". The check dam requires repair interventions"
+
+        if before > 0 or after > 0:
+            para_water += f", with an existing irrigation coverage of {before} acres, which is expected to increase to {after} acres after repair"
+
+        para_water += ", indicating its importance in enhancing water availability and supporting agricultural activities."
+
+    else:
+        para_water = "There is no check dam in the village, indicating a need for developing water harvesting structures to improve irrigation and groundwater recharge."
+
+    doc.add_paragraph(para_water)
+
     # -------- OTHER SECTIONS --------
         doc.add_paragraph(text)
 
