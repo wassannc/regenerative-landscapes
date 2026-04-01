@@ -911,7 +911,7 @@ def create_doc(text, df_v, village):
         table_enum.rows[i].cells[1].text = val
 
     # -------- OTHER SECTIONS --------
-        doc.add_paragraph(text)
+    
 
     # SAVE
     buffer = BytesIO()
