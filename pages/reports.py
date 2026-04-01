@@ -111,11 +111,16 @@ def create_doc(text, df_v, village):
 
     # smart sentence
     if job_yes == total_hhs and total_hhs > 0:
-        job_text = f"All {total_hhs} households possess job cards."
-    elif job_no == 0:
-        job_text = f"{job_yes} households possess job cards."
-    else:
+        job_text = f"All {total_hhs} households in the village possess job cards, and no households are left out."
+
+    elif job_yes > 0 and job_no > 0:
         job_text = f"In terms of livelihoods, {job_yes} households possess job cards, while {job_no} households do not have access to them."
+
+    elif job_yes > 0 and job_no == 0:
+        job_text = f"All households with demand have access to job cards, with {job_yes} households currently possessing them."
+
+    else:
+        job_text = "No households in the village currently possess job cards, indicating a need for increased access."
     
     # MIGRATION
     mig_hhs = pd.to_numeric(row.get("HHs going for seasonal migraion", 0), errors="coerce")
