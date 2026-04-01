@@ -867,53 +867,46 @@ def create_doc(text, df_v, village):
         table_shg.rows[i].cells[0].text = str(name)
         table_shg.rows[i].cells[1].text = str(val)
 
-    def get_water_val(row, col):
-        cols = list(row.index)
+        # -------- WATER RESOURCE DEVELOPMENT --------
+        doc.add_paragraph("")
+        doc.add_heading("Water Resource Development", 1)
 
-        # direct match
-        if col in cols:
-            return row[col]
+        def get_water_val(row, col):
+            cols = list(row.index)
+            if col in cols:
+                return row[col]
+            for c in cols:
+                if col.replace("-", "").replace("_", "") == c.replace("-", "").replace("_", ""):
+                    return row[c]
+            return 0
 
-        # normalize patterns
-        for c in cols:
-            if col.replace("-", "").replace("_", "") == c.replace("-", "").replace("_", ""):
-                return row[c]
+        checkdam = str(get_water_val(row, "checkdam-checkdam_in_village")).strip().lower()
+        repair = str(get_water_val(row, "checkdam-checkdam_repairs")).strip().lower()
 
-        return 0
+        year = str(get_water_val(row, "checkdam-Checkdam_year"))
+        before = pd.to_numeric(get_water_val(row, "checkdam-actual_coverage_before_repair"), errors="coerce")
+        after = pd.to_numeric(get_water_val(row, "checkdam-expected_coverage_after_repair"), errors="coerce")
 
-    # -------- WATER RESOURCE DEVELOPMENT --------
-    doc.add_paragraph("")
-    doc.add_heading("Water Resource Development", 1)
+        before = int(before) if pd.notna(before) else 0
+        after = int(after) if pd.notna(after) else 0
 
-    checkdam = str(get_water_val(row, "checkdam-checkdam_in_village")).strip().lower()
-    repair = str(get_water_val(row, "checkdam-checkdam_repairs")).strip().lower()
+        if checkdam in ["yes", "y"]:
+            para_water = "A check dam is available in the village"
 
-    year = str(get_water_val(row, "checkdam-Checkdam_year"))
-    before = pd.to_numeric(get_water_val(row, "checkdam-actual_coverage_before_repair"), errors="coerce")
-    after = pd.to_numeric(get_water_val(row, "checkdam-expected_coverage_after_repair"), errors="coerce")
+            if year and year != "0":
+                para_water += ", constructed in " + year[:4]
 
-    before = int(before) if pd.notna(before) else 0
-    after = int(after) if pd.notna(after) else 0
+            if repair in ["yes", "y"]:
+                para_water += ". The check dam requires repairs"
 
-    # -------- LOGIC --------
-    if checkdam in ["yes", "y"]:
-        para_water = "A check dam is available in the village"
+            if before > 0 or after > 0:
+                para_water += ", irrigation coverage is " + str(before) + " acres and may increase to " + str(after) + " acres"
 
-        if year and year != "0":
-            para_water += ", constructed in " + year[:4]
+            para_water += ". This structure supports water availability and agriculture."
+        else:
+            para_water = "No check dam is available in the village. There is a need for water harvesting structures."
 
-        if repair in ["yes", "y"]:
-            para_water += ". The check dam requires repairs"
-
-        if before > 0 or after > 0:
-            para_water += ", irrigation coverage is " + str(before) + " acres and may increase to " + str(after) + " acres"
-
-        para_water += ". This structure supports water availability and agriculture."
-
-    else:
-        para_water = "No check dam is available in the village. There is a need for water harvesting structures."
-
-    doc.add_paragraph(para_water)
+        doc.add_paragraph(para_water)
 
     # -------- OTHER SECTIONS --------
         doc.add_paragraph(text)
