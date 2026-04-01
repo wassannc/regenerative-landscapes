@@ -773,6 +773,65 @@ def create_doc(text, df_v, village):
     for i, (name, val) in enumerate(sr_data):
         table_sr.rows[i].cells[0].text = name
         table_sr.rows[i].cells[1].text = str(val)
+
+        # -------- FISHERIES --------
+    doc.add_paragraph("")
+    doc.add_heading("Fisheries", 2)
+
+    pond_hhs = pd.to_numeric(get_val(row, "HHs owning ponds"), errors="coerce")
+    area = pd.to_numeric(get_val(row, "fisheries-area_ponds"), errors="coerce")
+    water_spread = pd.to_numeric(get_val(row, "Total water spread are of the ponds_acr"), errors="coerce")
+
+    individual = pd.to_numeric(get_val(row, "fisheries-individual_ponds"), errors="coerce")
+    community = pd.to_numeric(get_val(row, "No of community ponds"), errors="coerce")
+
+    farmponds = pd.to_numeric(get_val(row, "fisheries-eco_farmponds"), errors="coerce")
+    total_ponds = pd.to_numeric(get_val(row, "No of ponds under fisheries"), errors="coerce")
+
+    def safe_int(val):
+        return int(val) if pd.notna(val) else 0
+
+    pond_hhs = safe_int(pond_hhs)
+    area = safe_int(area)
+    water_spread = safe_int(water_spread)
+    individual = safe_int(individual)
+    community = safe_int(community)
+    farmponds = safe_int(farmponds)
+    total_ponds = safe_int(total_ponds)
+
+    # -------- LOGIC --------
+    if total_ponds == 0 and individual == 0:
+        fish_para = "Fisheries activities are not significantly practiced in the village."
+    else:
+        fish_para = f"""Fisheries activities are practiced in the village, with {pond_hhs} households owning ponds. The total area under ponds is {area} acres, with a water spread area of {water_spread} acres. The village has {individual} individual ponds and {community} community ponds."""
+
+        if farmponds > 0:
+            fish_para += f" Additionally, {farmponds} eco-farm ponds are available"
+
+        if total_ponds > 0:
+            fish_para += f", with a total of {total_ponds} ponds under fisheries"
+
+        fish_para += "."
+
+    doc.add_paragraph(fish_para)
+
+    # -------- FISHERIES TABLE --------
+    fish_data = [
+        ("Households owning ponds", pond_hhs),
+        ("Area under ponds (acres)", area),
+        ("Water spread area (acres)", water_spread),
+        ("Individual ponds", individual),
+        ("Community ponds", community),
+        ("Eco farm ponds", farmponds),
+        ("Total ponds under fisheries", total_ponds),
+    ]
+
+    table_fish = doc.add_table(rows=len(fish_data), cols=2)
+    table_fish.style = "Table Grid"
+
+    for i, (name, val) in enumerate(fish_data):
+        table_fish.rows[i].cells[0].text = name
+        table_fish.rows[i].cells[1].text = str(val)
         
     # -------- OTHER SECTIONS --------
         doc.add_paragraph(text)
