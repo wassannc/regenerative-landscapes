@@ -833,7 +833,7 @@ def create_doc(text, df_v, village):
         table_fish.rows[i].cells[0].text = name
         table_fish.rows[i].cells[1].text = str(val)
 
-        # -------- SHG & FPO SECTION --------
+       # -------- SHG & FPO SECTION --------
     doc.add_paragraph("")
     doc.add_heading("SHGs and Farmer Producer Organizations", 1)
 
@@ -841,7 +841,7 @@ def create_doc(text, df_v, village):
     fpo_groups = pd.to_numeric(get_val(row, "fpo-farmer_groups"), errors="coerce")
 
     fpo_member_flag = str(get_val(row, "fpo-fpo_fpc_membership")).strip().lower()
-    fpo_name = get_val(row, "fpo-fpo_fpc_name")
+    fpo_name = str(get_val(row, "fpo-fpo_fpc_name"))
     fpo_members = pd.to_numeric(get_val(row, "fpo-fpo_fpc_members"), errors="coerce")
 
     def safe_int(val):
@@ -851,21 +851,19 @@ def create_doc(text, df_v, village):
     fpo_groups = safe_int(fpo_groups)
     fpo_members = safe_int(fpo_members)
 
-    # -------- PARAGRAPH LOGIC --------
-    para_shg = f"The village has {shg} Self-Help Groups (SHGs), which play an important role in supporting livelihoods and community-level activities."
+    # -------- PARAGRAPH --------
+    para_shg = f"The village has {shg} Self-Help Groups (SHGs), which support livelihoods and community development."
 
-    # FPO logic
     if fpo_groups > 0:
         if fpo_member_flag in ["yes", "y"]:
             para_shg += f" There are {fpo_groups} farmer producer group(s) in the village. Farmers are members of the FPO/FPC named {fpo_name}, with a total membership of {fpo_members} members."
         else:
-            para_shg += f" There are {fpo_groups} farmer producer group(s) in the village; however, farmers are not currently linked to any FPO/FPC, indicating a need for institutional strengthening."
+            para_shg += f" There are {fpo_groups} farmer producer group(s) in the village; however, farmers are not currently linked to any FPO/FPC, indicating a need for strengthening institutional linkages."
     else:
-        para_shg += " There are no farmer producer groups in the village, and efforts may be needed to promote collective institutions such as FPOs for better market access and value realization."
+        para_shg += " There are no farmer producer groups in the village, and efforts may be needed to promote collective institutions such as FPOs for better market access."
 
     doc.add_paragraph(para_shg)
-
-        
+    
     # -------- OTHER SECTIONS --------
         doc.add_paragraph(text)
 
