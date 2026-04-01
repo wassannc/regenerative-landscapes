@@ -938,23 +938,6 @@ def create_doc(text, df_v, village):
 
     for i, (name, val) in enumerate(enum_data):
         table_enum.rows[i].cells[0].text = name
-        table_enum.rows[i].cells[1].text = val# -------- ENUMERATOR DETAILS --------
-    doc.add_paragraph("")
-    doc.add_heading("Data Collection Details", 1)
-
-    enum_name = str(get_val(row, "enumerator-Enumerator_name"))
-    enum_mobile = str(get_val(row, "enumerator-Enumerator_mobile"))
-
-    enum_data = [
-        ("Enumerator Name", enum_name),
-        ("Contact Number", enum_mobile),
-    ]
-
-    table_enum = doc.add_table(rows=len(enum_data), cols=2)
-    table_enum.style = "Table Grid"
-
-    for i, (name, val) in enumerate(enum_data):
-        table_enum.rows[i].cells[0].text = name
         table_enum.rows[i].cells[1].text = val
 
     # -------- OTHER SECTIONS --------
