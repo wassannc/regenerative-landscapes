@@ -933,5 +933,3 @@ if st.button("Generate Report"):
         file_name=f"{selected_village}_report.docx",
         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
-
-    st.text_area("Preview", report, height=400)
