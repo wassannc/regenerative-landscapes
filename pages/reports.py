@@ -848,11 +848,11 @@ def create_doc(text, df_v, village):
 
     if fpo_groups > 0:
         if fpo_member_flag in ["yes", "y"]:
-            para_shg += f" There are {fpo_groups} farmer producer group(s). Farmers are members of {fpo_name} with {fpo_members} members."
+            para_shg = para_shg + f" There are {fpo_groups} farmer producer group(s). Farmers are members of {fpo_name} with {fpo_members} members."
         else:
-            para_shg += f" There are {fpo_groups} farmer producer group(s), but farmers are not linked to any FPO/FPC."
+            para_shg = para_shg + f" There are {fpo_groups} farmer producer group(s), but farmers are not linked to any FPO/FPC."
     else:
-        para_shg += " There are no farmer producer groups in the village."
+        para_shg = para_shg + " There are no farmer producer groups in the village."
 
     doc.add_paragraph(para_shg)
     
