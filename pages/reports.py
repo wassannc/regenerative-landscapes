@@ -833,29 +833,40 @@ def create_doc(text, df_v, village):
         table_fish.rows[i].cells[0].text = name
         table_fish.rows[i].cells[1].text = str(val)
 
-       # -------- SHG & FPO SECTION --------
+    # -------- SHG & FPO TABLE --------
     doc.add_paragraph("")
     doc.add_heading("SHGs and Farmer Producer Organizations", 1)
 
-    shg = int(pd.to_numeric(get_val(row, "SHG_nos"), errors="coerce") or 0)
-    fpo_groups = int(pd.to_numeric(get_val(row, "fpo-farmer_groups"), errors="coerce") or 0)
-
-    fpo_member_flag = str(get_val(row, "fpo-fpo_fpc_membership")).strip().lower()
+    shg = pd.to_numeric(get_val(row, "SHG_nos"), errors="coerce")
+    fpo_groups = pd.to_numeric(get_val(row, "fpo-farmer_groups"), errors="coerce")
+    fpo_member_flag = str(get_val(row, "fpo-fpo_fpc_membership")).strip()
     fpo_name = str(get_val(row, "fpo-fpo_fpc_name"))
-    fpo_members = int(pd.to_numeric(get_val(row, "fpo-fpo_fpc_members"), errors="coerce") or 0)
+    fpo_members = pd.to_numeric(get_val(row, "fpo-fpo_fpc_members"), errors="coerce")
 
-    para_shg = f"The village has {shg} Self-Help Groups (SHGs)."
+    # safe conversion
+    def safe_int(val):
+        return int(val) if pd.notna(val) else 0
 
-    if fpo_groups > 0:
-        if fpo_member_flag in ["yes", "y"]:
-            para_shg = para_shg + f" There are {fpo_groups} farmer producer group(s). Farmers are members of {fpo_name} with {fpo_members} members."
-        else:
-            para_shg = para_shg + f" There are {fpo_groups} farmer producer group(s), but farmers are not linked to any FPO/FPC."
-    else:
-        para_shg = para_shg + " There are no farmer producer groups in the village."
+    shg = safe_int(shg)
+    fpo_groups = safe_int(fpo_groups)
+    fpo_members = safe_int(fpo_members)
 
-    doc.add_paragraph(para_shg)
-    
+    # table data (no filtering)
+    shg_data = [
+        ("No. of SHGs", shg),
+        ("No. of Farmer Producer Groups", fpo_groups),
+        ("FPO/FPC Membership Available", fpo_member_flag),
+        ("FPO/FPC Name", fpo_name),
+        ("No. of FPO Members", fpo_members),
+    ]
+
+    table_shg = doc.add_table(rows=len(shg_data), cols=2)
+    table_shg.style = "Table Grid"
+
+    for i, (name, val) in enumerate(shg_data):
+        table_shg.rows[i].cells[0].text = str(name)
+        table_shg.rows[i].cells[1].text = str(val)
+     
     # -------- OTHER SECTIONS --------
         doc.add_paragraph(text)
 
