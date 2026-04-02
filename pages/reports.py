@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 from docx import Document
+from docx.shared import Inches
+import os
 from io import BytesIO
 from dashboard import load_sheet
 def get_val(row, col):
@@ -1002,7 +1004,17 @@ def create_doc(text, df_v, village):
 
 
     # -------- OTHER SECTIONS --------
-    
+
+    # -------- VILLAGE IMAGE --------
+    doc.add_paragraph("")
+    doc.add_heading("Village Photo", 1)
+
+    image_path = f"images/{village}.jpg"
+
+    if os.path.exists(image_path):
+        doc.add_picture(image_path, width=Inches(5.5))
+    else:
+        doc.add_paragraph("No image available for this village.")
 
     # SAVE
     buffer = BytesIO()
