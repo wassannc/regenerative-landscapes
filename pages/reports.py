@@ -915,6 +915,29 @@ def create_doc(text, df_v, village):
         table_enum.rows[i].cells[0].text = name
         table_enum.rows[i].cells[1].text = val
 
+# -------- PROPOSED DEVELOPMENT INTERVENTIONS --------
+doc.add_paragraph("")
+doc.add_heading("Proposed Development Interventions", 1)
+
+works = []
+
+for col in df_p.columns:
+    if "required" in col.lower():
+        val = df_p[col].sum()
+        if val > 0:
+            clean = col.replace("_", " ").replace("required", "").replace("farmeasy", "").strip().title()
+            works.append(f"{clean} ({int(val)} units)")
+
+# create smart sentence
+if len(works) > 0:
+    works_text = ", ".join(works[:-1]) + " and " + works[-1] if len(works) > 1 else works[0]
+
+    para_plan = f"""Based on the village assessment and identified gaps, a set of targeted development interventions have been proposed to strengthen livelihoods and agricultural productivity. Key interventions include {works_text}. These interventions are expected to enhance farm efficiency, improve post-harvest management, and increase income opportunities for rural households."""
+else:
+    para_plan = "No specific development interventions have been proposed for the village based on the current assessment."
+
+doc.add_paragraph(para_plan)
+
     # -------- OTHER SECTIONS --------
     
 
