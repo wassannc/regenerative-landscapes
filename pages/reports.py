@@ -116,6 +116,10 @@ def create_doc(text, df_v, village):
 
     # 👉 ALWAYS derive job_no
     job_no = max(total_hhs - job_yes, 0)
+    st.write("DEBUG JOB:", 
+         row.get("Total HHs"), 
+         row.get("Households-mnregs_cards"), 
+         row.get("No of HHs not having Job cards"))
 
     # -------- SMART SENTENCE --------
     if total_hhs > 0 and job_yes == total_hhs:
