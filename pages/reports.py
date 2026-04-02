@@ -916,7 +916,7 @@ def create_doc(text, df_v, village):
         table_enum.rows[i].cells[0].text = name
         table_enum.rows[i].cells[1].text = val
 
-    # -------- PROPOSED DEVELOPMENT INTERVENTIONS --------
+   # -------- PROPOSED DEVELOPMENT INTERVENTIONS --------
     doc.add_paragraph("")
     doc.add_heading("Proposed Development Interventions", 1)
 
@@ -927,7 +927,37 @@ def create_doc(text, df_v, village):
 
         source_col = row_b["Source Column"]
         work_name = row_b["Name of the work"]
-        unit_cost = row_b["Unit Cost (Rs)"]
+        unit_cost = pd.to_numeric(row_b["Unit Cost (Rs)"], errors="coerce")
+
+        # check column exists in village plan
+        if source_col in df_p.columns:
+
+            qty = pd.to_numeric(df_p[source_col], errors="coerce").sum()
+
+            if qty > 0:
+                cost = qty * unit_cost
+                total_cost += cost
+
+                interventions.append(f"{work_name} ({int(qty)} units)")
+
+    # -------- CREATE SMART TEXT --------
+    if len(interventions) > 0:
+
+        # join works nicely
+        if len(interventions) == 1:
+            works_text = interventions[0]
+        else:
+            works_text = ", ".join(interventions[:-1]) + " and " + interventions[-1]
+
+        # convert cost to lakhs
+        total_cost_lakh = total_cost / 100000
+
+        para_plan = f"""Based on the village assessment and identified gaps, a comprehensive set of development interventions has been proposed to strengthen livelihoods, agriculture, and allied sectors. Key interventions include {works_text}. The total estimated investment required for these interventions is approximately ₹{total_cost_lakh:.2f} lakhs. These interventions are expected to enhance productivity, improve infrastructure, and create sustainable income opportunities for households."""
+
+    else:
+        para_plan = "No specific development interventions have been proposed for the village based on the current assessment."
+
+    doc.add_paragraph(para_plan)
 
 
     # -------- OTHER SECTIONS --------
