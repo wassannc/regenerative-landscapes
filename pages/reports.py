@@ -959,6 +959,47 @@ def create_doc(text, df_v, village):
 
     doc.add_paragraph(para_plan)
 
+    # -------- DETAILED INTERVENTIONS TABLE --------
+    doc.add_paragraph("")
+    doc.add_heading("Detailed Proposed Works", 2)
+
+    table_data = []
+
+    for _, row_b in df_budget.iterrows():
+
+        source_col = row_b["Source Column"]
+        work_name = row_b["Name of the work"]
+        unit_cost = pd.to_numeric(row_b["Unit Cost (Rs)"], errors="coerce")
+
+        if source_col in df_p.columns:
+
+            qty = pd.to_numeric(df_p[source_col], errors="coerce").sum()
+
+            if qty > 0:
+                total = qty * unit_cost
+
+                table_data.append([
+                    work_name,
+                    int(qty),
+                    int(unit_cost),
+                    int(total)
+                ])
+
+    # create table
+    table = doc.add_table(rows=len(table_data)+1, cols=4)
+    table.style = "Table Grid"
+
+    # headers
+    headers = ["Work", "Units", "Unit Cost (₹)", "Total Cost (₹)"]
+
+    for j, h in enumerate(headers):
+        table.rows[0].cells[j].text = h
+
+    # fill rows
+    for i, row_data in enumerate(table_data):
+        for j, val in enumerate(row_data):
+            table.rows[i+1].cells[j].text = str(val)
+
 
     # -------- OTHER SECTIONS --------
     
