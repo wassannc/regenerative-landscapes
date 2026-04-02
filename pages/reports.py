@@ -919,24 +919,15 @@ def create_doc(text, df_v, village):
     doc.add_paragraph("")
     doc.add_heading("Proposed Development Interventions", 1)
 
-    works = []
+    interventions = []
+    total_cost = 0
 
-    for col in df_p.columns:
-        if "required" in col.lower():
-            val = df_p[col].sum()
-            if val > 0:
-                clean = col.replace("_", " ").replace("required", "").replace("farmeasy", "").strip().title()
-                works.append(f"{clean} ({int(val)} units)")
+    for _, row_b in df_budget.iterrows():
 
-    # create smart sentence
-    if len(works) > 0:
-        works_text = ", ".join(works[:-1]) + " and " + works[-1] if len(works) > 1 else works[0]
+        source_col = row_b["Source Column"]
+        work_name = row_b["Name of the work"]
+        unit_cost = row_b["Unit Cost (Rs)"]
 
-        para_plan = f"""Based on the village assessment and identified gaps, a set of targeted development interventions have been proposed to strengthen livelihoods and agricultural productivity. Key interventions include {works_text}. These interventions are expected to enhance farm efficiency, improve post-harvest management, and increase income opportunities for rural households."""
-    else:
-        para_plan = "No specific development interventions have been proposed for the village based on the current assessment."
-
-    doc.add_paragraph(para_plan)
 
     # -------- OTHER SECTIONS --------
     
