@@ -103,30 +103,26 @@ def create_doc(text, df_v, village):
 
     water = row.get("drinking_water_source", "NA")
 
-    # -------- JOB CARDS (ROBUST LOGIC) --------
+    # -------- JOB CARDS --------
 
-    total_hhs = pd.to_numeric(row.get("Total HHs", 0), errors="coerce")
-    job_yes = pd.to_numeric(row.get("Households-mnregs_cards", 0), errors="coerce")
-    job_no = pd.to_numeric(row.get("No of HHs not having Job cards", 0), errors="coerce")
+    def clean_int(val):
+        try:
+            return int(float(str(val).strip()))
+        except:
+            return 0
 
-    # safe conversion
-    total_hhs = int(total_hhs) if pd.notna(total_hhs) else 0
-    job_yes = int(job_yes) if pd.notna(job_yes) else 0
-    job_no = int(job_no) if pd.notna(job_no) else 0
+    total_hhs = clean_int(row.get("Total HHs"))
+    job_yes = clean_int(row.get("Households-mnregs_cards"))
 
-    # 🧠 FIX: derive missing values if needed
-    if job_no == 0 and total_hhs > job_yes:
-        job_no = total_hhs - job_yes
+    # 👉 ALWAYS derive job_no
+    job_no = max(total_hhs - job_yes, 0)
 
     # -------- SMART SENTENCE --------
-    if total_hhs > 0 and job_yes >= total_hhs:
+    if total_hhs > 0 and job_yes == total_hhs:
         job_text = f"All {total_hhs} households in the village possess job cards, and no households are left out."
 
-    elif job_yes > 0 and job_no > 0:
+    elif job_yes > 0 and job_yes < total_hhs:
         job_text = f"In terms of livelihoods, {job_yes} households possess job cards, while {job_no} households do not have access to them."
-
-    elif job_yes > 0 and job_no == 0:
-        job_text = f"All households in the village have access to job cards, with {job_yes} households currently possessing them."
 
     elif job_yes == 0 and total_hhs > 0:
         job_text = "No households in the village currently possess job cards, indicating a need for increased access."
