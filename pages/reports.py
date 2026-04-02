@@ -29,6 +29,7 @@ st.title("📄 Village Reports")
 
 df_profile = load_sheet("village profile")
 df_plan = load_sheet("village plan")
+df_budget = load_sheet("budget")
 
 village_list = sorted(df_profile["village"].dropna().unique())
 selected_village = st.selectbox("Select Village", village_list)
