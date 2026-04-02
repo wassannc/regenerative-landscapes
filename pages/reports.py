@@ -938,7 +938,7 @@ def create_doc(text, df_v, village):
                 cost = qty * unit_cost
                 total_cost += cost
 
-                interventions.append(f"{work_name} ({int(qty)} units)")
+                interventions.append(work_name)
 
     # -------- CREATE SMART TEXT --------
     if len(interventions) > 0:
