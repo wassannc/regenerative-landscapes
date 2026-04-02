@@ -1005,16 +1005,26 @@ def create_doc(text, df_v, village):
 
     # -------- OTHER SECTIONS --------
 
-    # -------- VILLAGE IMAGE --------
+    # -------- VILLAGE PHOTOS --------
     doc.add_paragraph("")
-    doc.add_heading("Village Photo", 1)
+    doc.add_heading("Village Photos", 1)
 
-    image_path = f"images/{village}.jpg"
+    import os
 
-    if os.path.exists(image_path):
-        doc.add_picture(image_path, width=Inches(5.5))
-    else:
-        doc.add_paragraph("No image available for this village.")
+    image_found = False
+
+    for i in range(1, 6):  # supports up to 5 images (you can increase)
+
+        image_path = f"images/{village}_{i}.jpg"
+
+        if os.path.exists(image_path):
+            doc.add_picture(image_path, width=Inches(5.5))
+            doc.add_paragraph("")  # spacing
+            image_found = True
+
+    # fallback
+    if not image_found:
+        doc.add_paragraph("No images available for this village.")
 
     # SAVE
     buffer = BytesIO()
