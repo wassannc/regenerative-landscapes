@@ -144,16 +144,22 @@ def create_doc(text, df_v, village):
     mig_members = int(mig_members) if pd.notna(mig_members) else 0
     mig_days = int(mig_days) if pd.notna(mig_days) else 0
     mig_income = int(mig_income) if pd.notna(mig_income) else 0
+    
+    # -------- MIGRATION TEXT --------
+    if mig_hhs == 0 or mig_members == 0:
+        migration_text = "No households from the village undertake seasonal migration."
+    else:
+        migration_text = f"""{mig_hhs} households undertake seasonal migration involving {mig_members} members. On average, migration lasts for about {mig_days} days per year, with an average annual earning of ₹{mig_income} per family."""
 
     # -------- PARAGRAPH --------
     if school in ["yes", "y"]:
         para = f"""{village} is a small village with a total population of {total_pop} people, comprising {male} males and {female} females across {hh} households. The village has {children_icds} children enrolled in ICDS and {children_school} children attending {school_name}. A kitchen garden is {'available' if kg in ['yes','y'] else 'not available'} at the school. Drinking water in the village is sourced from {water}. In terms of livelihoods, {job_yes} households possess job cards, while {job_no} households do not have access to them.
 
-{mig_hhs} households undertake seasonal migration involving {mig_members} members. On average, migration lasts for about {mig_days} days per year, with an average annual earning of ₹{mig_income} per family."""
+{migration_text}
     else:
         para = f"""{village} is a small village with a total population of {total_pop} people, comprising {male} males and {female} females across {hh} households. The village has {children_icds} children enrolled in ICDS; however, there is no functioning school currently, and no children are attending school despite the presence of a {school_name}. Drinking water in the village is sourced from {water}. In terms of livelihoods, {job_yes} households possess job cards, while {job_no} households do not have access to them.
 
-{mig_hhs} households undertake seasonal migration involving {mig_members} members. On average, migration lasts for about {mig_days} days per year, with an average annual earning of ₹{mig_income} per family."""
+{migration_text}
 
     doc.add_paragraph(para)
     # -------- COMMUNITY TABLE --------
