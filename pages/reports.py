@@ -114,13 +114,6 @@ def create_doc(text, df_v, village):
     total_hhs = clean_int(row.get("Total HHs"))
     job_yes = clean_int(row.get("Households-mnregs_cards"))
 
-    # 👉 ALWAYS derive job_no
-    job_no = max(total_hhs - job_yes, 0)
-    st.write("DEBUG JOB:", 
-         row.get("Total HHs"), 
-         row.get("Households-mnregs_cards"), 
-         row.get("No of HHs not having Job cards"))
-
     # -------- SMART SENTENCE --------
     if total_hhs > 0 and job_yes == total_hhs:
         job_text = f"All {total_hhs} households in the village possess job cards, and no households are left out."
