@@ -1044,11 +1044,10 @@ def create_doc(text, df_v, village):
 
     return buffer
 
+   #Button
+   if st.button("Generate Report"):
 
-    # ---------------- BUTTON ----------------
-if st.button("Generate Report"):
-
-report = generate_report(df_v, df_p, selected_village)
+    report = generate_report(df_v, df_p, selected_village)
     file = create_doc(report, df_v, selected_village)
 
     st.download_button(
