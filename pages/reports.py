@@ -1048,12 +1048,12 @@ def create_doc(text, df_v, village):
     # ---------------- BUTTON ----------------
 if st.button("Generate Report"):
 
-    report = generate_report(df_v, df_p, selected_village)
-        file = create_doc(report, df_v, selected_village)
+report = generate_report(df_v, df_p, selected_village)
+    file = create_doc(report, df_v, selected_village)
 
-        st.download_button(
-            "Download Report",
-            data=file,
-            file_name=f"{selected_village}_report.docx",
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        )
+    st.download_button(
+        "Download Report",
+        data=file,
+        file_name=f"{selected_village}_report.docx",
+        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
