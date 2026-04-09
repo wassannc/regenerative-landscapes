@@ -113,7 +113,8 @@ def create_doc(text, df_v, village):
 
     total_hhs = clean_int(row.get("Total HHs"))
     job_yes = clean_int(row.get("Households-mnregs_cards"))
-
+    job_no = total_hhs - job_yes
+    
     # -------- SMART SENTENCE --------
     if total_hhs > 0 and job_yes == total_hhs:
         job_text = f"All {total_hhs} households in the village possess job cards, and no households are left out."
@@ -139,7 +140,7 @@ def create_doc(text, df_v, village):
     mig_income = int(mig_income) if pd.notna(mig_income) else 0
     
     # -------- MIGRATION TEXT --------
-    if mig_hhs == 0 or mig_members == 0:
+    if mig_hhs == 0 and mig_members == 0:
         migration_text = "No households from the village undertake seasonal migration."
     else:
         migration_text = f"""{mig_hhs} households undertake seasonal migration involving {mig_members} members. On average, migration lasts for about {mig_days} days per year, with an average annual earning of ₹{mig_income} per family."""
