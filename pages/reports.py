@@ -776,7 +776,7 @@ def create_doc(text, df_v, village):
 
     # -------- LOGIC --------
     if sr_animals == 0:
-        sr_para = "Small ruminant rearing is not significantly practiced in the village."
+        sr_para = "There is no household who are rearing small ruminants in this village."
     else:
         sr_para = f"""Small ruminants are reared by {sr_hhs} households out of {total_hhs} households in the village, with a total of {sr_animals} animals. During the last year, {mortality} animal deaths were reported"""
 
