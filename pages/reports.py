@@ -627,16 +627,17 @@ def create_doc(text, df_v, village):
 
         doc.add_paragraph(situation_para)
         
-    doc.add_heading("Activities proposed for Poultry", 2)
+    doc.add_heading("Proposed Interventions for Poultry", 2)
     if byp_hhs > 0:
-        poultry_activites_para = (
-            "Regular deworming and vaccination of poultry."
-            "For poultry health management: Deworming using Neem leaf powder and Vaccination against Raniket disease (RD) using the Lasota vaccine."
-            "Forage development and training on best management practices."
-            "Maintaining clean and hygienic poultry sheds and renovating or reconstructing them with necessary improvements."
+        poultry_activites = [
+            "Regular deworming and vaccination of poultry.",
+            "For poultry health management: Deworming using Neem leaf powder and Vaccination against Raniket disease (RD) using the Lasota vaccine.",
+            "Forage development and training on best management practices.",
+            "Maintaining clean and hygienic poultry sheds and renovating or reconstructing them with necessary improvements.",
             "Promoting backyard poultry rearing and establishing breed farms to enhance household income."
-        )
-        doc.add_paragraph(poultry_activites_para)
+        ]
+        for activity in poultry_activities:
+            doc.add_paragraph(activity, style="List Bullet")
 
     # -------- POULTRY TABLE --------
     poultry_data = [
