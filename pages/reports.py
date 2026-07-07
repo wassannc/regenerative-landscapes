@@ -587,7 +587,7 @@ def create_doc(text, df_v, village):
         table_fac.rows[i].cells[1].text = str(avail)
         table_fac.rows[i].cells[2].text = str(users)
 
-        # -------- Livestock-Poultry-LR-SR-Fish --------
+    # -------- Livestock-Poultry-LR-SR-Fish --------
        
     
     doc.add_paragraph("")
@@ -598,6 +598,7 @@ def create_doc(text, df_v, village):
     birds = pd.to_numeric(row.get("Total Birds", 0), errors="coerce")
     mortality = pd.to_numeric(row.get("birds mortality", 0), errors="coerce")
     immunized = pd.to_numeric(row.get("Total birds immunized", 0), errors="coerce")
+    bfes_plan = pd.to_numeric(row.get("No of women are willing to establish breedfarms", 0), errors="coerce")
 
     service = str(row.get("poultry service provider", "")).strip().lower()
 
@@ -636,6 +637,7 @@ def create_doc(text, df_v, village):
             poultry_para += " There is a need to strengthen poultry services as no service provider is available."
     
     doc.add_paragraph(poultry_para)
+    
     doc.add_heading("Situation", 2)
     if byp_hhs > 0:
         situation_para = (
@@ -665,6 +667,13 @@ def create_doc(text, df_v, village):
         ]
         for activity in implementation_strategies:
             doc.add_paragraph(activity, style="List Bullet")
+
+    doc.add_heading("Desi Breedfarms", 2)
+    if bfes_plan > 0:
+        bfe_para = (
+            "{No of women are willing to establish breedfarms} families have come forward to establish Desi poultry breed farms. Currently, there is one breed farm in the village, which will be upgraded into a 5-layer breed farm."
+        )
+        doc.add_paragraph(bfe_para)
 
     # -------- LARGE RUMINANTS --------
     doc.add_paragraph("")
