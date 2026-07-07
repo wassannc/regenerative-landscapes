@@ -618,17 +618,24 @@ def create_doc(text, df_v, village):
     
     doc.add_paragraph(poultry_para)
     doc.add_heading("Situation", 2)
+    doc.add_heading("Activities proposed for Poultry", 2)
     if byp_hhs > 0:
-
-        doc.add_heading("Situation", 2)
-
         situation_para = (
             "Bird mortality is high due to Raniket disease and fowlpox. "
-            "Predator attacks are also contributing to bird mortality. "
-            "Regular deworming and vaccination services need to be strengthened."
+            "In addition to that predator also a cause for birds’ mortality."
+            "There were no regular deworming and vaccination to the poultry."
         )
 
         doc.add_paragraph(situation_para)
+        
+        poultry_activites_para = (
+            "Regular deworming and vaccination of poultry."
+            "For poultry health management: Deworming using Neem leaf powder and Vaccination against Raniket disease (RD) using the Lasota vaccine."
+            "Forage development and training on best management practices."
+            "Maintaining clean and hygienic poultry sheds and renovating or reconstructing them with necessary improvements."
+            "Promoting backyard poultry rearing and establishing breed farms to enhance household income."
+        )
+        doc.add_paragraph(poultry_activites_para)
 
     # -------- POULTRY TABLE --------
     poultry_data = [
