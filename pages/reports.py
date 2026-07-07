@@ -589,6 +589,21 @@ def create_doc(text, df_v, village):
 
         # -------- Livestock-Poultry-LR-SR-Fish --------
         # -------- POULTRY TABLE --------
+        byp_hhs = pd.to_numeric(row.get("no of BYP HHs", 0), errors="coerce")
+        birds = pd.to_numeric(row.get("Total Birds", 0), errors="coerce")
+        mortality = pd.to_numeric(row.get("birds mortality", 0), errors="coerce")
+        immunized = pd.to_numeric(row.get("Total birds immunized", 0), errors="coerce")
+
+        service = str(row.get("poultry service provider", "")).strip().lower()
+
+        def safe_int(val):
+            return int(val) if pd.notna(val) else 0
+
+        byp_hhs = safe_int(byp_hhs)
+        birds = safe_int(birds)
+        mortality = safe_int(mortality)
+        immunized = safe_int(immunized)
+    
         poultry_data = [
             ("Households with Backyard Poultry", byp_hhs),
             ("Total Birds", birds),
@@ -607,20 +622,7 @@ def create_doc(text, df_v, village):
     doc.add_paragraph("")
     doc.add_heading("Poultry", 2)
 
-    byp_hhs = pd.to_numeric(row.get("no of BYP HHs", 0), errors="coerce")
-    birds = pd.to_numeric(row.get("Total Birds", 0), errors="coerce")
-    mortality = pd.to_numeric(row.get("birds mortality", 0), errors="coerce")
-    immunized = pd.to_numeric(row.get("Total birds immunized", 0), errors="coerce")
-
-    service = str(row.get("poultry service provider", "")).strip().lower()
-
-    def safe_int(val):
-        return int(val) if pd.notna(val) else 0
-
-    byp_hhs = safe_int(byp_hhs)
-    birds = safe_int(birds)
-    mortality = safe_int(mortality)
-    immunized = safe_int(immunized)
+    
 
     if byp_hhs == 0 and birds == 0:
         poultry_para = "Poultry activity is not significantly practiced in the village."
@@ -662,9 +664,6 @@ def create_doc(text, df_v, village):
         ]
         for activity in implementation_strategies:
             doc.add_paragraph(activity, style="List Bullet")
-
-
-
 
     # -------- LARGE RUMINANTS --------
     doc.add_paragraph("")
