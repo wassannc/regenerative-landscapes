@@ -588,6 +588,22 @@ def create_doc(text, df_v, village):
         table_fac.rows[i].cells[2].text = str(users)
 
         # -------- Livestock-Poultry-LR-SR-Fish --------
+        # -------- POULTRY TABLE --------
+    poultry_data = [
+        ("Households with Backyard Poultry", byp_hhs),
+        ("Total Birds", birds),
+        ("Bird Mortality (Last Year)", mortality),
+        ("Birds Immunized", immunized),
+        ("Service Provider Available", "Yes" if service in ["yes","y"] else "No"),
+    ]
+
+    table_poultry = doc.add_table(rows=len(poultry_data), cols=2)
+    table_poultry.style = "Table Grid"
+
+    for i, (name, val) in enumerate(poultry_data):
+        table_poultry.rows[i].cells[0].text = name
+        table_poultry.rows[i].cells[1].text = str(val)
+    
     doc.add_paragraph("")
     doc.add_heading("Poultry", 2)
 
@@ -648,21 +664,7 @@ def create_doc(text, df_v, village):
             doc.add_paragraph(activity, style="List Bullet")
 
 
-    # -------- POULTRY TABLE --------
-    poultry_data = [
-        ("Households with Backyard Poultry", byp_hhs),
-        ("Total Birds", birds),
-        ("Bird Mortality (Last Year)", mortality),
-        ("Birds Immunized", immunized),
-        ("Service Provider Available", "Yes" if service in ["yes","y"] else "No"),
-    ]
 
-    table_poultry = doc.add_table(rows=len(poultry_data), cols=2)
-    table_poultry.style = "Table Grid"
-
-    for i, (name, val) in enumerate(poultry_data):
-        table_poultry.rows[i].cells[0].text = name
-        table_poultry.rows[i].cells[1].text = str(val)
 
     # -------- LARGE RUMINANTS --------
     doc.add_paragraph("")
