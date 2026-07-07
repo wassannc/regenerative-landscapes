@@ -819,8 +819,7 @@ def create_doc(text, df_v, village):
         for activity in sr_activities:
             doc.add_paragraph(activity, style="List Bullet")
 
-
-        # -------- FISHERIES --------
+    # -------- FISHERIES --------
     doc.add_paragraph("")
     doc.add_heading("Fisheries", 2)
 
@@ -878,6 +877,42 @@ def create_doc(text, df_v, village):
     for i, (name, val) in enumerate(fish_data):
         table_fish.rows[i].cells[0].text = name
         table_fish.rows[i].cells[1].text = str(val)
+
+    doc.add_paragraph("")
+    doc.add_heading("Farm Ponds", 2)
+    farmpond_para = (
+        "Interested farmers may be identified and encouraged to construct new farm ponds "
+        "for rainwater harvesting. The proposed list of farm ponds may be submitted through "
+        "the Village Committee and Technical Assistant."
+    )
+
+    doc.add_paragraph(farmpond_para)
+
+    table_fp = doc.add_table(rows=5, cols=5)
+    table_fp.style = "Table Grid"
+    headers = [
+        "Name of Farmer",
+        "Father's Name",
+        "Proposed Pond Size (m)",
+        "Latitude",
+        "Longitude"
+    ]
+
+    for j, h in enumerate(headers):
+        table_fp.rows[0].cells[j].text = h
+    sizes = ["10 × 10", "15 × 15", "20 × 20", "40 × 40"]
+    for i in range(4):
+        table_fp.rows[i+1].cells[2].text = sizes[i]
+
+    doc.add_paragraph("")
+
+    remarks = (
+        "Existing farm ponds in the village may be desilted and strengthened. "
+        "Suitable ponds can be converted into Eco Farm Ponds to improve rainwater "
+        "harvesting and fish production."
+    )
+
+    doc.add_paragraph(remarks)
 
 # -------- WATER RESOURCE DEVELOPMENT --------
     doc.add_paragraph("")
