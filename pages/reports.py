@@ -847,9 +847,9 @@ def create_doc(text, df_v, village):
 
     # -------- LOGIC --------
     if total_ponds == 0 and individual == 0:
-        fish_para = "Fisheries activities are not significantly practiced in the village."
+        fish_para = "Rainfed fish farming is not practicing in this village."
     else:
-        fish_para = f"""Fisheries activities are practiced in the village, with {pond_hhs} households owning ponds. The total area under ponds is {area} acres, with a water spread area of {water_spread} acres. The village has {individual} individual ponds and {community} community ponds."""
+        fish_para = f"""Rainfed fish farming is beign practiced in the village, with {pond_hhs} households owning ponds. The total area under ponds is {area} acres, with a water spread area of {water_spread} acres. The village has {individual} individual ponds and {community} community ponds."""
 
         if farmponds > 0:
             fish_para += f" Additionally, {farmponds} eco-farm ponds are available"
