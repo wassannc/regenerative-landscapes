@@ -615,11 +615,20 @@ def create_doc(text, df_v, village):
             poultry_para += " Poultry service providers are available in the village."
         else:
             poultry_para += " There is a need to strengthen poultry services as no service provider is available."
-    else:
-        doc.add_heading("Situation", 2)
-            poultry_para += " Birds mortality is high due to Raniket disease and fowlpox. In addition to that predator also a cause for birds’ mortality. There were no regular deworming and vaccination to the poultry."
-
+    
     doc.add_paragraph(poultry_para)
+    doc.add_heading("Situation", 2)
+    if byp_hhs > 0:
+
+        doc.add_heading("Situation", 2)
+
+        situation_para = (
+            "Bird mortality is high due to Raniket disease and fowlpox. "
+            "Predator attacks are also contributing to bird mortality. "
+            "Regular deworming and vaccination services need to be strengthened."
+        )
+
+        doc.add_paragraph(situation_para)
 
     # -------- POULTRY TABLE --------
     poultry_data = [
