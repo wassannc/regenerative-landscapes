@@ -639,6 +639,15 @@ def create_doc(text, df_v, village):
         for activity in poultry_activities:
             doc.add_paragraph(activity, style="List Bullet")
 
+    doc.add_heading("Implementation strategy and process", 2)
+    if byp_hhs > 0:
+        implementation_strategies = [
+            "Ensure that the Animal Husbandry Assistant (AHA) visits the village regularly to provide vaccination and other poultry health services."
+        ]
+        for activity in implementation_strategies:
+            doc.add_paragraph(activity, style="List Bullet")
+
+
     # -------- POULTRY TABLE --------
     poultry_data = [
         ("Households with Backyard Poultry", byp_hhs),
