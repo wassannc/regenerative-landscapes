@@ -629,7 +629,7 @@ def create_doc(text, df_v, village):
         
     doc.add_heading("Proposed Interventions for Poultry", 2)
     if byp_hhs > 0:
-        poultry_activites = [
+        poultry_activities = [
             "Regular deworming and vaccination of poultry.",
             "For poultry health management: Deworming using Neem leaf powder and Vaccination against Raniket disease (RD) using the Lasota vaccine.",
             "Forage development and training on best management practices.",
