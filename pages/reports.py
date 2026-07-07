@@ -881,9 +881,8 @@ def create_doc(text, df_v, village):
     doc.add_paragraph("")
     doc.add_heading("Farm Ponds", 2)
     farmpond_para = (
-        "Interested farmers may be identified and encouraged to construct new farm ponds "
-        "for rainwater harvesting. The proposed list of farm ponds may be submitted through "
-        "the Village Committee and Technical Assistant."
+        "Four farmers came forward to construct new farm ponds  to harvest the rain water."
+        "The proposed farm ponds list will be submitted to VB-G-RAM-G through Panchayat leaders and Technical Assistants."
     )
 
     doc.add_paragraph(farmpond_para)
