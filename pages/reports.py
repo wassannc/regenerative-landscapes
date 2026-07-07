@@ -588,7 +588,12 @@ def create_doc(text, df_v, village):
         table_fac.rows[i].cells[2].text = str(users)
 
         # -------- Livestock-Poultry-LR-SR-Fish --------
-        # -------- POULTRY TABLE --------
+       
+    
+    doc.add_paragraph("")
+    doc.add_heading("Poultry", 2)
+
+     # -------- POULTRY TABLE --------
         byp_hhs = pd.to_numeric(row.get("no of BYP HHs", 0), errors="coerce")
         birds = pd.to_numeric(row.get("Total Birds", 0), errors="coerce")
         mortality = pd.to_numeric(row.get("birds mortality", 0), errors="coerce")
@@ -618,11 +623,6 @@ def create_doc(text, df_v, village):
         for i, (name, val) in enumerate(poultry_data):
             table_poultry.rows[i].cells[0].text = name
             table_poultry.rows[i].cells[1].text = str(val)
-    
-    doc.add_paragraph("")
-    doc.add_heading("Poultry", 2)
-
-    
 
     if byp_hhs == 0 and birds == 0:
         poultry_para = "Poultry activity is not significantly practiced in the village."
