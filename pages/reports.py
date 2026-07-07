@@ -741,8 +741,7 @@ def create_doc(text, df_v, village):
             "Training to the farmers on improved livestock management practices.Invite the Animal Husbandry Assistant (AHA) to the village regularly to provide vaccination and other livestock health services.",
             "Regular vaccination & Deworming for livestock.",
             "Renovation of cattle shed flooring. Submit proposals under VB-G-Ram-G for the renovation and reconstruction of cattle sheds, including the construction of flooring (cemented/paved floors).",
-            "Development of grazing lands/pastures- There is 96.38 acres of grazing land available in the village, in which 5 acres has been identified by the community for fodder promotion.
-             (Proposed for further assessment- to know the feasibility for fodder promotion.)",
+            "Development of grazing lands/pastures- There is 96.38 acres of grazing land available in the village, in which 5 acres has been identified by the community for fodder promotion.Proposed for further assessment- to know the feasibility for fodder promotion.",
             "Cultivation of fodder crops such as Super Napier and fodder flax, along with other suitable fodder grasses on the field bunds and small patches of the land.Mobilize farmers to establish fodder plots by cultivating fodder grasses and multipurpose fodder trees to ensure year-round feed availability for livestock.",
             "Submit applications to the Animal Husbandry Department for the supply of required  vaccines and fodder seed."    
         ]
