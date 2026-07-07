@@ -624,6 +624,7 @@ def create_doc(text, df_v, village):
         table_poultry.rows[i].cells[0].text = name
         table_poultry.rows[i].cells[1].text = str(val)
 
+    
     if byp_hhs == 0 and birds == 0:
         poultry_para = "Poultry activity is not significantly practiced in the village."
     else:
