@@ -808,6 +808,17 @@ def create_doc(text, df_v, village):
     for i, (name, val) in enumerate(sr_data):
         table_sr.rows[i].cells[0].text = name
         table_sr.rows[i].cells[1].text = str(val)
+        
+    doc.add_heading("Proposed Activities for Small Ruminants", 2)
+    if sr_animals > 0:
+        sr_activities = [
+            "Renovation of elevated goat shelters. Submit proposals under VB-G-Ram-G for the renovation and reconstruction of goat shelters.",
+            "Mobilize farmers to establish fodder plots by cultivating fodder grasses and multipurpose fodder trees to ensure year-round feed availability for small ruminants.",
+            "Submit applications to the Animal Husbandry Department for the supply of required  vaccines and fodder seed."
+        ]
+        for activity in sr_activities:
+            doc.add_paragraph(activity, style="List Bullet")
+
 
         # -------- FISHERIES --------
     doc.add_paragraph("")
